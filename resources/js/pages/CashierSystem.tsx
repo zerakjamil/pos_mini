@@ -1,22 +1,29 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { Row, Col, Card, message } from 'antd';
-import { usePage } from '@inertiajs/react';
-import { ProductType, CartItem } from '../types/cashier';
-import { addProductToCart, calculateTotal } from '../utils/cashier-utils';
-import { printReceipt, openCashDrawer } from '../utils/receipt-service';
-import DashboardLayout from '@/layouts/DashboardLayout';
+import React, { useState, useRef, useEffect } from 'react';
+import { Layout, Card, Row, Col, message, Button } from 'antd';
+import { usePage, Link } from '@inertiajs/react';
+import { ArrowLeftOutlined, HistoryOutlined } from '@ant-design/icons';
 
-// Components
+// Import components
 import CashierHeader from '../components/cashier/CashierHeader';
-import BarcodeScanner from '../components/cashier/BarcodeScanner';
+import BarcodeScanner, { BarcodeScannerRef } from '../components/cashier/BarcodeScanner';
 import CartTable from '../components/cashier/CartTable';
 import TransactionSummary from '../components/cashier/TransactionSummary';
 import CheckoutModal from '../components/cashier/CheckoutModal';
 import ProductLookupModal from '../components/cashier/ProductLookupModal';
 
+// Import utilities
+import { addProductToCart, removeItemFromCart, updateItemQuantity, calculateTotal } from '../utils/cashier-utils';
+import { saveTransaction } from '../utils/transaction-service';
+import { printReceipt, openCashDrawer } from '../utils/receipt-printer';
+
+// Import types
+import { CartItem, ProductType } from '../types/cashier';
+
+const { Content, Footer, Header } = Layout;
+
 const CashierSystem: React.FC = () => {
   // Get products from props
-  const { products = [] } = usePage().props as unknown as {
+  const { products } = usePage().props as unknown as {
     products: ProductType[]
   };
 
@@ -24,79 +31,81 @@ const CashierSystem: React.FC = () => {
   const [cartItems, setCartItems] = useState<CartItem[]>([]);
   const [total, setTotal] = useState<number>(0);
 
-  // Modal states
+  // Checkout state
   const [checkoutModalVisible, setCheckoutModalVisible] = useState<boolean>(false);
-  const [productLookupVisible, setProductLookupVisible] = useState<boolean>(false);
-
-  // Reference to the BarcodeScanner component
-  const barcodeScannerRef = useRef<{ focusInput: () => void }>(null);
-
-  // Checkout states
   const [amountPaid, setAmountPaid] = useState<number | null>(null);
   const [change, setChange] = useState<number>(0);
+  const [processingTransaction, setProcessingTransaction] = useState<boolean>(false);
+
+  // Product lookup state
+  const [productLookupVisible, setProductLookupVisible] = useState<boolean>(false);
   const [selectedProduct, setSelectedProduct] = useState<string | null>(null);
 
-  // Calculate total whenever cart items change
+  // Ref for barcode scanner
+  const barcodeScannerRef = useRef<BarcodeScannerRef>(null);
+
+  // Update total when cart items change
   useEffect(() => {
     const newTotal = calculateTotal(cartItems);
     setTotal(newTotal);
   }, [cartItems]);
 
+  // Focus barcode scanner on mount
+  useEffect(() => {
+    if (barcodeScannerRef.current) {
+      barcodeScannerRef.current.focusInput();
+    }
+  }, []);
+
   // Handle barcode scan
-  const handleBarcodeScanned = (barcode: string) => {
-    // Find product by barcode
+  const handleBarcodeScan = (barcode: string) => {
     const product = products.find(p => p.barcode === barcode);
-
     if (product) {
-      handleAddProductToCart(product);
-      message.success(`Added: ${product.name}`);
+      handleProductScanned(product);
     } else {
-      message.error(`Product not found for barcode: ${barcode}`);
+      message.error(`Product with barcode ${barcode} not found`);
     }
   };
 
-  // Add product to cart
-  const handleAddProductToCart = (product: ProductType) => {
-    setCartItems(prevItems => addProductToCart(product, prevItems));
-  };
-
-  // Remove item from cart
-  const handleRemoveItem = (itemId: string) => {
-    setCartItems(prevItems => prevItems.filter(item => item.id !== itemId));
-  };
-
-  // Update item quantity
-  const handleUpdateQuantity = (itemId: string, quantity: number) => {
-    if (quantity <= 0) {
-      handleRemoveItem(itemId);
-      return;
-    }
-
-    setCartItems(prevItems =>
-      prevItems.map(item =>
-        item.id === itemId
-          ? { ...item, quantity, subtotal: quantity * item.price }
-          : item
-      )
-    );
-  };
-
-  // Product lookup functions
-  const showProductLookup = () => {
+  // Handle product lookup
+  const handleProductLookup = () => {
     setProductLookupVisible(true);
-    setSelectedProduct(null);
   };
 
-  const handleProductSelect = () => {
+  // Handle product scanned (from barcode or lookup)
+  const handleProductScanned = (product: ProductType) => {
+    const updatedCart = addProductToCart(product, cartItems);
+    setCartItems(updatedCart);
+    message.success(`Added: ${product.name}`);
+  };
+
+  // Handle product selection from lookup
+  const handleProductSelect = (productId: string) => {
+    setSelectedProduct(productId);
+  };
+
+  // Handle adding product from lookup
+  const handleAddProductFromLookup = () => {
     if (selectedProduct) {
       const product = products.find(p => p.id === selectedProduct);
       if (product) {
-        handleAddProductToCart(product);
-        message.success(`Added: ${product.name}`);
+        handleProductScanned(product);
       }
+      setProductLookupVisible(false);
+      setSelectedProduct(null);
     }
-    setProductLookupVisible(false);
-    setSelectedProduct(null);
+  };
+
+  // Handle quantity update
+  const handleUpdateQuantity = (itemId: string, quantity: number) => {
+    const updatedCart = updateItemQuantity(itemId, quantity, cartItems);
+    setCartItems(updatedCart);
+  };
+
+  // Handle item removal
+  const handleRemoveItem = (itemId: string) => {
+    const updatedCart = removeItemFromCart(itemId, cartItems);
+    setCartItems(updatedCart);
   };
 
   // Handle checkout
@@ -105,9 +114,9 @@ const CashierSystem: React.FC = () => {
       message.warning('Cart is empty');
       return;
     }
-
     setCheckoutModalVisible(true);
     setAmountPaid(total);
+    setChange(0);
   };
 
   // Handle amount paid change
@@ -120,76 +129,118 @@ const CashierSystem: React.FC = () => {
     }
   };
 
-  // Complete transaction
-  const completeTransaction = () => {
+  // Handle transaction completion
+  const handleCompleteTransaction = () => {
     if (!amountPaid || amountPaid < total) {
       message.error('Amount paid must be at least equal to the total');
       return;
     }
 
-    // Print receipt
-    printReceipt(cartItems, total, amountPaid, change);
+    setProcessingTransaction(true);
 
-    // Open cash drawer
-    openCashDrawer();
+    // Save transaction to database
+    saveTransaction({
+      cartItems,
+      total,
+      amountPaid,
+      change,
+      onSuccess: (data) => {
+        // Open cash drawer
+        openCashDrawer();
 
-    message.success('Transaction completed successfully!');
-    message.info(`Change: $${change.toFixed(2)}`);
+        // Print receipt with transaction number from server
+        printReceipt({
+          cartItems,
+          total,
+          amountPaid,
+          change,
+          transactionNumber: data.transaction_number
+        });
 
-    // Reset cart after successful transaction
-    setTimeout(() => {
-      setCartItems([]);
-      setCheckoutModalVisible(false);
-      setAmountPaid(null);
-      setChange(0);
+        message.success('Transaction completed successfully!');
+        message.info(`Change: $${change.toFixed(2)}`);
 
-      // Focus the barcode input after transaction is complete
-      if (barcodeScannerRef.current) {
-        barcodeScannerRef.current.focusInput();
+        // Reset cart after successful transaction
+        setTimeout(() => {
+          setCartItems([]);
+          setTotal(0);
+          setCheckoutModalVisible(false);
+          setProcessingTransaction(false);
+
+          // Focus barcode scanner for next transaction
+          if (barcodeScannerRef.current) {
+            barcodeScannerRef.current.focusInput();
+          }
+        }, 1500);
+      },
+      onError: (error) => {
+        message.error(`Transaction failed: ${error.message || 'Unknown error'}`);
+        setProcessingTransaction(false);
       }
-    }, 1500);
+    });
   };
 
-  // Cancel checkout
-  const cancelCheckout = () => {
-    setCheckoutModalVisible(false);
-    setAmountPaid(null);
-    setChange(0);
+  // Handle clear cart
+  const handleClearCart = () => {
+    setCartItems([]);
+    setTotal(0);
   };
 
   return (
-    <div className="cashier-system">
-      <CashierHeader />
+    <Layout style={{ minHeight: '100vh' }}>
+      <Header style={{ background: '#fff', padding: '0 16px' }}>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', height: '100%' }}>
+          <div style={{ display: 'flex', alignItems: 'center' }}>
+            <Link href="/">
+              <Button icon={<ArrowLeftOutlined />} style={{ marginRight: 16 }}>
+                Back to Dashboard
+              </Button>
+            </Link>
+            <CashierHeader />
+          </div>
+          <Link href="/sales">
+            <Button icon={<HistoryOutlined />} type="primary">
+              Sales History
+            </Button>
+          </Link>
+        </div>
+      </Header>
 
-      <Row gutter={[16, 16]}>
-        <Col span={16}>
-          <Card title="Current Transaction" bordered={false}>
-            <BarcodeScanner
-              ref={barcodeScannerRef}
-              onBarcodeScan={handleBarcodeScanned}
-              onProductLookup={showProductLookup}
-            />
+      <Content style={{ padding: '20px' }}>
+        <Row gutter={[16, 16]}>
+          <Col span={16}>
+            <Card title="Current Transaction">
+              <BarcodeScanner
+                ref={barcodeScannerRef}
+                onBarcodeScan={handleBarcodeScan}
+                onProductLookup={handleProductLookup}
+              />
 
-            <CartTable
-              cartItems={cartItems}
-              total={total}
-              onUpdateQuantity={handleUpdateQuantity}
-              onRemoveItem={handleRemoveItem}
-            />
-          </Card>
-        </Col>
+              <CartTable
+                cartItems={cartItems}
+                onUpdateQuantity={handleUpdateQuantity}
+                onRemoveItem={handleRemoveItem}
+                total={total}
+              />
+            </Card>
+          </Col>
 
-        <Col span={8}>
-          <Card title="Transaction Summary" bordered={false}>
-            <TransactionSummary
-              cartItems={cartItems}
-              total={total}
-              onCheckout={handleCheckout}
-              onClearCart={() => setCartItems([])}
-            />
-          </Card>
-        </Col>
-      </Row>
+          <Col span={8}>
+            <Card title="Transaction Summary" bordered={false}>
+              <TransactionSummary
+                cartItems={cartItems}
+                total={total}
+                onCheckout={handleCheckout}
+                onClearCart={handleClearCart}
+              />
+            </Card>
+          </Col>
+        </Row>
+      </Content>
+
+      <Footer style={{ textAlign: 'center' }}>
+        POS Cashier System ©{new Date().getFullYear()}
+      </Footer>
 
       {/* Modals */}
       <CheckoutModal
@@ -198,23 +249,24 @@ const CashierSystem: React.FC = () => {
         amountPaid={amountPaid}
         change={change}
         onAmountPaidChange={handleAmountPaidChange}
-        onComplete={completeTransaction}
-        onCancel={cancelCheckout}
+        onComplete={handleCompleteTransaction}
+        onCancel={() => setCheckoutModalVisible(false)}
+        loading={processingTransaction}
       />
 
       <ProductLookupModal
         visible={productLookupVisible}
         products={products}
         selectedProduct={selectedProduct}
-        onProductSelect={setSelectedProduct}
-        onOk={handleProductSelect}
-        onCancel={() => setProductLookupVisible(false)}
+        onProductSelect={handleProductSelect}
+        onOk={handleAddProductFromLookup}
+        onCancel={() => {
+          setProductLookupVisible(false);
+          setSelectedProduct(null);
+        }}
       />
-    </div>
+    </Layout>
   );
 };
-
-// Apply the DashboardLayout to this component
-CashierSystem.layout = (page: React.ReactNode) => <DashboardLayout>{page}</DashboardLayout>;
 
 export default CashierSystem;

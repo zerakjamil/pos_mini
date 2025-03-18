@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
-import { Modal, Input, Table, Button } from 'antd';
-import { SearchOutlined } from '@ant-design/icons';
+import React from 'react';
+import { Modal, Select } from 'antd';
 import { ProductType } from '../../types/cashier';
+
+const { Option } = Select;
 
 interface ProductLookupModalProps {
   visible: boolean;
@@ -18,81 +19,32 @@ const ProductLookupModal: React.FC<ProductLookupModalProps> = ({
   selectedProduct,
   onProductSelect,
   onOk,
-  onCancel,
+  onCancel
 }) => {
-  const [searchText, setSearchText] = useState('');
-
-  const filteredProducts = products.filter(
-    (product) =>
-      product.name.toLowerCase().includes(searchText.toLowerCase()) ||
-      product.barcode.includes(searchText)
-  );
-
-  const columns = [
-    {
-      title: 'Name',
-      dataIndex: 'name',
-      key: 'name',
-    },
-    {
-      title: 'Price',
-      dataIndex: 'price',
-      key: 'price',
-      render: (price: number) => `$${price.toFixed(2)}`,
-    },
-    {
-      title: 'Category',
-      dataIndex: 'category',
-      key: 'category',
-    },
-    {
-      title: 'Stock',
-      dataIndex: 'stock',
-      key: 'stock',
-    },
-    {
-      title: 'Barcode',
-      dataIndex: 'barcode',
-      key: 'barcode',
-    },
-  ];
-
-  const rowSelection = {
-    type: 'radio' as const,
-    selectedRowKeys: selectedProduct ? [selectedProduct] : [],
-    onChange: (selectedRowKeys: React.Key[]) => {
-      onProductSelect(selectedRowKeys[0] as string);
-    },
-  };
-
   return (
     <Modal
-      title="Find Product"
+      title="Product Lookup"
       open={visible}
       onOk={onOk}
       onCancel={onCancel}
-      width={800}
       okButtonProps={{ disabled: !selectedProduct }}
-      okText="Add to Cart"
     >
-      <div className="mb-4">
-        <Input
-          placeholder="Search by name or barcode"
-          prefix={<SearchOutlined />}
-          value={searchText}
-          onChange={(e) => setSearchText(e.target.value)}
-          autoFocus
-        />
-      </div>
-
-      <Table
-        rowSelection={rowSelection}
-        columns={columns}
-        dataSource={filteredProducts}
-        rowKey="id"
-        pagination={{ pageSize: 5 }}
-        size="small"
-      />
+      <Select
+        showSearch
+        style={{ width: '100%' }}
+        placeholder="Search for a product"
+        optionFilterProp="children"
+        onChange={(value) => onProductSelect(value)}
+        filterOption={(input, option) =>
+          (option?.children as unknown as string).toLowerCase().includes(input.toLowerCase())
+        }
+      >
+        {Array.isArray(products) && products.map(product => (
+          <Option key={product.id} value={product.id}>
+            {product.name} - ${product.price.toFixed(2)} ({product.stock} in stock)
+          </Option>
+        ))}
+      </Select>
     </Modal>
   );
 };

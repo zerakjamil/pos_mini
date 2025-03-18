@@ -1,6 +1,6 @@
 import React from 'react';
-import { Modal, InputNumber, Statistic, Row, Col, Button } from 'antd';
-import { DollarOutlined } from '@ant-design/icons';
+import { Modal, Row, Col, Typography, InputNumber } from 'antd';
+const { Text } = Typography;
 
 interface CheckoutModalProps {
   visible: boolean;
@@ -10,6 +10,7 @@ interface CheckoutModalProps {
   onAmountPaidChange: (value: number | null) => void;
   onComplete: () => void;
   onCancel: () => void;
+  loading?: boolean;
 }
 
 const CheckoutModal: React.FC<CheckoutModalProps> = ({
@@ -20,66 +21,48 @@ const CheckoutModal: React.FC<CheckoutModalProps> = ({
   onAmountPaidChange,
   onComplete,
   onCancel,
+  loading = false
 }) => {
   return (
     <Modal
       title="Complete Transaction"
       open={visible}
+      onOk={onComplete}
       onCancel={onCancel}
-      footer={[
-        <Button key="back" onClick={onCancel}>
-          Cancel
-        </Button>,
-        <Button
-          key="submit"
-          type="primary"
-          onClick={onComplete}
-          disabled={!amountPaid || amountPaid < total}
-        >
-          Complete Payment
-        </Button>,
-      ]}
+      okText="Complete Payment"
+      cancelText="Cancel"
+      confirmLoading={loading}
+      okButtonProps={{ disabled: !amountPaid || amountPaid < total || loading }}
     >
-      <Row gutter={16} className="mb-4">
-        <Col span={12}>
-          <Statistic
-            title="Total Amount"
-            value={total}
-            precision={2}
-            prefix="$"
-          />
-        </Col>
-        <Col span={12}>
-          <Statistic
-            title="Change"
-            value={change}
-            precision={2}
-            prefix="$"
-            valueStyle={{ color: change > 0 ? '#3f8600' : '#cf1322' }}
-          />
-        </Col>
-      </Row>
-
-      <div className="mb-4">
-        <label className="block mb-2">Amount Paid:</label>
-        <InputNumber
-          style={{ width: '100%' }}
-          size="large"
-          min={0}
-          step={0.01}
-          precision={2}
-          value={amountPaid}
-          onChange={onAmountPaidChange}
-          prefix={<DollarOutlined />}
-          autoFocus
-        />
+      <div style={{ marginBottom: 16 }}>
+        <Row>
+          <Col span={12}><Text strong>Total Amount:</Text></Col>
+          <Col span={12} style={{ textAlign: 'right' }}>
+            <Text strong>${total.toFixed(2)}</Text>
+          </Col>
+        </Row>
+        <Row style={{ marginTop: 16 }}>
+          <Col span={12}><Text>Amount Paid:</Text></Col>
+          <Col span={12} style={{ textAlign: 'right' }}>
+            <InputNumber
+              style={{ width: '100%' }}
+              value={amountPaid}
+              onChange={(value) => onAmountPaidChange(value)}
+              min={total}
+              precision={2}
+              formatter={(value) => `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+              parser={(value) => Number(value!.replace(/\$\s?|(,*)/g, ''))}
+              disabled={loading}
+            />
+          </Col>
+        </Row>
+        <Row style={{ marginTop: 16 }}>
+          <Col span={12}><Text strong>Change:</Text></Col>
+          <Col span={12} style={{ textAlign: 'right' }}>
+            <Text strong style={{ fontSize: 18 }}>${change.toFixed(2)}</Text>
+          </Col>
+        </Row>
       </div>
-
-      {amountPaid && amountPaid < total && (
-        <div className="text-red-500">
-          Amount paid must be at least equal to the total.
-        </div>
-      )}
     </Modal>
   );
 };

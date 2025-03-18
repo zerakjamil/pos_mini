@@ -1,7 +1,9 @@
 import React from 'react';
-import { Button, Statistic, Card, Space, Divider } from 'antd';
-import { ShoppingCartOutlined, DollarOutlined, DeleteOutlined } from '@ant-design/icons';
+import { Row, Col, Typography, Divider, Button } from 'antd';
+import { DollarOutlined } from '@ant-design/icons';
 import { CartItem } from '../../types/cashier';
+
+const { Text } = Typography;
 
 interface TransactionSummaryProps {
   cartItems: CartItem[];
@@ -14,54 +16,64 @@ const TransactionSummary: React.FC<TransactionSummaryProps> = ({
   cartItems,
   total,
   onCheckout,
-  onClearCart,
+  onClearCart
 }) => {
-  const itemCount = cartItems.reduce((sum, item) => sum + item.quantity, 0);
+  const totalItems = cartItems.reduce((sum, item) => sum + item.quantity, 0);
 
   return (
-    <div className="transaction-summary">
-      <Card className="mb-4">
-        <Statistic
-          title="Total Amount"
-          value={total}
-          precision={2}
-          prefix="$"
-          valueStyle={{ color: '#3f8600', fontSize: '2rem' }}
-        />
+    <>
+      <div style={{ marginBottom: 16 }}>
+        <Row>
+          <Col span={12}><Text>Items:</Text></Col>
+          <Col span={12} style={{ textAlign: 'right' }}>
+            <Text>{totalItems}</Text>
+          </Col>
+        </Row>
+        <Row>
+          <Col span={12}><Text>Subtotal:</Text></Col>
+          <Col span={12} style={{ textAlign: 'right' }}>
+            <Text>${total.toFixed(2)}</Text>
+          </Col>
+        </Row>
+        <Row>
+          <Col span={12}><Text>Tax (0%):</Text></Col>
+          <Col span={12} style={{ textAlign: 'right' }}>
+            <Text>$0.00</Text>
+          </Col>
+        </Row>
         <Divider />
-        <div className="flex justify-between mb-2">
-          <span>Items:</span>
-          <span>{itemCount}</span>
-        </div>
-        <div className="flex justify-between">
-          <span>Products:</span>
-          <span>{cartItems.length}</span>
-        </div>
-      </Card>
+        <Row>
+          <Col span={12}><Text strong>Total:</Text></Col>
+          <Col span={12} style={{ textAlign: 'right' }}>
+            <Text strong>${total.toFixed(2)}</Text>
+          </Col>
+        </Row>
+      </div>
 
-      <Space direction="vertical" style={{ width: '100%' }}>
+      <div style={{ marginTop: 24 }}>
         <Button
           type="primary"
           size="large"
+          block
           icon={<DollarOutlined />}
           onClick={onCheckout}
           disabled={cartItems.length === 0}
-          block
         >
           Checkout
         </Button>
+
         <Button
           danger
           size="large"
-          icon={<DeleteOutlined />}
+          block
+          style={{ marginTop: 8 }}
           onClick={onClearCart}
           disabled={cartItems.length === 0}
-          block
         >
           Clear Cart
         </Button>
-      </Space>
-    </div>
+      </div>
+    </>
   );
 };
 

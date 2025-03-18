@@ -1,30 +1,22 @@
 <?php
 
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\TransactionController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
-/*
-|--------------------------------------------------------------------------
-| Web Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider and all of them will
-| be assigned to the "web" middleware group. Make something great!
-|
-*/
-
 Route::get('/', function () {
-    return redirect()->route('dashboard');
-});
-
-Route::get('/dashboard', function () {
-    return Inertia::render('Dashboard');
-})->name('dashboard');
+    return Inertia::render('welcome');
+})->name('home');
 
 // Product routes
-Route::resource('products', ProductController::class);
-
-// Cashier route
+Route::get('/products', [ProductController::class, 'index'])->name('products.index');
 Route::get('/cashier', [ProductController::class, 'cashier'])->name('cashier');
+
+// Transaction routes
+Route::get('/sales', [TransactionController::class, 'index'])->name('sales.index');
+Route::get('/sales/{id}', [TransactionController::class, 'show'])->name('sales.show');
+
+// API routes for transactions
+Route::post('/api/transactions', [TransactionController::class, 'store']);
+Route::get('/api/transactions/{id}', [TransactionController::class, 'show']);

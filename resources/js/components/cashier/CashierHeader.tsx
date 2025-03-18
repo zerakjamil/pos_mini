@@ -1,28 +1,28 @@
 import React from 'react';
-import { PageHeader, Button } from 'antd';
-import { BarcodeOutlined, ShoppingCartOutlined } from '@ant-design/icons';
+import { Layout, Row, Col, Typography, Space } from 'antd';
+import { ShoppingCartOutlined } from '@ant-design/icons';
 
-interface CashierHeaderProps {
-  onNewTransaction?: () => void;
-}
+const { Header } = Layout;
+const { Title, Text } = Typography;
 
-const CashierHeader: React.FC<CashierHeaderProps> = ({ onNewTransaction }) => {
+const CashierHeader: React.FC = () => {
   return (
-    <PageHeader
-      className="site-page-header mb-4"
-      title="Cashier System"
-      subTitle="Process sales and transactions"
-      extra={[
-        <Button
-          key="1"
-          type="primary"
-          icon={<ShoppingCartOutlined />}
-          onClick={onNewTransaction}
-        >
-          New Transaction
-        </Button>,
-      ]}
-    />
+    <Header style={{ background: '#fff', padding: '0 20px' }}>
+      <Row justify="space-between" align="middle">
+        <Col>
+          <Title level={3} style={{ margin: '16px 0' }}>
+            <ShoppingCartOutlined /> POS Cashier System
+          </Title>
+        </Col>
+        <Col>
+          <Space>
+            <Text>Cashier: John Doe</Text>
+            <Text>Terminal: #1</Text>
+            <Text>Date: {new Date().toLocaleDateString()}</Text>
+          </Space>
+        </Col>
+      </Row>
+    </Header>
   );
 };
 

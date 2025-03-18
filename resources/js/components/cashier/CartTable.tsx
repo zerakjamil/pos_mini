@@ -1,20 +1,22 @@
 import React from 'react';
-import { Table, Button, InputNumber } from 'antd';
+import { Table, Button, InputNumber, Typography } from 'antd';
 import { DeleteOutlined } from '@ant-design/icons';
 import { CartItem } from '../../types/cashier';
 
+const { Text } = Typography;
+
 interface CartTableProps {
   cartItems: CartItem[];
-  total: number;
   onUpdateQuantity: (itemId: string, quantity: number) => void;
   onRemoveItem: (itemId: string) => void;
+  total: number;
 }
 
 const CartTable: React.FC<CartTableProps> = ({
   cartItems,
-  total,
   onUpdateQuantity,
-  onRemoveItem
+  onRemoveItem,
+  total
 }) => {
   const columns = [
     {
@@ -36,8 +38,8 @@ const CartTable: React.FC<CartTableProps> = ({
         <InputNumber
           min={1}
           value={record.quantity}
-          onChange={(value) => onUpdateQuantity(record.id, value as number)}
-          style={{ width: '70px' }}
+          onChange={(value) => onUpdateQuantity(record.id, value || 1)}
+          style={{ width: 60 }}
         />
       ),
     },
@@ -61,20 +63,25 @@ const CartTable: React.FC<CartTableProps> = ({
     },
   ];
 
-  const footer = () => (
-    <div className="text-right font-bold">
-      <span>Total: ${total.toFixed(2)}</span>
-    </div>
-  );
-
   return (
     <Table
       columns={columns}
       dataSource={cartItems}
-      rowKey="id"
       pagination={false}
-      footer={footer}
-      locale={{ emptyText: 'No items in cart' }}
+      rowKey="id"
+      summary={() => (
+        <Table.Summary fixed>
+          <Table.Summary.Row>
+            <Table.Summary.Cell index={0} colSpan={3}>
+              <Text strong>Total</Text>
+            </Table.Summary.Cell>
+            <Table.Summary.Cell index={1}>
+              <Text strong>${total.toFixed(2)}</Text>
+            </Table.Summary.Cell>
+            <Table.Summary.Cell index={2} />
+          </Table.Summary.Row>
+        </Table.Summary>
+      )}
     />
   );
 };

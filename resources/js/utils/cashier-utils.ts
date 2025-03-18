@@ -1,44 +1,90 @@
 import { CartItem, ProductType } from "../types/cashier";
 
 /**
- * Add a product to the cart
- *
- * @param product Product to add
- * @param cartItems Current cart items
- * @returns Updated cart items
+ * Calculate the total price of all items in the cart
  */
-export const addProductToCart = (
-  product: ProductType,
-  cartItems: CartItem[]
-): CartItem[] => {
-  // Check if item already exists in cart
+export const calculateTotal = (cartItems: CartItem[]): number => {
+  return cartItems.reduce((sum, item) => sum + item.subtotal, 0);
+};
+
+/**
+ * Add a product to the cart
+ * If the product already exists in the cart, increase its quantity
+ */
+export const addProductToCart = (product: ProductType, cartItems: CartItem[]): CartItem[] => {
+  // Check if the product is already in the cart
   const existingItemIndex = cartItems.findIndex(item => item.id === product.id);
 
   if (existingItemIndex >= 0) {
-    // Update quantity of existing item
+    // Product exists, update quantity
     const updatedItems = [...cartItems];
-    updatedItems[existingItemIndex].quantity += 1;
-    updatedItems[existingItemIndex].subtotal =
-      updatedItems[existingItemIndex].quantity * updatedItems[existingItemIndex].price;
+    const existingItem = updatedItems[existingItemIndex];
+    const newQuantity = existingItem.quantity + 1;
+
+    updatedItems[existingItemIndex] = {
+      ...existingItem,
+      quantity: newQuantity,
+      subtotal: product.price * newQuantity
+    };
+
     return updatedItems;
   } else {
-    // Add new item to cart
-    return [...cartItems, {
-      ...product,
-      quantity: 1,
-      subtotal: product.price
-    }];
+    // Product doesn't exist, add it
+    return [
+      ...cartItems,
+      {
+        id: product.id,
+        name: product.name,
+        price: product.price,
+        quantity: 1,
+        subtotal: product.price
+      }
+    ];
   }
 };
 
 /**
- * Calculate the total price of all items in the cart
- *
- * @param cartItems Items in the cart
- * @returns Total price
+ * Update the quantity of an item in the cart
+ * If quantity is 0 or less, remove the item
  */
-export const calculateTotal = (cartItems: CartItem[]): number => {
-  return cartItems.reduce((sum, item) => sum + item.subtotal, 0);
+export const updateItemQuantity = (itemId: string, quantity: number, cartItems: CartItem[]): CartItem[] => {
+  if (quantity <= 0) {
+    return removeItemFromCart(itemId, cartItems);
+  }
+
+  return cartItems.map(item =>
+    item.id === itemId
+      ? { ...item, quantity, subtotal: item.price * quantity }
+      : item
+  );
+};
+
+/**
+ * Remove an item from the cart
+ */
+export const removeItemFromCart = (itemId: string, cartItems: CartItem[]): CartItem[] => {
+  return cartItems.filter(item => item.id !== itemId);
+};
+
+/**
+ * Clear all items from the cart
+ */
+export const clearCart = (): CartItem[] => {
+  return [];
+};
+
+/**
+ * Format a price as a currency string
+ */
+export const formatCurrency = (amount: number): string => {
+  return `$${amount.toFixed(2)}`;
+};
+
+/**
+ * Generate a unique transaction ID
+ */
+export const generateTransactionId = (): string => {
+  return `TX-${Date.now()}-${Math.floor(Math.random() * 1000)}`;
 };
 
 export const generateReceiptContent = (

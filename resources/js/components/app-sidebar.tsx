@@ -1,31 +1,39 @@
-import { NavFooter } from '@/components/nav-footer';
 import { NavMain } from '@/components/nav-main';
+import { Link } from '@inertiajs/react';
 import { NavUser } from '@/components/nav-user';
 import { Sidebar, SidebarContent, SidebarFooter, SidebarHeader, SidebarMenu, SidebarMenuButton, SidebarMenuItem } from '@/components/ui/sidebar';
-import { type NavItem } from '@/types';
-import { Link } from '@inertiajs/react';
-import { BookOpen, Folder, LayoutGrid } from 'lucide-react';
 import AppLogo from './app-logo';
+import { NavFooter } from '@/components/nav-footer';
+import { type NavItem } from '@/types';
+import { BookOpen, Folder, LayoutGrid } from 'lucide-react';
+import CashierSystem from '@/pages/CashierSystem';
 
-const mainNavItems: NavItem[] = [
+// Extend the NavItem type to include the active property
+type ExtendedNavItem = NavItem & {
+    active?: boolean;
+};
+
+// Export the navigation items so they can be imported elsewhere
+export const mainNavItems: ExtendedNavItem[] = [
     {
         title: 'Dashboard',
         href: '/dashboard',
         icon: LayoutGrid,
+    },{
+        title: 'Products',
+        href: route('products.index'),
+        icon: LayoutGrid,
     },
+    {
+        title: 'Cashier',
+        href: route('cashier'),
+        icon: LayoutGrid,
+        active: route().current('cashier'),
+    }
 ];
 
-const footerNavItems: NavItem[] = [
-    {
-        title: 'Repository',
-        href: 'https://github.com/laravel/react-starter-kit',
-        icon: Folder,
-    },
-    {
-        title: 'Documentation',
-        href: 'https://laravel.com/docs/starter-kits',
-        icon: BookOpen,
-    },
+export const footerNavItems: ExtendedNavItem[] = [
+    // Your footer nav items here
 ];
 
 export function AppSidebar() {

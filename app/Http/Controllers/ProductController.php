@@ -131,7 +131,7 @@ public function cashier(): Response
             'price' => 79.99,
             'category' => 'Kitchen',
             'stock' => 25,
-            'barcode' => '5901234567895', // EAN-13 format
+            'barcode' => '8681038207009', // EAN-13 format
         ]
     ];
 
