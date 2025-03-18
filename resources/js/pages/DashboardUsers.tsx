@@ -38,8 +38,7 @@ interface DataType{
     tags: string[];
 }
 const App: React.FC = () => {
-    const { users } = usePage().props as { users: DataType[] };
-    const { homeUrl } = usePage().props;
+    const { users } = usePage().props as unknown as { users: DataType[] };
 
     const {
         token: { colorBgContainer, borderRadiusLG },
@@ -69,7 +68,7 @@ const App: React.FC = () => {
                 </Sider>
                 <Layout style={{ padding: '0 24px 24px' }}>
                     <Breadcrumb
-                        items={[{ title: 'Home', href: homeUrl }, { title: 'List' }, { title: 'App' }]}
+                        items={[{ title: 'Home', href: route('home') }, { title: 'List' }, { title: 'App' }]}
                         style={{ margin: '16px 0' }}
                     />
                     <Content
