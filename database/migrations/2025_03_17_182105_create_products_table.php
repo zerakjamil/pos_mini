@@ -14,9 +14,16 @@ return new class extends Migration
         Schema::create('products', function (Blueprint $table) {
             $table->id();
             $table->string('name');
+            $table->string('barcode')->nullable()->unique();
             $table->integer('price');
+            $table->integer('batch_price')->nullable();
+            $table->integer('units_per_batch')->nullable();
             $table->string('category');
             $table->integer('stock');
+            $table->integer('reorder_level')->nullable();
+            $table->string('brand')->nullable();
+            $table->string('image_path')->nullable();
+            $table->date('expiration_date')->nullable();
             $table->timestamps();
         });
     }

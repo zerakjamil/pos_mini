@@ -3,67 +3,84 @@
 namespace App\Http\Controllers;
 
 use App\Models\Sale;
-use App\Models\SaleItem;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Str;
-use Inertia\Inertia;
-use Inertia\Response;
+use Illuminate\Support\Facades\{DB, Log};
+use Inertia\{Inertia, Response};
+use Illuminate\Routing\Controller as Controller;
 
 class SalesController extends Controller
 {
     /**
+     * Create a new controller instance.
+     */
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+    /**
      * Store a newly created sale in storage.
+     */
+    /**
+     * Store a newly created sale in storage.
+     */
+    /**
+     * Store a newly created resource in storage.
      */
     public function store(Request $request)
     {
-        // Validate the request
+        $user = auth()->user();
+
         $validated = $request->validate([
-            'total' => 'required|numeric|min:0',
-            'amountPaid' => 'required|numeric|min:0',
-            'change' => 'required|numeric|min:0',
+            'customer_name' => 'nullable|string|max:255',
+            'payment_method' => 'required|string|in:cash,card,mobile_payment',
             'items' => 'required|array|min:1',
-            'items.*.id' => 'required|string',
-            'items.*.name' => 'required|string',
-            'items.*.price' => 'required|numeric|min:0',
+            'items.*.id' => 'required|exists:products,id',
             'items.*.quantity' => 'required|integer|min:1',
+            'items.*.price' => 'required|numeric|min:0',
             'items.*.subtotal' => 'required|numeric|min:0',
+            'total_amount' => 'required|numeric|min:0',
         ]);
 
-        try {
-            // Start a database transaction
-            DB::beginTransaction();
+        $transactionNumber = 'TXN-' . date('YmdHis') . '-' . rand(1000, 9999);
 
-            // Generate a unique transaction number
-            $transactionNumber = 'TXN-' . strtoupper(Str::random(8));
+        try {
+            DB::beginTransaction();
 
             // Create the sale record
             $sale = Sale::create([
-                'total_amount' => $validated['total'],
-                'amount_paid' => $validated['amountPaid'],
-                'change_amount' => $validated['change'],
-                'cashier_name' => 'John Doe', // This would come from auth user in a real app
-                'payment_method' => 'cash', // Default to cash for now
                 'transaction_number' => $transactionNumber,
+                'customer_name' => $validated['customer_name'] ?? 'Walk-in Customer',
+                'user_id' => $user->id,
+                'cashier_name' => $user->name,
+                'payment_method' => $validated['payment_method'],
+                'total_amount' => $validated['total_amount'] * 100, // Store in cents
             ]);
 
-            // Create sale items
+            // Create sale items and update product stock
             foreach ($validated['items'] as $item) {
-                SaleItem::create([
-                    'sale_id' => $sale->id,
+                // Update product stock
+                $product = Product::findOrFail($item['id']);
+
+                // Check if user has permission to sell products with low stock
+                if ($product->stock < $item['quantity'] && !$user->isSupervisor()) {
+                    throw new \Exception("Insufficient stock for product: {$product->name}. Available: {$product->stock}");
+                }
+
+                // Update the stock
+                $product->decrement('stock', $item['quantity']);
+
+                // Create the sale item
+                $sale->items()->create([
                     'product_id' => $item['id'],
                     'product_name' => $item['name'],
                     'quantity' => $item['quantity'],
-                    'unit_price' => $item['price'],
-                    'subtotal' => $item['subtotal'],
+                    'unit_price' => $item['price'] * 100, // Store in cents
+                    'subtotal' => $item['subtotal'] * 100, // Store in cents
                 ]);
             }
 
-            // Commit the transaction
             DB::commit();
 
-            // Return success response with Inertia
             return back()->with([
                 'success' => true,
                 'message' => 'Sale recorded successfully',
@@ -71,13 +88,13 @@ class SalesController extends Controller
                 'sale_id' => $sale->id,
             ]);
         } catch (\Exception $e) {
-            // Rollback the transaction in case of error
             DB::rollBack();
             Log::error('Error recording sale: ' . $e->getMessage());
 
             return back()->with([
-                'error' => 'Failed to record sale: ' . $e->getMessage()
-            ]);
+                'success' => false,
+                'message' => 'Error recording sale: ' . $e->getMessage(),
+            ])->withInput();
         }
     }
 
@@ -86,22 +103,42 @@ class SalesController extends Controller
      */
     public function index(): Response
     {
-        $sales = Sale::with('items')->latest()->get();
+        if (auth()->user()->isSupervisor()) {
+            $sales = Sale::with(['items', 'user'])->latest()->get();
+        } else {
+            $sales = Sale::with('items')
+                ->where('user_id', auth()->id())
+                ->latest()
+                ->get();
+        }
 
         return Inertia::render('Sales/Index', [
             'sales' => $sales,
+            'userRole' => auth()->user()->role,
+        ]);
+    }
+
+    public function show(Sale $sale): Response
+    {
+        if (!auth()->user()->isSupervisor() && $sale->user_id !== auth()->id()) {
+            abort(403, 'Unauthorized action.');
+        }
+
+        $sale->load(['items.product', 'user']);
+
+        return Inertia::render('Sales/Show', [
+            'sale' => $sale,
+            'userRole' => auth()->user()->role,
         ]);
     }
 
     /**
-     * Display the specified sale.
+     * Show the form for creating a new sale.
      */
-    public function show(Sale $sale): Response
+    public function create(): Response
     {
-        $sale->load('items');
-
-        return Inertia::render('Sales/Show', [
-            'sale' => $sale,
-        ]);
+        return Inertia::render('Sales/Create');
     }
+
+
 }

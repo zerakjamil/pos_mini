@@ -120,16 +120,13 @@ const BarcodeScanner = forwardRef<BarcodeScannerRef, BarcodeScannerProps>(
             value={barcode}
             onChange={(e) => setBarcode(e.target.value)}
             onPressEnter={(e) => {
-              e.preventDefault(); // Prevent form submission
+              e.preventDefault();
               handleSubmit();
             }}
             prefix={<BarcodeOutlined />}
             style={{ width: 300 }}
             autoFocus
           />
-          <Button type="primary" onClick={handleSubmit}>
-            Add
-          </Button>
           <Button onClick={onProductLookup} icon={<SearchOutlined />}>
             Product Lookup
           </Button>

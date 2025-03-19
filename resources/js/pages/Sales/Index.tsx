@@ -1,10 +1,11 @@
 import React from 'react';
 import { Head, Link } from '@inertiajs/react';
-import { Table, Typography, Button, Layout, Card, Space } from 'antd';
-import { ArrowLeftOutlined, EyeOutlined } from '@ant-design/icons';
+import { Table, Typography, Button, Card, Space } from 'antd';
+import { EyeOutlined } from '@ant-design/icons';
+import AppLayout from '@/layouts/app-layout';
+import { type BreadcrumbItem } from '@/types';
 
 const { Title } = Typography;
-const { Content, Header, Footer } = Layout;
 
 interface Transaction {
   id: number;
@@ -23,6 +24,11 @@ interface SalesIndexProps {
 }
 
 const SalesIndex: React.FC<SalesIndexProps> = ({ transactions }) => {
+  const breadcrumbs: BreadcrumbItem[] = [
+    { title: 'Dashboard', href: route('dashboard') },
+    { title: 'Sales History', href: route('sales.index') },
+  ];
+
   const columns = [
     {
       title: 'Transaction #',
@@ -56,7 +62,7 @@ const SalesIndex: React.FC<SalesIndexProps> = ({ transactions }) => {
       title: 'Actions',
       key: 'actions',
       render: (_, record: Transaction) => (
-        <Link href={`/sales/${record.id}`}>
+        <Link href={route('sales.show', record.id)}>
           <Button type="primary" icon={<EyeOutlined />} size="small">
             View
           </Button>
@@ -66,28 +72,18 @@ const SalesIndex: React.FC<SalesIndexProps> = ({ transactions }) => {
   ];
 
   return (
-    <Layout style={{ minHeight: '100vh' }}>
+    <AppLayout breadcrumbs={breadcrumbs}>
       <Head title="Sales History" />
-
-      <Header style={{ background: '#fff', padding: '0 16px' }}>
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', height: '100%' }}>
-          <div style={{ display: 'flex', alignItems: 'center' }}>
-            <Link href="/">
-              <Button icon={<ArrowLeftOutlined />} style={{ marginRight: 16 }}>
-                Back to Dashboard
-              </Button>
-            </Link>
-            <Title level={4} style={{ margin: 0 }}>Sales History</Title>
-          </div>
-          <Link href="/cashier">
+      <div className="flex h-full flex-1 flex-col gap-4 rounded-xl p-4">
+        <div className="flex items-center justify-between mb-4">
+          <Title level={4}>Sales History</Title>
+          <Link href={route('cashier')}>
             <Button type="primary">
               New Sale
             </Button>
           </Link>
         </div>
-      </Header>
 
-      <Content style={{ padding: '24px' }}>
         <Card>
           <Table
             columns={columns}
@@ -100,12 +96,8 @@ const SalesIndex: React.FC<SalesIndexProps> = ({ transactions }) => {
             }}
           />
         </Card>
-      </Content>
-
-      <Footer style={{ textAlign: 'center' }}>
-        POS System ©{new Date().getFullYear()}
-      </Footer>
-    </Layout>
+      </div>
+    </AppLayout>
   );
 };
 

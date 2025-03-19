@@ -1,10 +1,9 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Layout, Card, Row, Col, message, Button } from 'antd';
-import { usePage, Link } from '@inertiajs/react';
-import { ArrowLeftOutlined, HistoryOutlined } from '@ant-design/icons';
+import { Card, Row, Col, message, Button } from 'antd';
+import { usePage, Head } from '@inertiajs/react';
+import AppLayout from '@/layouts/app-layout';
 
 // Import components
-import CashierHeader from '../components/cashier/CashierHeader';
 import BarcodeScanner, { BarcodeScannerRef } from '../components/cashier/BarcodeScanner';
 import CartTable from '../components/cashier/CartTable';
 import TransactionSummary from '../components/cashier/TransactionSummary';
@@ -17,15 +16,19 @@ import { saveTransaction } from '../utils/transaction-service';
 import { printReceipt, openCashDrawer } from '../utils/receipt-printer';
 
 // Import types
-import { CartItem, ProductType } from '../types/cashier';
-
-const { Content, Footer, Header } = Layout;
+import { CartItem, ProductType, BreadcrumbItem } from '../types';
 
 const CashierSystem: React.FC = () => {
   // Get products from props
   const { products } = usePage().props as unknown as {
     products: ProductType[]
   };
+
+  // Define breadcrumbs for this page
+  const breadcrumbs: BreadcrumbItem[] = [
+    { title: 'Dashboard', href: route('dashboard') },
+    { title: 'Cashier', href: route('cashier') },
+  ];
 
   // State for cart items
   const [cartItems, setCartItems] = useState<CartItem[]>([]);
@@ -84,7 +87,6 @@ const CashierSystem: React.FC = () => {
     setSelectedProduct(productId);
   };
 
-  // Handle adding product from lookup
   const handleAddProductFromLookup = () => {
     if (selectedProduct) {
       const product = products.find(p => p.id === selectedProduct);
@@ -187,29 +189,12 @@ const CashierSystem: React.FC = () => {
   };
 
   return (
-    <Layout style={{ minHeight: '100vh' }}>
-      <Header style={{ background: '#fff', padding: '0 16px' }}>
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', height: '100%' }}>
-          <div style={{ display: 'flex', alignItems: 'center' }}>
-            <Link href="/">
-              <Button icon={<ArrowLeftOutlined />} style={{ marginRight: 16 }}>
-                Back to Dashboard
-              </Button>
-            </Link>
-            <CashierHeader />
-          </div>
-          <Link href="/sales">
-            <Button icon={<HistoryOutlined />} type="primary">
-              Sales History
-            </Button>
-          </Link>
-        </div>
-      </Header>
-
-      <Content style={{ padding: '20px' }}>
+    <AppLayout breadcrumbs={breadcrumbs}>
+      <Head title="Cashier System" />
+      <div className="flex h-full flex-1 flex-col gap-4 rounded-xl p-4">
         <Row gutter={[16, 16]}>
-          <Col span={16}>
-            <Card title="Current Transaction">
+          <Col xs={24} lg={16}>
+            <Card title="Current Transaction" className="h-full">
               <BarcodeScanner
                 ref={barcodeScannerRef}
                 onBarcodeScan={handleBarcodeScan}
@@ -225,8 +210,8 @@ const CashierSystem: React.FC = () => {
             </Card>
           </Col>
 
-          <Col span={8}>
-            <Card title="Transaction Summary" bordered={false}>
+          <Col xs={24} lg={8}>
+            <Card title="Transaction Summary" bordered={false} className="h-full">
               <TransactionSummary
                 cartItems={cartItems}
                 total={total}
@@ -236,11 +221,7 @@ const CashierSystem: React.FC = () => {
             </Card>
           </Col>
         </Row>
-      </Content>
-
-      <Footer style={{ textAlign: 'center' }}>
-        POS Cashier System ©{new Date().getFullYear()}
-      </Footer>
+      </div>
 
       {/* Modals */}
       <CheckoutModal
@@ -265,7 +246,7 @@ const CashierSystem: React.FC = () => {
           setSelectedProduct(null);
         }}
       />
-    </Layout>
+    </AppLayout>
   );
 };
 
