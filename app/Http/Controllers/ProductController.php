@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\{Category, Product};
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use Inertia\{Inertia, Response};
 use Illuminate\Routing\Controller as Controller;
 
@@ -178,21 +179,24 @@ public function update(Request $request, Product $product)
 
     // Only supervisors can update products
     if (!$user->isSupervisor()) {
-        return redirect()->route('products.index')
-            ->with('error', 'You do not have permission to update products.');
+        return response()->json(['error' => 'You do not have permission to update products.'], 403);
     }
 
-    $validated = $request->validate([
-        'name' => 'required|string|max:255',
-        'price' => 'required|numeric|min:0',
+   $validated = $request->validate([
+       'name' => 'required|string|max:255',
+       'price' => 'required|numeric|min:0',
+       'batch_price' => 'required|numeric|min:0',
+       'units_per_batch' => 'required|integer|min:1',
         'category_id' => 'required|exists:categories,id',
-        'stock' => 'required|integer|min:0',
-        'barcode' => 'nullable|string|max:255|unique:products,barcode,' . $product->id,
-        'reorder_level' => 'nullable|integer|min:0',
-        'brand' => 'nullable|string|max:255',
-        'image' => 'nullable|image|max:2048',
-        'expiration_date' => 'nullable|date|after:today',
-    ]);
+       'stock' => 'required|integer|min:0',
+       'reorder_level' => 'nullable|integer|min:0',
+       'image' => 'nullable|image|max:2048',
+       'expiration_date' => 'nullable|date',
+   ]);
+
+    if ($validated->fails()) {
+        return response()->json(['errors' => $validated->errors()], 422);
+    }
 
     // Handle image upload if present
     if ($request->hasFile('image')) {

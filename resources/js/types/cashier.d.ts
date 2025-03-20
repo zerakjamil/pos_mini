@@ -42,3 +42,8 @@ export interface TransactionItem {
   unit_price: number;
   subtotal: number;
 }
+
+export interface BreadCrumb {
+    title: string;
+    href: string;
+}

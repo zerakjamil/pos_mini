@@ -18,7 +18,6 @@ class Product extends Model
         'batch_price',
         'category_id',
         'units_per_batch',
-        'category',
         'stock',
         'reorder_level',
         'brand',

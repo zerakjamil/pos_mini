@@ -6,6 +6,7 @@ import { createRoot } from 'react-dom/client';
 import { initializeTheme } from './hooks/use-appearance';
 
 const appName = import.meta.env.VITE_APP_NAME || 'Laravel';
+import.meta.env.VITE_SERVER_URL = import.meta.env.VITE_SERVER_URL || 'http://192.168.101.143:5173';
 
 createInertiaApp({
     title: (title) => `${title} - ${appName}`,

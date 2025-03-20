@@ -1,4 +1,4 @@
-import React, { useRef, useEffect, useState, forwardRef, useImperativeHandle } from 'react';
+import React, { useRef, useEffect, useState, forwardRef, useImperativeHandle, useCallback } from 'react';
 import { Input, Button, Space } from 'antd';
 import { BarcodeOutlined, SearchOutlined } from '@ant-design/icons';
 
@@ -40,10 +40,10 @@ const BarcodeScanner = forwardRef<BarcodeScannerRef, BarcodeScannerProps>(
     }, []);
 
     // Process a scanned barcode
-    const processBarcode = (scannedBarcode: string) => {
+    // Memoize the processBarcode function
+    const processBarcode = useCallback((scannedBarcode: string) => {
       const currentTime = Date.now();
 
-      // Check if this is a duplicate scan (same barcode within cooldown period)
       if (
         scannedBarcode === lastScannedBarcode &&
         currentTime - lastScanTime < scanCooldown
@@ -52,13 +52,11 @@ const BarcodeScanner = forwardRef<BarcodeScannerRef, BarcodeScannerProps>(
         return;
       }
 
-      // Update last scan info
       setLastScannedBarcode(scannedBarcode);
       setLastScanTime(currentTime);
 
-      // Process the barcode
       onBarcodeScan(scannedBarcode);
-    };
+    }, [lastScannedBarcode, lastScanTime, onBarcodeScan]);
 
     // Handle barcode scanner input
     useEffect(() => {
@@ -99,7 +97,7 @@ const BarcodeScanner = forwardRef<BarcodeScannerRef, BarcodeScannerProps>(
         window.removeEventListener('keydown', handleKeyDown);
         if (barcodeTimeout) clearTimeout(barcodeTimeout);
       };
-    }, [barcodeBuffer, barcodeTimeout, onBarcodeScan, lastScannedBarcode, lastScanTime]);
+    }, [barcodeBuffer, barcodeTimeout, onBarcodeScan, lastScannedBarcode, lastScanTime, processBarcode]);
 
     const handleSubmit = () => {
       if (barcode.trim()) {
