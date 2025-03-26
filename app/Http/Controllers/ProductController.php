@@ -4,20 +4,15 @@ namespace App\Http\Controllers;
 
 use App\Models\{Category, Product};
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Redirect;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Validation\ValidationException;
 use Inertia\{Inertia, Response};
-use Illuminate\Routing\Controller as Controller;
 
 class ProductController extends Controller
 {
-    /**
-     * Create a new controller instance.
-     */
-    public function __construct()
-    {
-        $this->middleware('auth');
-        $this->middleware('role:supervisor')->only(['create', 'store', 'edit', 'update', 'destroy']);
-    }
     /**
      * Display a listing of the resource.
      */
@@ -39,7 +34,7 @@ class ProductController extends Controller
             ];
         });
 
-        $categories = Category::where('active', true)->pluck('name');
+        $categories = $this->getActiveCategories();
 
         return Inertia::render('Products/ProductsPage', [
             'products' => $products,
@@ -48,78 +43,36 @@ class ProductController extends Controller
     }
 
     /**
- * Display the cashier interface.
- */
-public function cashier(): Response
-{
-    $products = [
-        [
-            'id' => '1',
-            'key' => '1',
-            'name' => 'Laptop Pro',
-            'price' => 1299.99,
-            'category' => 'Electronics',
-            'stock' => 45,
-            'barcode' => '8693029702950', // EAN-13 format
-        ],
-        [
-            'id' => '2',
-            'key' => '2',
-            'name' => 'Wireless Headphones',
-            'price' => 199.99,
-            'category' => 'Electronics',
-            'stock' => 120,
-            'barcode' => '7501234567891', // EAN-13 format
-        ],
-        [
-            'id' => '3',
-            'key' => '3',
-            'name' => 'Coffee Maker',
-            'price' => 89.99,
-            'category' => 'Kitchen',
-            'stock' => 30,
-            'barcode' => '0123456789012', // UPC-A format
-        ],
-        [
-            'id' => '4',
-            'key' => '4',
-            'name' => 'Fitness Tracker',
-            'price' => 129.99,
-            'category' => 'Wearables',
-            'stock' => 75,
-            'barcode' => '6901234567893', // EAN-13 format
-        ],
-        [
-            'id' => '5',
-            'key' => '5',
-            'name' => 'Smart Speaker',
-            'price' => 149.99,
-            'category' => 'Electronics',
-            'stock' => 60,
-            'barcode' => '0987654321098', // UPC-A format
-        ],
-        [
-            'id' => '6',
-            'key' => '6',
-            'name' => 'Blender',
-            'price' => 79.99,
-            'category' => 'Kitchen',
-            'stock' => 25,
-            'barcode' => '8681038207009', // EAN-13 format
-        ]
-    ];
+     * Display the cashier interface.
+     */
+    public function cashier(): Response
+    {
+        $products = Product::with('category')
+            ->where('stock', '>', 0)
+            ->get()
+            ->map(function ($product) {
+                return [
+                    'id' => (string)$product->id,
+                    'key' => (string)$product->id,
+                    'name' => $product->name,
+                    'price' => $product->price / 100,
+                    'category' => $product->category ? $product->category->name : 'Uncategorized',
+                    'stock' => $product->stock,
+                    'barcode' => $product->barcode ?? '',
+                ];
+            });
 
-    return Inertia::render('CashierSystem', [
-        'products' => $products,
-    ]);
-}
+        return Inertia::render('CashierSystem', [
+            'products' => $products,
+        ]);
+    }
 
     /**
      * Show the form for creating a new product.
      */
     public function create(): Response
     {
-        $categories = Category::where('active', true)->get();
+        $categories = $this->getActiveCategories();
 
         return Inertia::render('Products/Create', [
             'categories' => $categories,
@@ -127,119 +80,189 @@ public function cashier(): Response
     }
 
     /**
+     * Show the form for editing a product.
+     */
+    public function edit(Product $product): Response
+    {
+        $categories = $this->getActiveCategories();
+
+        // Format product data for the form
+        $productData = $this->formatProductForForm($product);
+
+        return Inertia::render('Products/Edit', [
+            'product' => $productData,
+            'categories' => $categories,
+        ]);
+    }
+
+    /**
      * Store a newly created resource in storage.
      */
-/**
- * Store a newly created resource in storage.
- */
-public function store(Request $request)
-{
-    $user = auth()->user();
+    public function store(Request $request): RedirectResponse
+    {
+        Log::info('Store method called', ['request_data' => $request->all()]);
 
-    // Only supervisors can add products
-    if (!$user->isSupervisor()) {
-        return redirect()->route('products.index')
-            ->with('error', 'You do not have permission to add products.');
+        try {
+            $validated = $this->validateProduct($request);
+            $validated = $this->handleImageUpload($request, $validated);
+
+            Product::create($validated);
+
+            Log::info('Product created successfully');
+            return Redirect::route('product.index')
+                ->with('success', 'Product created successfully.');
+
+        } catch (ValidationException $e) {
+            Log::error('Validation failed', [
+                'errors' => $e->errors(),
+                'request_data' => $request->all()
+            ]);
+            throw $e;
+        } catch (\Exception $e) {
+            Log::error('Product creation failed', [
+                'error' => $e->getMessage(),
+            ]);
+            return Redirect::back()
+                ->with('error', 'Failed to create product: ' . $e->getMessage());
+        }
     }
 
-    $validated = $request->validate([
-        'name' => 'required|string|max:255',
-        'price' => 'required|numeric|min:0',
-        'category_id' => 'required|exists:categories,id',
-        'stock' => 'required|integer|min:0',
-        'barcode' => 'nullable|string|max:255|unique:products,barcode',
-        'reorder_level' => 'nullable|integer|min:0',
-        'brand' => 'nullable|string|max:255',
-        'image' => 'nullable|image|max:2048',
-        'expiration_date' => 'nullable|date|after:today',
-    ]);
+    /**
+     * Update the specified resource in storage.
+     */
+    public function update(Request $request, Product $product): RedirectResponse
+    {
+        try {
+            $validated = $this->validateProduct($request, $product->id);
+            $validated = $this->handleImageUpload($request, $validated, $product);
 
-    // Handle image upload if present
-    if ($request->hasFile('image')) {
-        $imagePath = $request->file('image')->store('products', 'public');
-        $validated['image_path'] = $imagePath;
+            $product->update($validated);
+
+            return Redirect::route('product.index')
+                ->with('success', 'Product updated successfully.');
+
+        } catch (ValidationException $e) {
+            Log::error('Validation failed during update', [
+                'errors' => $e->errors(),
+                'product_id' => $product->id
+            ]);
+            throw $e;
+        } catch (\Exception $e) {
+            Log::error('Product update failed', [
+                'error' => $e->getMessage(),
+                'product_id' => $product->id
+            ]);
+            return Redirect::back()
+                ->with('error', 'Failed to update product: ' . $e->getMessage());
+        }
     }
 
-    // Convert price to cents for storage
-    $validated['price'] = $validated['price'] * 100;
+    /**
+     * Remove the specified resource from storage.
+     */
+    public function destroy(Product $product): RedirectResponse
+    {
+        try {
+            // Delete the product image if exists
+            if ($product->image_path) {
+                Storage::disk('public')->delete($product->image_path);
+            }
 
-    // Create the product
-    $product = Product::create($validated);
+            $product->delete();
 
-    return redirect()->route('products.index')
-        ->with('success', 'Product created successfully.');
-}
-
-/**
- * Update the specified resource in storage.
- */
-public function update(Request $request, Product $product)
-{
-    $user = auth()->user();
-
-    // Only supervisors can update products
-    if (!$user->isSupervisor()) {
-        return response()->json(['error' => 'You do not have permission to update products.'], 403);
+            return Redirect::route('product.index')
+                ->with('success', 'Product deleted successfully.');
+        } catch (\Exception $e) {
+            Log::error('Product deletion failed', [
+                'error' => $e->getMessage(),
+                'product_id' => $product->id
+            ]);
+            return Redirect::back()
+                ->with('error', 'Failed to delete product: ' . $e->getMessage());
+        }
     }
 
-   $validated = $request->validate([
-       'name' => 'required|string|max:255',
-       'price' => 'required|numeric|min:0',
-       'batch_price' => 'required|numeric|min:0',
-       'units_per_batch' => 'required|integer|min:1',
-        'category_id' => 'required|exists:categories,id',
-       'stock' => 'required|integer|min:0',
-       'reorder_level' => 'nullable|integer|min:0',
-       'image' => 'nullable|image|max:2048',
-       'expiration_date' => 'nullable|date',
-   ]);
-
-    if ($validated->fails()) {
-        return response()->json(['errors' => $validated->errors()], 422);
-    }
-
-    // Handle image upload if present
-    if ($request->hasFile('image')) {
-        // Delete old image if exists
-        if ($product->image_path) {
-            Storage::disk('public')->delete($product->image_path);
+    /**
+     * Validate product input
+     */
+    private function validateProduct(Request $request, ?int $productId = null): array
+    {
+        $barcodeRule = 'nullable|string|max:255';
+        if (!$productId) {
+            $barcodeRule .= '|unique:products,barcode';
+        } else {
+            $barcodeRule .= '|unique:products,barcode,' . $productId;
         }
 
-        $imagePath = $request->file('image')->store('products', 'public');
-        $validated['image_path'] = $imagePath;
+        return $request->validate([
+            'name' => 'required|string|max:255',
+            'price' => 'required|numeric|min:0',
+            'category_id' => 'required|exists:categories,id',
+            'stock' => 'required|integer|min:0',
+            'barcode' => $barcodeRule,
+            'reorder_level' => 'nullable|integer|min:0',
+            'brand' => 'nullable|string|max:255',
+            'image' => 'nullable|image|max:2048',
+            'expiration_date' => 'nullable|date',
+            'batch_price' => 'required|numeric|min:0',
+            'units_per_batch' => 'required|integer|min:1',
+        ]);
     }
 
-    // Convert price to cents for storage
-    $validated['price'] = $validated['price'] * 100;
+    /**
+     * Handle image upload for product
+     */
+    private function handleImageUpload(Request $request, array $validated, ?Product $product = null): array
+    {
+        if ($request->hasFile('image')) {
+            Log::info('Processing image upload');
 
-    // Update the product
-    $product->update($validated);
+            // Delete old image if updating
+            if ($product && $product->image_path) {
+                Storage::disk('public')->delete($product->image_path);
+            }
 
-    return redirect()->route('products.index')
-        ->with('success', 'Product updated successfully.');
-}
+            try {
+                $imagePath = $request->file('image')->store('products', 'public');
+                $validated['image_path'] = $imagePath;
+                Log::info('Image stored successfully', ['path' => $imagePath]);
+            } catch (\Exception $e) {
+                Log::error('Image upload failed', [
+                    'error' => $e->getMessage()
+                ]);
+                throw $e;
+            }
+        }
 
-/**
- * Remove the specified resource from storage.
- */
-public function destroy(Product $product)
-{
-    $user = auth()->user();
-
-    // Only supervisors can delete products
-    if (!$user->isSupervisor()) {
-        return redirect()->route('products.index')
-            ->with('error', 'You do not have permission to delete products.');
+        return $validated;
     }
 
-    // Delete the product image if exists
-    if ($product->image_path) {
-        Storage::disk('public')->delete($product->image_path);
+    /**
+     * Format product data for form display
+     */
+    private function formatProductForForm(Product $product): array
+    {
+        return [
+            'id' => $product->id,
+            'name' => $product->name,
+            'price' => $product->price / 100,
+            'batch_price' => $product->batch_price / 100,
+            'units_per_batch' => $product->units_per_batch,
+            'category_id' => $product->category_id,
+            'stock' => $product->stock,
+            'barcode' => $product->barcode,
+            'reorder_level' => $product->reorder_level,
+            'brand' => $product->brand,
+            'expiration_date' => $product->expiration_date,
+            'image_path' => $product->image_path ? Storage::url($product->image_path) : null,
+        ];
     }
 
-    $product->delete();
-
-    return redirect()->route('products.index')
-        ->with('success', 'Product deleted successfully.');
-}
+    /**
+     * Get active categories
+     */
+    private function getActiveCategories(): array
+    {
+        return Category::where('active', true)->get(['id', 'name'])->toArray();
+    }
 }
