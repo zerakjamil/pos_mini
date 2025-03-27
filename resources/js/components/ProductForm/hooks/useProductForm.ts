@@ -61,7 +61,7 @@ export const useProductForm = (
       formData.append('image', fileList[0].originFileObj);
     }
 
-    post(route('products.store'), formData, {
+    post(route('product.store'), formData, {
       onSuccess: () => {
         message.success('Product added successfully!');
         resetForm();

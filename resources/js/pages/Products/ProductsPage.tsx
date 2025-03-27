@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
 import { Button, Input, Space, Table, Tag, Select, Image, Typography, Badge, Slider, DatePicker } from 'antd';
-import { SearchOutlined, PlusOutlined, EditOutlined, DeleteOutlined, WarningOutlined } from '@ant-design/icons';
+import { SearchOutlined, PlusOutlined, EditOutlined, WarningOutlined } from '@ant-design/icons';
 import type { ColumnsType } from 'antd/es/table';
 import { usePage, Link } from '@inertiajs/react';
 import AppLayout from '@/layouts/app-layout';
 import dayjs from 'dayjs';
+import DeleteProduct from '@/pages/Products/DeleteProduct';
 
 const { Text } = Typography;
 const { RangePicker } = DatePicker;
@@ -125,7 +126,7 @@ const ProductsPage: React.FC = () => {
             title: 'Name',
             dataIndex: 'name',
             key: 'name',
-            render: (text, record) => <Link href={route('products.edit', record.id)}>{text}</Link>,
+            render: (text, record) => <Link href={route('product.edit', record.id)}>{text}</Link>,
         },
         {
             title: 'Price',
@@ -208,19 +209,10 @@ const ProductsPage: React.FC = () => {
             key: 'action',
             render: (_, record) => (
                 <Space size="middle">
-                    <Link href={route('products.edit', record.id)}>
+                    <Link href={route('product.edit', record.id)}>
                         <Button type="text" icon={<EditOutlined />}>Edit</Button>
                     </Link>
-                    <Button
-                        type="text"
-                        danger
-                        icon={<DeleteOutlined />}
-                        onClick={() => {
-                            // Delete action
-                        }}
-                    >
-                        Delete
-                    </Button>
+                    <DeleteProduct product={record} />
                 </Space>
             ),
         },
@@ -245,7 +237,7 @@ const ProductsPage: React.FC = () => {
             <div className="products-dashboard">
                 <div className="mb-6 flex items-center justify-between">
                     <h1 className="text-2xl font-bold">Products Management</h1>
-                    <Link href={route('products.create')}>
+                    <Link href={route('product.create')}>
                         <Button type="primary" icon={<PlusOutlined />}>
                             Add Product
                         </Button>

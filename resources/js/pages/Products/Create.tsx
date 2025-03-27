@@ -21,7 +21,7 @@ const Create: React.FC = () => {
     const breadcrumbs: BreadCrumb[] = [
         {title: 'Dashboard', href: route('dashboard')},
         {title: 'Products', href: route('product.index')},
-        {title: 'Create Product', href: route('products.create')},
+        {title: 'Create Product', href: route('product.create')},
     ];
 
     return (

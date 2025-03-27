@@ -190,7 +190,7 @@ export default function Dashboard() {
                         </Col>
                         {isSupervisor && (
                             <Col xs={24} sm={8}>
-                                <Link href={route('products.create')}>
+                                <Link href={route('product.create')}>
                                     <Button icon={<Package className="w-4 h-4" />} size="large" block>
                                         Add Product
                                     </Button>
