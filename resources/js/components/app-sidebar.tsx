@@ -1,10 +1,20 @@
+import { NavFooter } from '@/components/nav-footer';
 import { NavMain } from '@/components/nav-main';
-import { Link, usePage } from '@inertiajs/react';
 import { NavUser } from '@/components/nav-user';
 import { Sidebar, SidebarContent, SidebarFooter, SidebarHeader, SidebarMenu, SidebarMenuButton, SidebarMenuItem } from '@/components/ui/sidebar';
+import { Link, usePage } from '@inertiajs/react';
+import {
+    BarChart2,
+    ClipboardIcon,
+    Folder,
+    LayoutGrid,
+    Package,
+    PieChart,
+    Settings,
+    ShoppingCart,
+    Users
+} from 'lucide-react';
 import AppLogo from './app-logo';
-import { NavFooter } from '@/components/nav-footer';
-import { BookOpen, Folder, LayoutGrid, ShoppingCart, Users, Settings, BarChart2, Package } from 'lucide-react';
 
 export function AppSidebar() {
     // Get user role from the page props inside the component
@@ -37,11 +47,28 @@ export function AppSidebar() {
             href: route('cashier'),
             icon: ShoppingCart,
             active: route().current('cashier'),
-        }
+        },
+        {
+            title: 'Debtors',
+            href: route('debtors.index'),
+            icon: Users,
+            active: route().current('debtors.*'),
+        },
+        {
+            title: 'Debts',
+            href: route('debts.index'),
+            icon: ClipboardIcon,
+            active: route().current('debts.*'),
+        },
     ];
 
-    // Supervisor-specific items
     const supervisorNavItems: ExtendedNavItem[] = [
+        {
+            title: 'Reports',
+            href: route('reports.index'),
+            icon: PieChart,
+            active: route().current('reports.*'),
+        },
         {
             title: 'User Management',
             href: route('users.index'),
@@ -59,13 +86,11 @@ export function AppSidebar() {
             href: route('settings.index'),
             icon: Settings,
             active: route().current('settings.index'),
-        }
+        },
     ];
 
     // Combine the navigation items based on user role
-    const navItems = isSupervisor
-        ? [...mainNavItems, ...supervisorNavItems]
-        : mainNavItems;
+    const navItems = isSupervisor ? [...mainNavItems, ...supervisorNavItems] : mainNavItems;
 
     const footerNavItems: ExtendedNavItem[] = [
         // Your footer nav items here

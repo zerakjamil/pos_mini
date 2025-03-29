@@ -28,7 +28,7 @@ const CartTable: React.FC<CartTableProps> = ({
       title: 'Price',
       dataIndex: 'price',
       key: 'price',
-      render: (price: number) => `$${price.toFixed(2)}`,
+      render: (price: number) => `IQD ${price.toFixed(0)}`,
     },
     {
       title: 'Quantity',
@@ -47,7 +47,7 @@ const CartTable: React.FC<CartTableProps> = ({
       title: 'Subtotal',
       dataIndex: 'subtotal',
       key: 'subtotal',
-      render: (subtotal: number) => `$${subtotal.toFixed(2)}`,
+      render: (subtotal: number) => `IQD ${subtotal.toFixed(0)}`,
     },
     {
       title: 'Action',
@@ -76,7 +76,7 @@ const CartTable: React.FC<CartTableProps> = ({
               <Text strong>Total</Text>
             </Table.Summary.Cell>
             <Table.Summary.Cell index={1}>
-              <Text strong>${total.toFixed(2)}</Text>
+              <Text strong>IQD {total.toFixed(0)}</Text>
             </Table.Summary.Cell>
             <Table.Summary.Cell index={2} />
           </Table.Summary.Row>

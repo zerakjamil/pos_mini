@@ -24,46 +24,55 @@ const CheckoutModal: React.FC<CheckoutModalProps> = ({
   loading = false
 }) => {
   return (
-    <Modal
-      title="Complete Transaction"
-      open={visible}
-      onOk={onComplete}
-      onCancel={onCancel}
-      okText="Complete Payment"
-      cancelText="Cancel"
-      confirmLoading={loading}
-      okButtonProps={{ disabled: !amountPaid || amountPaid < total || loading }}
-    >
-      <div style={{ marginBottom: 16 }}>
-        <Row>
-          <Col span={12}><Text strong>Total Amount:</Text></Col>
-          <Col span={12} style={{ textAlign: 'right' }}>
-            <Text strong>${total.toFixed(2)}</Text>
-          </Col>
-        </Row>
-        <Row style={{ marginTop: 16 }}>
-          <Col span={12}><Text>Amount Paid:</Text></Col>
-          <Col span={12} style={{ textAlign: 'right' }}>
-            <InputNumber
-              style={{ width: '100%' }}
-              value={amountPaid}
-              onChange={(value) => onAmountPaidChange(value)}
-              min={total}
-              precision={2}
-              formatter={(value) => `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
-              parser={(value) => Number(value!.replace(/\$\s?|(,*)/g, ''))}
-              disabled={loading}
-            />
-          </Col>
-        </Row>
-        <Row style={{ marginTop: 16 }}>
-          <Col span={12}><Text strong>Change:</Text></Col>
-          <Col span={12} style={{ textAlign: 'right' }}>
-            <Text strong style={{ fontSize: 18 }}>${change.toFixed(2)}</Text>
-          </Col>
-        </Row>
-      </div>
-    </Modal>
+      <Modal
+          title="Complete Transaction"
+          open={visible}
+          onOk={onComplete}
+          onCancel={onCancel}
+          okText="Complete Payment"
+          cancelText="Cancel"
+          confirmLoading={loading}
+          okButtonProps={{ disabled: !amountPaid || amountPaid < total || loading }}
+      >
+          <div style={{ marginBottom: 16 }}>
+              <Row>
+                  <Col span={12}>
+                      <Text strong>Total Amount:</Text>
+                  </Col>
+                  <Col span={12} style={{ textAlign: 'right' }}>
+                      <Text strong>IQD {total.toFixed(0)}</Text>
+                  </Col>
+              </Row>
+              <Row style={{ marginTop: 16 }}>
+                  <Col span={12}>
+                      <Text>Amount Paid:</Text>
+                  </Col>
+                  <Col span={12} style={{ textAlign: 'right' }}>
+                      <InputNumber
+                          style={{ width: '100%' }}
+                          value={amountPaid}
+                          onChange={onAmountPaidChange}
+                          min={0}
+                          precision={0}
+                          formatter={(value) => `IQD ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+                          parser={(value) => Number(value?.toString().replace(/[^\d]/g, ''))}
+                          disabled={loading}
+                          autoFocus
+                      />
+                  </Col>
+              </Row>
+              <Row style={{ marginTop: 16 }}>
+                  <Col span={12}>
+                      <Text strong>Change:</Text>
+                  </Col>
+                  <Col span={12} style={{ textAlign: 'right' }}>
+                      <Text strong style={{ fontSize: 18 }}>
+                          IQD {change.toFixed(0)}
+                      </Text>
+                  </Col>
+              </Row>
+          </div>
+      </Modal>
   );
 };
 
