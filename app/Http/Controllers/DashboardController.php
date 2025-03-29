@@ -26,7 +26,6 @@ class DashboardController extends Controller
         $user = $request->user();
         $isSupervisor = $user->role === 'supervisor';
 
-        // Basic stats for all users
         $stats = [
             'todaySales' => $this->getTodaySales($user, $isSupervisor),
             'productsCount' => Product::count(),
@@ -65,15 +64,13 @@ class DashboardController extends Controller
     {
         $query = Sale::whereDate('created_at', Carbon::today());
 
-        // If not supervisor, only show user's sales
         if (!$isSupervisor) {
             $query->where('user_id', $user->id);
         }
 
         $todaySales = $query->sum('total_amount');
 
-        // Convert from cents to dollars
-        return $todaySales / 100;
+        return $todaySales;
     }
 
     /**

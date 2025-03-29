@@ -1,9 +1,8 @@
-import { PlaceholderPattern } from '@/components/ui/placeholder-pattern';
 import AppLayout from '@/layouts/app-layout';
 import { Head, usePage, Link } from '@inertiajs/react';
-import { Card, Statistic, Button, Table, Tag, Alert, Divider, Row, Col, List } from 'antd';
-import { ShoppingCartOutlined, DollarOutlined, UserOutlined, BarChartOutlined, ExclamationCircleOutlined, WarningOutlined } from '@ant-design/icons';
-import { Settings, Package, AlertTriangle } from 'lucide-react';
+import { Card, Statistic, Button, Table, Tag, Alert, Row, Col } from 'antd';
+import { ShoppingCartOutlined, DollarOutlined, UserOutlined, BarChartOutlined, ExclamationCircleOutlined } from '@ant-design/icons';
+import { Package, AlertTriangle } from 'lucide-react';
 import React from 'react';
 
 interface BreadcrumbItem {
@@ -31,7 +30,10 @@ export default function Dashboard() {
             title: 'Amount',
             dataIndex: 'total_amount',
             key: 'total_amount',
-            render: (amount: number) => `$${(amount / 100).toFixed(2)}`,
+            render: (amount: number | string) => {
+                const numAmount = typeof amount === 'string' ? parseFloat(amount) : amount;
+            return isNaN(numAmount) ? 'IQD 0' : `IQD ${numAmount.toLocaleString()}`;
+            },
         },
         {
             title: 'Date',
@@ -131,9 +133,9 @@ export default function Dashboard() {
                             <Statistic
                                 title="Today's Sales"
                                 value={stats?.todaySales || 0}
-                                precision={2}
+                                precision={0}
                                 prefix={<DollarOutlined />}
-                                suffix="USD"
+                                suffix="IQD"
                             />
                         </Card>
                     </Col>
