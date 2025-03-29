@@ -26,4 +26,12 @@ class SaleItem extends Model
     {
         return $this->belongsTo(Sale::class);
     }
+
+    /**
+     * Get the product that owns the item.
+     */
+    public function product(): BelongsTo
+    {
+        return $this->belongsTo(Product::class);
+    }
 }

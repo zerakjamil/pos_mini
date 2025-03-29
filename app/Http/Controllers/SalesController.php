@@ -2,7 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreSaleRequest;
+use App\Models\Product;
 use App\Models\Sale;
+use App\Models\SaleItem;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\{DB, Log};
 use Inertia\{Inertia, Response};
@@ -10,94 +13,55 @@ use Illuminate\Routing\Controller as Controller;
 
 class SalesController extends Controller
 {
-    /**
-     * Create a new controller instance.
-     */
-    public function __construct()
+    public function store(StoreSaleRequest $request): \Illuminate\Http\RedirectResponse
     {
-        $this->middleware('auth');
-    }
-    /**
-     * Store a newly created sale in storage.
-     */
-    /**
-     * Store a newly created sale in storage.
-     */
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        $user = auth()->user();
+        Log::info('SalesController store method called');
+        Log::info('Request data:', $request->all());
 
-        $validated = $request->validate([
-            'customer_name' => 'nullable|string|max:255',
-            'payment_method' => 'required|string|in:cash,card,mobile_payment',
-            'items' => 'required|array|min:1',
-            'items.*.id' => 'required|exists:products,id',
-            'items.*.quantity' => 'required|integer|min:1',
-            'items.*.price' => 'required|numeric|min:0',
-            'items.*.subtotal' => 'required|numeric|min:0',
-            'total_amount' => 'required|numeric|min:0',
-        ]);
-
-        $transactionNumber = 'TXN-' . date('YmdHis') . '-' . rand(1000, 9999);
-
+        $validatedData = $request->validated();
         try {
             DB::beginTransaction();
 
-            // Create the sale record
             $sale = Sale::create([
-                'transaction_number' => $transactionNumber,
-                'customer_name' => $validated['customer_name'] ?? 'Walk-in Customer',
-                'user_id' => $user->id,
-                'cashier_name' => $user->name,
-                'payment_method' => $validated['payment_method'],
-                'total_amount' => $validated['total_amount'] * 100, // Store in cents
+                'user_id' => auth()->id(),
+                'transaction_number' => 'TXN-' . now()->format('YmdHis') . '-' . rand(1000, 9999),
+                'total_amount' => $validatedData['total_amount'],
+                'payment_method' => $validatedData['payment_method'],
+                'amount_paid' => $validatedData['amount_paid'],
+                'change_amount' => $validatedData['change'],
+                'cashier_name' => auth()->user()->name,
             ]);
 
-            // Create sale items and update product stock
-            foreach ($validated['items'] as $item) {
-                // Update product stock
+            foreach ($validatedData['items'] as $item) {
                 $product = Product::findOrFail($item['id']);
 
-                // Check if user has permission to sell products with low stock
-                if ($product->stock < $item['quantity'] && !$user->isSupervisor()) {
-                    throw new \Exception("Insufficient stock for product: {$product->name}. Available: {$product->stock}");
+                if ($product->stock < $item['quantity']) {
+                    throw new \Exception("Not enough stock for product: {$product->name}");
                 }
 
-                // Update the stock
-                $product->decrement('stock', $item['quantity']);
-
-                // Create the sale item
-                $sale->items()->create([
+                SaleItem::create([
+                    'sale_id' => $sale->id,
                     'product_id' => $item['id'],
-                    'product_name' => $item['name'],
+                    'product_name' => $product->name,
                     'quantity' => $item['quantity'],
-                    'unit_price' => $item['price'] * 100, // Store in cents
-                    'subtotal' => $item['subtotal'] * 100, // Store in cents
+                    'unit_price' => $item['price'],
+                    'subtotal' => $item['subtotal'],
                 ]);
+
+                $product->stock -= $item['quantity'];
+                $product->save();
             }
 
             DB::commit();
 
-            return back()->with([
-                'success' => true,
-                'message' => 'Sale recorded successfully',
-                'transaction_number' => $transactionNumber,
-                'sale_id' => $sale->id,
-            ]);
+            return redirect()->intended(route('cashier', absolute: false));
         } catch (\Exception $e) {
             DB::rollBack();
             Log::error('Error recording sale: ' . $e->getMessage());
 
-            return back()->with([
-                'success' => false,
-                'message' => 'Error recording sale: ' . $e->getMessage(),
-            ])->withInput();
+            return redirect()->intended(route('cashier', absolute: false));
         }
     }
-
     /**
      * Display a listing of sales.
      */

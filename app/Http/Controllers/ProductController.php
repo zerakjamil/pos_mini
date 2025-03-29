@@ -23,7 +23,7 @@ class ProductController extends Controller
                 'id' => $product->id,
                 'key' => (string)$product->id,
                 'name' => $product->name,
-                'price' => $product->price / 100,
+                'price' => $product->price,
                 'category' => $product->category ? $product->category->name : 'Uncategorized',
                 'stock' => $product->stock,
                 'barcode' => $product->barcode ?? '',
@@ -55,7 +55,7 @@ class ProductController extends Controller
                     'id' => (string)$product->id,
                     'key' => (string)$product->id,
                     'name' => $product->name,
-                    'price' => $product->price / 100,
+                    'price' => $product->price,
                     'category' => $product->category ? $product->category->name : 'Uncategorized',
                     'stock' => $product->stock,
                     'barcode' => $product->barcode ?? '',
@@ -163,7 +163,6 @@ class ProductController extends Controller
     public function destroy(Product $product): RedirectResponse
     {
         try {
-            // Delete the product image if exists
             if ($product->image_path) {
                 Storage::disk('public')->delete($product->image_path);
             }

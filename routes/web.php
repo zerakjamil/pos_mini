@@ -1,9 +1,13 @@
 <?php
 
+use App\Http\Controllers\DebtController;
+use App\Http\Controllers\DebtorController;
+use App\Http\Controllers\DebtPaymentController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\ReportsController;
 use App\Http\Controllers\SalesController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\SettingsController;
@@ -51,7 +55,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::put('/products/{product}', [ProductController::class, 'update'])->name('product.update');
         Route::delete('/products/{product}', [ProductController::class, 'destroy'])->name('product.destroy');
 
-        // Category management
+        Route::get('/reports', [ReportsController::class, 'index'])->name('reports.index');
+
         Route::resource('categories', CategoryController::class);
 
         // User management
@@ -60,7 +65,21 @@ Route::middleware(['auth', 'verified'])->group(function () {
         // Settings
         Route::get('/settings', [SettingsController::class, 'index'])->name('settings.index');
         Route::put('/settings', [SettingsController::class, 'update'])->name('settings.update');
+
+        Route::middleware(['verified'])->group(function () {
+            Route::resource('debtors', DebtorController::class);
+            Route::resource('debts', DebtController::class);
+            Route::resource('payments', DebtPaymentController::class)
+                ->except(['index', 'create', 'store']);
+            Route::get('debts/{debt}/payments', [DebtPaymentController::class, 'index'])
+                ->name('debts.payments.index');
+            Route::get('debts/{debt}/payments/create', [DebtPaymentController::class, 'create'])
+                ->name('debts.payments.create');
+            Route::post('debts/{debt}/payments', [DebtPaymentController::class, 'store'])
+                ->name('debts.payments.store');
+        });
     });
+
 });
 
 Route::middleware('auth')->group(function () {

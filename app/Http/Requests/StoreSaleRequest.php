@@ -22,15 +22,15 @@ class StoreSaleRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'payment_method' => 'required|string',
-            'items' => 'required|array',
-            'items.*.id' => 'required|string',
-            'items.*.quantity' => 'required|integer|min:1',
-            'items.*.price' => 'required|numeric|min:0',
-            'items.*.subtotal' => 'required|numeric|min:0',
-            'total_amount' => 'required|numeric|min:0',
-            'amount_paid' => 'required|numeric|min:0',
-            'change' => 'required|numeric|min:0',
+            'payment_method' => ['required','string'],
+            'items' => ['required','array'],
+            'items.*.id' => ['required','string'],
+            'items.*.quantity' => ['required','integer','min:1'],
+            'items.*.price' => ['required','numeric','min:0'],
+            'items.*.subtotal' => ['required','numeric','min:0'],
+            'total_amount' => ['required','numeric','min:0'],
+            'amount_paid' => ['required','numeric','min:0'],
+            'change' => ['required','numeric','min:0'],
         ];
     }
 }
