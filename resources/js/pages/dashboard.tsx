@@ -4,7 +4,6 @@ import { Card, Statistic, Button, Table, Tag, Alert, Row, Col } from 'antd';
 import { ShoppingCartOutlined, DollarOutlined, UserOutlined, BarChartOutlined, ExclamationCircleOutlined } from '@ant-design/icons';
 import { Package, AlertTriangle } from 'lucide-react';
 import React from 'react';
-
 interface BreadcrumbItem {
     title: string;
     href: string;
@@ -125,6 +124,7 @@ export default function Dashboard() {
                 <p className="text-gray-600 mb-4">
                     You are logged in as a {user.role}.
                 </p>
+
 
                 {/* Quick Stats Section */}
                 <Row gutter={16} className="mb-4">
