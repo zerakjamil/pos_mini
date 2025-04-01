@@ -32,20 +32,21 @@ const TransactionSummary: React.FC<TransactionSummaryProps> = ({
         <Row>
           <Col span={12}><Text>Subtotal:</Text></Col>
           <Col span={12} style={{ textAlign: 'right' }}>
-            <Text>${total.toFixed(2)}</Text>
+            <Text>IQD {total.toFixed(0)}</Text>
           </Col>
         </Row>
-        <Row>
-          <Col span={12}><Text>Tax (0%):</Text></Col>
-          <Col span={12} style={{ textAlign: 'right' }}>
-            <Text>$0.00</Text>
-          </Col>
-        </Row>
+        {/*  TODO if tax is applied */}
+        {/*<Row>*/}
+        {/*  <Col span={12}><Text>Tax (0%):</Text></Col>*/}
+        {/*  <Col span={12} style={{ textAlign: 'right' }}>*/}
+        {/*    <Text>$0.00</Text>*/}
+        {/*  </Col>*/}
+        {/*</Row>*/}
         <Divider />
         <Row>
           <Col span={12}><Text strong>Total:</Text></Col>
           <Col span={12} style={{ textAlign: 'right' }}>
-            <Text strong>${total.toFixed(2)}</Text>
+            <Text strong>IQD {total.toFixed(0)}</Text>
           </Col>
         </Row>
       </div>
