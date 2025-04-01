@@ -1,0 +1,64 @@
+{
+  "cashier": {
+    "title": "سیستەمی کاشێر",
+    "currentTransaction": "مامەڵەی ئێستا",
+    "transactionSummary": "پوختەی مامەڵە",
+    "cart": {
+      "empty": "سەبەتە بەتاڵە",
+      "clear": "پاککردنەوەی سەبەتە",
+      "checkout": "پارەدان",
+        "product": "بەرهەم",
+        "price": "نرخ",
+        "quantity": "بڕ",
+        "subtotal": "کۆی لاوەکی",
+        "action": "کردار",
+        "remove": "لابردنی بەرهەم",
+        "total": "کۆی گشتی"
+    },
+    "product": {
+      "notFound": "بەرهەم بە بارکۆدی {{barcode}} نەدۆزرایەوە",
+      "added": "زیادکرا: {{name}}",
+      "lookup": "گەڕان بۆ بەرهەم"
+    },
+    "transaction": {
+      "completed": "مامەڵە بە سەرکەوتوویی تەواو بوو!",
+      "change": "گۆڕانکاری: IQD {{amount}}",
+      "failed": "مامەڵە سەرکەوتوو نەبوو: {{message}}",
+      "amountPaidError": "بڕی پارەدراو دەبێت لانیکەم یەکسان بێت بە کۆی گشتی",
+      "emptyCartError": "ناتوانرێت مامەڵە تەواو بکرێت: سەبەتە بەتاڵە"
+    },
+      "barcode": {
+          "placeholder": "بارکۆد سکان بکە یان دەستی داخڵی بکە",
+          "productLookup": "گەڕان بۆ بەرهەم",
+          "duplicateScan": "سکانی دووبارە دۆزرایەوە و پشتگوێ خرا"
+      },
+      "summary": {
+          "total": "کۆی گشتی",
+          "items": "بەرهەمەکان",
+          "totalQuantity": "کۆی بڕ"
+      },
+      "productLookup": {
+          "title": "گەڕان بۆ بەرهەم",
+          "searchPlaceholder": "گەڕان بۆ بەرهەمێک",
+          "inStock": "{{stock}} لە کۆگادا"
+      },
+      "checkout": {
+          "title": "تەواوکردنی مامەڵە",
+          "completePayment": "تەواوکردنی پارەدان",
+          "totalAmount": "کۆی بڕی پارە",
+          "originalAmount": "ئەسڵی: د.ع {{amount}}",
+          "helped": "یارمەتیدراو",
+          "roundDown": "داگرتن بۆ نزیکترین ١،٠٠٠",
+          "resetAmount": "گەڕانەوە بۆ بڕی ئەسڵی",
+          "amountPaid": "بڕی پارەدراو",
+          "change": "گۆڕانکاری"
+      }
+  },
+  "common": {
+    "dashboard": "داشبۆرد",
+    "cashier": "کاشێر",
+      "currency": "د.ع",
+      "ok": "باشە",
+      "cancel": "هەڵوەشاندنەوە"
+  }
+}

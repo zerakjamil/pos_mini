@@ -1,0 +1,64 @@
+{
+  "cashier": {
+    "title": "Cashier System",
+    "currentTransaction": "Current Transaction",
+    "transactionSummary": "Transaction Summary",
+    "cart": {
+      "empty": "Cart is empty",
+      "clear": "Clear Cart",
+      "checkout": "Checkout",
+        "product": "Product",
+        "price": "Price",
+        "quantity": "Quantity",
+        "subtotal": "Subtotal",
+        "action": "Action",
+        "remove": "Remove item",
+        "total": "Total"
+    },
+    "product": {
+      "notFound": "Product with barcode {{barcode}} not found",
+      "added": "Added: {{name}}",
+      "lookup": "Product Lookup"
+    },
+    "transaction": {
+      "completed": "Transaction completed successfully!",
+      "change": "Change: IQD {{amount}}",
+      "failed": "Transaction failed: {{message}}",
+      "amountPaidError": "Amount paid must be at least equal to the total",
+      "emptyCartError": "Cannot complete transaction: Cart is empty"
+    },
+      "barcode": {
+          "placeholder": "Scan barcode or enter manually",
+          "productLookup": "Product Lookup",
+          "duplicateScan": "Duplicate scan detected and ignored"
+      },
+      "summary": {
+          "total": "Total",
+          "items": "Items",
+          "totalQuantity": "Total Quantity"
+      },
+      "productLookup": {
+          "title": "Product Lookup",
+          "searchPlaceholder": "Search for a product",
+          "inStock": "{{stock}} in stock"
+      },
+      "checkout": {
+          "title": "Complete Transaction",
+          "completePayment": "Complete Payment",
+          "totalAmount": "Total Amount",
+          "originalAmount": "Original: IQD {{amount}}",
+          "helped": "Helped",
+          "roundDown": "Round down to nearest 1,000",
+          "resetAmount": "Reset to original amount",
+          "amountPaid": "Amount Paid",
+          "change": "Change"
+      }
+  },
+  "common": {
+    "dashboard": "Dashboard",
+    "cashier": "Cashier",
+      "currency": "IQD",
+      "ok": "OK",
+      "cancel": "Cancel"
+  }
+}
