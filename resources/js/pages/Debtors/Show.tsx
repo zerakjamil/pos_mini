@@ -2,10 +2,35 @@ import AppLayout from '@/layouts/app-layout';
 import { Head, Link } from '@inertiajs/react';
 import { Card, Button, Typography, Tag, Table, Space, Descriptions } from 'antd';
 import { EditOutlined, PlusOutlined, EyeOutlined } from '@ant-design/icons';
+import { PageProps } from '@inertiajs/core';
 
 const { Title } = Typography;
 
-export default function Show({ debtor, auth }) {
+// Define proper interfaces for the data
+interface Debt {
+  id: number;
+  description: string;
+  due_date: string;
+  amount: number | string;
+  balance: number | string;
+  status: 'paid' | 'partial' | 'pending' | 'overdue';
+}
+
+interface Debtor {
+  id: number;
+  name: string;
+  email?: string;
+  phone?: string;
+  address?: string;
+  notes?: string;
+  debts: Debt[];
+}
+
+interface DebtorShowProps extends PageProps {
+  debtor: Debtor;
+}
+
+export default function Show({ debtor }: DebtorShowProps) {
   const breadcrumbs = [
     { title: 'Dashboard', href: route('dashboard') },
     { title: 'Debtors', href: route('debtors.index') },
@@ -29,14 +54,14 @@ export default function Show({ debtor, auth }) {
       dataIndex: 'amount',
       key: 'amount',
       align: 'right' as const,
-      render: (amount: number) => `$${amount.toFixed(2)}`,
+      render: (amount: number | string) => `$${Number(amount).toFixed(2)}`,
     },
     {
       title: 'Balance',
       dataIndex: 'balance',
       key: 'balance',
       align: 'right' as const,
-      render: (balance: number) => `$${balance.toFixed(2)}`,
+      render: (balance: number | string) => `$${Number(balance).toFixed(2)}`,
     },
     {
       title: 'Status',
@@ -53,7 +78,7 @@ export default function Show({ debtor, auth }) {
       title: 'Actions',
       key: 'actions',
       align: 'right' as const,
-      render: (text: string, record: any) => (
+      render: (_: unknown, record: Debt) => (
         <Space>
           <Link href={route('debts.show', record.id)}>
             <Button icon={<EyeOutlined />} size="small" />
@@ -77,7 +102,8 @@ export default function Show({ debtor, auth }) {
             <Link href={route('debtors.edit', debtor.id)}>
               <Button icon={<EditOutlined />}>Edit</Button>
             </Link>
-            <Link href={route('debts.create')} as="button" method="get" data={{ debtor_id: debtor.id }}>
+            {/* Fix the nested button issue by using a div instead of a button */}
+            <Link href={route('debts.create')} data={{ debtor_id: debtor.id }}>
               <Button type="primary" icon={<PlusOutlined />}>Add Debt</Button>
             </Link>
           </Space>
@@ -97,16 +123,16 @@ export default function Show({ debtor, auth }) {
             <Descriptions column={2}>
               <Descriptions.Item label="Total Debts">{debtor.debts.length}</Descriptions.Item>
               <Descriptions.Item label="Total Amount">
-                ${debtor.debts.reduce((sum, debt) => sum + debt.amount, 0).toFixed(2)}
+                IQD {debtor.debts.reduce((sum: number, debt: Debt) => sum + Number(debt.amount), 0).toLocaleString()}
               </Descriptions.Item>
               <Descriptions.Item label="Outstanding">
                 <span style={{ color: '#ff4d4f', fontWeight: 'bold' }}>
-                  ${debtor.debts.reduce((sum, debt) => sum + debt.balance, 0).toFixed(2)}
+                  IQD {debtor.debts.reduce((sum: number, debt: Debt) => sum + Number(debt.balance), 0).toLocaleString()}
                 </span>
               </Descriptions.Item>
               <Descriptions.Item label="Paid">
                 <span style={{ color: '#52c41a', fontWeight: 'bold' }}>
-                  ${debtor.debts.reduce((sum, debt) => sum + (debt.amount - debt.balance), 0).toFixed(2)}
+                  IQD {debtor.debts.reduce((sum: number, debt: Debt) => sum + (Number(debt.amount) - Number(debt.balance)), 0).toLocaleString()}
                 </span>
               </Descriptions.Item>
             </Descriptions>

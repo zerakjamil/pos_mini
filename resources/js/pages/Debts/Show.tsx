@@ -49,7 +49,7 @@ export default function Show({ debt }) {
       dataIndex: 'amount',
       key: 'amount',
       align: 'right',
-      render: (amount) => `$${parseFloat(amount).toFixed(2)}`,
+      render: (amount) => `IQD ${Number(amount).toLocaleString()}`,
     },
     {
       title: 'Method',
@@ -117,9 +117,9 @@ export default function Show({ debt }) {
             </Descriptions.Item>
             <Descriptions.Item label="Description">{debt.description}</Descriptions.Item>
             <Descriptions.Item label="Due Date">{new Date(debt.due_date).toLocaleDateString()}</Descriptions.Item>
-            <Descriptions.Item label="Total Amount">${amount.toFixed(2)}</Descriptions.Item>
-            <Descriptions.Item label="Balance">${balance.toFixed(2)}</Descriptions.Item>
-            <Descriptions.Item label="Paid Amount">${totalPaid.toFixed(2)}</Descriptions.Item>
+            <Descriptions.Item label="Total Amount">IQD {Number(amount).toLocaleString()}</Descriptions.Item>
+            <Descriptions.Item label="Balance">IQD {Number(balance).toLocaleString()}</Descriptions.Item>
+            <Descriptions.Item label="Paid Amount">IQD {Number(totalPaid).toLocaleString()}</Descriptions.Item>
             <Descriptions.Item label="Created At">{new Date(debt.created_at).toLocaleDateString()}</Descriptions.Item>
           </Descriptions>
         </Card>

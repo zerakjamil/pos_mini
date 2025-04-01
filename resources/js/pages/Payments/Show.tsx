@@ -65,7 +65,7 @@ export default function Show({ payment }) {
         <Card>
           <Descriptions title="Payment Information" bordered column={1}>
             <Descriptions.Item label="Amount">
-              <Text strong>${amount.toFixed(2)}</Text>
+              <Text strong>IQD {Number(amount).toLocaleString()}</Text>
             </Descriptions.Item>
             <Descriptions.Item label="Date">
               {dayjs(payment.payment_date).format('MMMM D, YYYY')}
@@ -95,10 +95,10 @@ export default function Show({ payment }) {
             <Descriptions.Item label="Due Date">
               {dayjs(debt.due_date).format('MMMM D, YYYY')}
             </Descriptions.Item>
-            <Descriptions.Item label="Amount">${debtAmount.toFixed(2)}</Descriptions.Item>
+            <Descriptions.Item label="Amount">IQD {Number(debtAmount).toLocaleString()}</Descriptions.Item>
             <Descriptions.Item label="Balance">
               <Text type={debtBalance > 0 ? "danger" : "success"} strong>
-                ${debtBalance.toFixed(2)}
+                IQD {Number(debtBalance).toLocaleString()}
               </Text>
             </Descriptions.Item>
           </Descriptions>
