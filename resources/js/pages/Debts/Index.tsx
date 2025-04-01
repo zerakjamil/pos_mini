@@ -91,7 +91,7 @@
           dataIndex: 'balance',
           key: 'balance',
           align: 'right',
-          render: (balance) => `IQD ${balance.toLocaleString()}`,
+          render: (balance) => `IQD ${Number(balance).toLocaleString()}`,
         },
         {
           title: 'Status',

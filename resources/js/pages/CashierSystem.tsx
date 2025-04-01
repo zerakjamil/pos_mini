@@ -3,8 +3,10 @@ import { Head, useForm, usePage } from '@inertiajs/react';
 import { Page, PageProps } from '@inertiajs/core';
 import { Card, Col, message, Row } from 'antd';
 import AppLayout from '@/layouts/app-layout';
+import { useTranslation } from 'react-i18next';
 
-// Import components and utilities
+import '../i18n';
+
 import BarcodeScanner, { BarcodeScannerRef } from '../components/cashier/BarcodeScanner';
 import CartTable from '../components/cashier/CartTable';
 import CheckoutModal from '../components/cashier/CheckoutModal';
@@ -13,7 +15,6 @@ import TransactionSummary from '../components/cashier/TransactionSummary';
 import { addProductToCart, calculateTotal, removeItemFromCart, updateItemQuantity } from '../utils/cashier-utils';
 import { openCashDrawer, printReceipt } from '../utils/receipt-printer';
 
-// Import types
 import { CartItem, ProductType } from '@/types/cashier';
 
 interface CashierPageProps extends PageProps {
@@ -36,7 +37,6 @@ interface BreadcrumbItem {
     href: string;
 }
 
-// Define proper types to replace "any"
 interface SaleItemSubmission {
     id: string;
     name: string;
@@ -51,41 +51,35 @@ interface SaleFormData {
     total_amount: number;
     amount_paid: number;
     change: number;
-    [key: string]: any; // Add index signature to satisfy FormDataType constraint
+    [key: string]: any;
 }
 
-// Define error type
 interface TransactionError {
     message?: string;
     [key: string]: any;
 }
 
 const CashierSystem: React.FC = () => {
-    // Page props and config
+    const { t } = useTranslation();
     const { products } = usePage<Page<CashierPageProps>>().props;
     const breadcrumbs: BreadcrumbItem[] = [
         { title: 'Dashboard', href: route('dashboard') },
         { title: 'Cashier', href: route('cashier') },
     ];
 
-    // Cart state
     const [cartItems, setCartItems] = useState<CartItem[]>([]);
     const [total, setTotal] = useState<number>(0);
 
-    // Transaction state
     const [checkoutModalVisible, setCheckoutModalVisible] = useState<boolean>(false);
     const [amountPaid, setAmountPaid] = useState<number | null>(null);
     const [change, setChange] = useState<number>(0);
     const [processingTransaction, setProcessingTransaction] = useState<boolean>(false);
 
-    // Product lookup state
     const [productLookupVisible, setProductLookupVisible] = useState<boolean>(false);
     const [selectedProduct, setSelectedProduct] = useState<string | null>(null);
 
-    // Refs
     const barcodeScannerRef = useRef<BarcodeScannerRef>(null);
 
-    // Extract setData along with post, processing, reset from useForm
     const { data, setData, post, processing, reset } = useForm<SaleFormData>({
         payment_method: 'cash',
         items: [],
@@ -94,7 +88,6 @@ const CashierSystem: React.FC = () => {
         change: 0,
     });
 
-    // Effects
     useEffect(() => {
         setTotal(calculateTotal(cartItems));
     }, [cartItems]);
@@ -113,7 +106,6 @@ const CashierSystem: React.FC = () => {
                     console.log('Transaction successful, server response:', response);
                     const transactionNumber = response.props?.flash?.transaction_number || response.data?.transaction_number;
 
-                    // Hardware interactions
                     openCashDrawer();
                     printReceipt({
                         cartItems,
@@ -206,7 +198,6 @@ const CashierSystem: React.FC = () => {
         setTotal(0);
     };
 
-    // Transaction handling
     const handleCheckout = () => {
         if (cartItems.length === 0) {
             message.warning('Cart is empty');
@@ -223,7 +214,6 @@ const CashierSystem: React.FC = () => {
         setChange(value && value >= total ? value - total : 0);
     };
 
-    // Format cart items for API submission with proper typing
     const prepareItemsForSubmission = (items: CartItem[]): SaleItemSubmission[] => {
         return items.map((item) => ({
             id: item.id,
@@ -234,7 +224,6 @@ const CashierSystem: React.FC = () => {
         }));
     };
 
-    // Submit transaction to the server - Fix post method call
     const submitTransaction = () => {
         if (cartItems.length === 0) {
             message.error('Cannot complete transaction: Cart is empty');
@@ -248,7 +237,6 @@ const CashierSystem: React.FC = () => {
 
         setProcessingTransaction(true);
 
-        // Build the form data based on local state
         const formData: SaleFormData = {
             payment_method: 'cash',
             items: prepareItemsForSubmission(cartItems),
@@ -257,17 +245,16 @@ const CashierSystem: React.FC = () => {
             change: change,
         };
 
-        // Update the form's internal state with the current data
         setData(formData);
     };
 
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
-            <Head title="Cashier System" />
+            <Head title={t('cashier.title')} />
             <div className="flex h-full flex-1 flex-col gap-4 rounded-xl p-4">
                 <Row gutter={[16, 16]}>
                     <Col xs={24} lg={16}>
-                        <Card title="Current Transaction" className="h-full">
+                        <Card title={t('cashier.currentTransaction')} className="h-full">
                             <BarcodeScanner ref={barcodeScannerRef} onBarcodeScan={handleBarcodeScan} onProductLookup={handleProductLookup} />
 
                             <CartTable cartItems={cartItems} onUpdateQuantity={handleUpdateQuantity} onRemoveItem={handleRemoveItem} total={total} />
@@ -275,7 +262,7 @@ const CashierSystem: React.FC = () => {
                     </Col>
 
                     <Col xs={24} lg={8}>
-                        <Card title="Transaction Summary" bordered={false} className="h-full">
+                        <Card title={t('cashier.transactionSummary')} bordered={false} className="h-full">
                             <TransactionSummary cartItems={cartItems} total={total} onCheckout={handleCheckout} onClearCart={handleClearCart} />
                         </Card>
                     </Col>

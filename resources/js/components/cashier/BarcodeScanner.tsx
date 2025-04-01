@@ -1,6 +1,7 @@
 import React, { useRef, useEffect, useState, forwardRef, useImperativeHandle, useCallback } from 'react';
 import { Input, Button, Space } from 'antd';
 import { BarcodeOutlined, SearchOutlined } from '@ant-design/icons';
+import { useTranslation } from 'react-i18next';
 
 interface BarcodeScannerProps {
   onBarcodeScan: (barcode: string) => void;
@@ -13,6 +14,7 @@ export interface BarcodeScannerRef {
 
 const BarcodeScanner = forwardRef<BarcodeScannerRef, BarcodeScannerProps>(
   ({ onBarcodeScan, onProductLookup }, ref) => {
+    const { t } = useTranslation();
     const [barcode, setBarcode] = useState<string>('');
     const [barcodeBuffer, setBarcodeBuffer] = useState<string>('');
     const [barcodeTimeout, setBarcodeTimeoutRef] = useState<NodeJS.Timeout | null>(null);
@@ -20,10 +22,8 @@ const BarcodeScanner = forwardRef<BarcodeScannerRef, BarcodeScannerProps>(
     const [lastScanTime, setLastScanTime] = useState<number>(0);
     const inputRef = useRef<Input>(null);
 
-    // Cooldown period to prevent duplicate scans (in milliseconds)
     const scanCooldown = 1500;
 
-    // Expose the focusInput method to parent components
     useImperativeHandle(ref, () => ({
       focusInput: () => {
         if (inputRef.current) {
@@ -32,15 +32,12 @@ const BarcodeScanner = forwardRef<BarcodeScannerRef, BarcodeScannerProps>(
       }
     }));
 
-    // Focus the input when the component mounts
     useEffect(() => {
       if (inputRef.current) {
         inputRef.current.focus();
       }
     }, []);
 
-    // Process a scanned barcode
-    // Memoize the processBarcode function
     const processBarcode = useCallback((scannedBarcode: string) => {
       const currentTime = Date.now();
 
@@ -58,10 +55,8 @@ const BarcodeScanner = forwardRef<BarcodeScannerRef, BarcodeScannerProps>(
       onBarcodeScan(scannedBarcode);
     }, [lastScannedBarcode, lastScanTime, onBarcodeScan]);
 
-    // Handle barcode scanner input
     useEffect(() => {
       const handleKeyDown = (e: KeyboardEvent) => {
-        // Ignore if user is typing in an input field that's not our barcode field
         if (
           document.activeElement instanceof HTMLInputElement &&
           document.activeElement !== inputRef.current?.input
@@ -69,7 +64,6 @@ const BarcodeScanner = forwardRef<BarcodeScannerRef, BarcodeScannerProps>(
           return;
         }
 
-        // Barcode scanners typically end with Enter key
         if (e.key === 'Enter' && barcodeBuffer) {
           e.preventDefault();
           processBarcode(barcodeBuffer);
@@ -77,12 +71,9 @@ const BarcodeScanner = forwardRef<BarcodeScannerRef, BarcodeScannerProps>(
           return;
         }
 
-        // Only accept alphanumeric characters for barcodes
         if (/^[a-zA-Z0-9]$/.test(e.key)) {
-          // Reset timeout for new scan
           if (barcodeTimeout) clearTimeout(barcodeTimeout);
 
-          // Set a new timeout - barcode scanners are fast, so if there's a delay, it's likely manual typing
           const newTimeout = setTimeout(() => {
             setBarcodeBuffer('');
           }, 100);
@@ -114,7 +105,7 @@ const BarcodeScanner = forwardRef<BarcodeScannerRef, BarcodeScannerProps>(
         <Space style={{ width: '100%' }}>
           <Input
             ref={inputRef}
-            placeholder="Scan barcode or enter manually"
+            placeholder={t('cashier.barcode.placeholder')}
             value={barcode}
             onChange={(e) => setBarcode(e.target.value)}
             onPressEnter={(e) => {
@@ -125,8 +116,12 @@ const BarcodeScanner = forwardRef<BarcodeScannerRef, BarcodeScannerProps>(
             style={{ width: 300 }}
             autoFocus
           />
-          <Button onClick={onProductLookup} icon={<SearchOutlined />}>
-            Product Lookup
+          <Button
+            onClick={onProductLookup}
+            icon={<SearchOutlined />}
+            aria-label={t('cashier.barcode.productLookup')}
+          >
+            {t('cashier.barcode.productLookup')}
           </Button>
         </Space>
       </div>

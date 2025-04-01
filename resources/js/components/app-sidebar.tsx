@@ -70,22 +70,10 @@ export function AppSidebar() {
             active: route().current('reports.*'),
         },
         {
-            title: 'User Management',
-            href: route('users.index'),
-            icon: Users,
-            active: route().current('users.index'),
-        },
-        {
             title: 'Categories',
             href: route('categories.index'),
             icon: Folder,
             active: route().current('categories.index'),
-        },
-        {
-            title: 'Settings',
-            href: route('settings.index'),
-            icon: Settings,
-            active: route().current('settings.index'),
         },
     ];
 

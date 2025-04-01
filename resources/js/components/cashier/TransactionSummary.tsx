@@ -1,81 +1,59 @@
 import React from 'react';
-import { Row, Col, Typography, Divider, Button } from 'antd';
-import { DollarOutlined } from '@ant-design/icons';
-import { CartItem } from '../../types/cashier';
+import { Button, Divider, Typography } from 'antd';
+import { useTranslation } from 'react-i18next';
+import { CartItem } from '@/types/cashier';
 
-const { Text } = Typography;
+const { Title } = Typography;
 
 interface TransactionSummaryProps {
-  cartItems: CartItem[];
-  total: number;
-  onCheckout: () => void;
-  onClearCart: () => void;
+    cartItems: CartItem[];
+    total: number;
+    onCheckout: () => void;
+    onClearCart: () => void;
 }
 
-const TransactionSummary: React.FC<TransactionSummaryProps> = ({
-  cartItems,
-  total,
-  onCheckout,
-  onClearCart
-}) => {
-  const totalItems = cartItems.reduce((sum, item) => sum + item.quantity, 0);
+const TransactionSummary: React.FC<TransactionSummaryProps> = ({ cartItems, total, onCheckout, onClearCart }) => {
+    const { t } = useTranslation();
 
-  return (
-    <>
-      <div style={{ marginBottom: 16 }}>
-        <Row>
-          <Col span={12}><Text>Items:</Text></Col>
-          <Col span={12} style={{ textAlign: 'right' }}>
-            <Text>{totalItems}</Text>
-          </Col>
-        </Row>
-        <Row>
-          <Col span={12}><Text>Subtotal:</Text></Col>
-          <Col span={12} style={{ textAlign: 'right' }}>
-            <Text>IQD {total.toFixed(0)}</Text>
-          </Col>
-        </Row>
-        {/*  TODO if tax is applied */}
-        {/*<Row>*/}
-        {/*  <Col span={12}><Text>Tax (0%):</Text></Col>*/}
-        {/*  <Col span={12} style={{ textAlign: 'right' }}>*/}
-        {/*    <Text>$0.00</Text>*/}
-        {/*  </Col>*/}
-        {/*</Row>*/}
-        <Divider />
-        <Row>
-          <Col span={12}><Text strong>Total:</Text></Col>
-          <Col span={12} style={{ textAlign: 'right' }}>
-            <Text strong>IQD {total.toFixed(0)}</Text>
-          </Col>
-        </Row>
-      </div>
+    return (
+        <div className="flex h-full flex-col">
+            <div className="mb-4 flex-grow">
+                <div className="mb-4 flex justify-between">
+                    <Title level={4}>{t('cashier.summary.total')}:</Title>
+                    <Title level={4}>{t('common.currency')} {total.toFixed(0)}</Title>
+                </div>
 
-      <div style={{ marginTop: 24 }}>
-        <Button
-          type="primary"
-          size="large"
-          block
-          icon={<DollarOutlined />}
-          onClick={onCheckout}
-          disabled={cartItems.length === 0}
-        >
-          Checkout
-        </Button>
+                <Divider />
 
-        <Button
-          danger
-          size="large"
-          block
-          style={{ marginTop: 8 }}
-          onClick={onClearCart}
-          disabled={cartItems.length === 0}
-        >
-          Clear Cart
-        </Button>
-      </div>
-    </>
-  );
+                <div className="mb-4">
+                    <p>{t('cashier.summary.items')}: {cartItems.length}</p>
+                    <p>{t('cashier.summary.totalQuantity')}: {cartItems.reduce((sum, item) => sum + item.quantity, 0)}</p>
+                </div>
+            </div>
+
+            <div className="mt-auto flex flex-col gap-2">
+                <Button
+                    type="primary"
+                    size="large"
+                    block
+                    onClick={onCheckout}
+                    disabled={cartItems.length === 0}
+                >
+                    {t('cashier.cart.checkout')}
+                </Button>
+
+                <Button
+                    danger
+                    size="large"
+                    block
+                    onClick={onClearCart}
+                    disabled={cartItems.length === 0}
+                >
+                    {t('cashier.cart.clear')}
+                </Button>
+            </div>
+        </div>
+    );
 };
 
 export default TransactionSummary;

@@ -27,7 +27,7 @@ export default function Index({ debt, payments }) {
             dataIndex: 'amount',
             key: 'amount',
             align: 'right',
-            render: (amount) => `$${parseFloat(amount).toFixed(2)}`,
+            render: (amount) => `IQD ${Number(amount).toLocaleString()}`,
         },
         {
             title: 'Method',
@@ -86,10 +86,10 @@ export default function Index({ debt, payments }) {
                     <Descriptions title="Debt Information" bordered column={2}>
                         <Descriptions.Item label="Debtor">{debt.debtor.name}</Descriptions.Item>
                         <Descriptions.Item label="Due Date">{dayjs(debt.due_date).format('MMM D, YYYY')}</Descriptions.Item>
-                        <Descriptions.Item label="Amount">${amount.toFixed(2)}</Descriptions.Item>
+                        <Descriptions.Item label="Amount">IQD {Number(amount).toLocaleString()}</Descriptions.Item>
                         <Descriptions.Item label="Balance">
                             <Text strong type={balance > 0 ? 'danger' : 'success'}>
-                                ${balance.toFixed(2)}
+                                IQD {Number(balance).toLocaleString()}
                             </Text>
                         </Descriptions.Item>
                     </Descriptions>
@@ -106,7 +106,7 @@ export default function Index({ debt, payments }) {
                                 <Table.Summary.Row>
                                     <Table.Summary.Cell index={0}>Total</Table.Summary.Cell>
                                     <Table.Summary.Cell index={1} align="right">
-                                        <Text strong>${totalAmount.toFixed(2)}</Text>
+                                        <Text strong>IQD {Number(totalAmount).toLocaleString()}</Text>
                                     </Table.Summary.Cell>
                                     <Table.Summary.Cell index={2} colSpan={4}></Table.Summary.Cell>
                                 </Table.Summary.Row>

@@ -2,6 +2,7 @@ import React from 'react';
 import { Table, Button, InputNumber, Typography } from 'antd';
 import { DeleteOutlined } from '@ant-design/icons';
 import { CartItem } from '../../types/cashier';
+import { useTranslation } from 'react-i18next';
 
 const { Text } = Typography;
 
@@ -18,20 +19,22 @@ const CartTable: React.FC<CartTableProps> = ({
   onRemoveItem,
   total
 }) => {
+  const { t } = useTranslation();
+
   const columns = [
     {
-      title: 'Product',
+      title: t('cashier.cart.product'),
       dataIndex: 'name',
       key: 'name',
     },
     {
-      title: 'Price',
+      title: t('cashier.cart.price'),
       dataIndex: 'price',
       key: 'price',
-      render: (price: number) => `IQD ${price.toFixed(0)}`,
+      render: (price: number) => `${t('common.currency')} ${price.toFixed(0)}`,
     },
     {
-      title: 'Quantity',
+      title: t('cashier.cart.quantity'),
       dataIndex: 'quantity',
       key: 'quantity',
       render: (_: any, record: CartItem) => (
@@ -44,13 +47,13 @@ const CartTable: React.FC<CartTableProps> = ({
       ),
     },
     {
-      title: 'Subtotal',
+      title: t('cashier.cart.subtotal'),
       dataIndex: 'subtotal',
       key: 'subtotal',
-      render: (subtotal: number) => `IQD ${subtotal.toFixed(0)}`,
+      render: (subtotal: number) => `${t('common.currency')} ${subtotal.toFixed(0)}`,
     },
     {
-      title: 'Action',
+      title: t('cashier.cart.action'),
       key: 'action',
       render: (_: any, record: CartItem) => (
         <Button
@@ -58,6 +61,7 @@ const CartTable: React.FC<CartTableProps> = ({
           danger
           icon={<DeleteOutlined />}
           onClick={() => onRemoveItem(record.id)}
+          aria-label={t('cashier.cart.remove')}
         />
       ),
     },
@@ -73,15 +77,18 @@ const CartTable: React.FC<CartTableProps> = ({
         <Table.Summary fixed>
           <Table.Summary.Row>
             <Table.Summary.Cell index={0} colSpan={3}>
-              <Text strong>Total</Text>
+              <Text strong>{t('cashier.cart.total')}</Text>
             </Table.Summary.Cell>
             <Table.Summary.Cell index={1}>
-              <Text strong>IQD {total.toFixed(0)}</Text>
+              <Text strong>{t('common.currency')} {total.toFixed(0)}</Text>
             </Table.Summary.Cell>
             <Table.Summary.Cell index={2} />
           </Table.Summary.Row>
         </Table.Summary>
       )}
+      locale={{
+        emptyText: t('cashier.cart.empty')
+      }}
     />
   );
 };

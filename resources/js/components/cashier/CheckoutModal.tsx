@@ -1,5 +1,7 @@
-import React from 'react';
-import { Modal, Row, Col, Typography, InputNumber } from 'antd';
+import React, { useState, useEffect } from 'react';
+import { Modal, Row, Col, Typography, InputNumber, Button, Tooltip } from 'antd';
+import { useTranslation } from 'react-i18next';
+
 const { Text } = Typography;
 
 interface CheckoutModalProps {
@@ -11,6 +13,7 @@ interface CheckoutModalProps {
   onComplete: () => void;
   onCancel: () => void;
   loading?: boolean;
+  onRoundDown?: (originalAmount: number, roundedAmount: number) => void;
 }
 
 const CheckoutModal: React.FC<CheckoutModalProps> = ({
@@ -21,31 +24,108 @@ const CheckoutModal: React.FC<CheckoutModalProps> = ({
   onAmountPaidChange,
   onComplete,
   onCancel,
-  loading = false
+  loading = false,
+  onRoundDown
 }) => {
+  const { t } = useTranslation();
+  const [roundedTotal, setRoundedTotal] = useState<number>(total);
+  const [amountForgiven, setAmountForgiven] = useState<number>(0);
+  const [isRounded, setIsRounded] = useState<boolean>(false);
+
+  // Reset states when modal becomes visible or total changes
+  useEffect(() => {
+    setRoundedTotal(total);
+    setAmountForgiven(0);
+    setIsRounded(false);
+  }, [visible, total]);
+
+  const handleRoundDown = () => {
+    // Round down to the nearest thousand
+    const newRoundedTotal = Math.floor(total / 1000) * 1000;
+    const forgiven = total - newRoundedTotal;
+
+    setRoundedTotal(newRoundedTotal);
+    setAmountForgiven(forgiven);
+    setIsRounded(true);
+
+    if (amountPaid !== null) {
+      onAmountPaidChange(amountPaid);
+    }
+
+    if (onRoundDown) {
+      onRoundDown(total, newRoundedTotal);
+    }
+  };
+
+  const handleResetAmount = () => {
+    setRoundedTotal(total);
+    setAmountForgiven(0);
+    setIsRounded(false);
+
+    if (amountPaid !== null) {
+      onAmountPaidChange(amountPaid);
+    }
+  };
+
+  const effectiveTotal = isRounded ? roundedTotal : total;
+
   return (
       <Modal
-          title="Complete Transaction"
+          title={t('cashier.checkout.title')}
           open={visible}
           onOk={onComplete}
           onCancel={onCancel}
-          okText="Complete Payment"
-          cancelText="Cancel"
+          okText={t('cashier.checkout.completePayment')}
+          cancelText={t('common.cancel')}
           confirmLoading={loading}
-          okButtonProps={{ disabled: !amountPaid || amountPaid < total || loading }}
+          okButtonProps={{ disabled: !amountPaid || amountPaid < effectiveTotal || loading }}
       >
           <div style={{ marginBottom: 16 }}>
               <Row>
                   <Col span={12}>
-                      <Text strong>Total Amount:</Text>
+                      <Text strong>{t('cashier.checkout.totalAmount')}:</Text>
                   </Col>
                   <Col span={12} style={{ textAlign: 'right' }}>
-                      <Text strong>IQD {total.toFixed(0)}</Text>
+                      <Text strong>
+                          {t('common.currency')} {Number(effectiveTotal).toLocaleString()}
+                          {isRounded && (
+                              <Tooltip title={t('cashier.checkout.originalAmount', { amount: Number(total).toLocaleString() })}>
+                                  <span style={{ marginLeft: 8, fontSize: 12, color: '#52c41a' }}>
+                                      ({t('cashier.checkout.helped')}: {t('common.currency')} {Number(amountForgiven).toLocaleString()})
+                                  </span>
+                              </Tooltip>
+                          )}
+                      </Text>
                   </Col>
               </Row>
+
+              <Row style={{ marginTop: 8 }}>
+                  <Col span={24} style={{ textAlign: 'right' }}>
+                      {!isRounded ? (
+                          <Button
+                              type="link"
+                              onClick={handleRoundDown}
+                              disabled={total % 1000 === 0 || loading}
+                              style={{ padding: 0 }}
+                          >
+                              {t('cashier.checkout.roundDown')}
+                          </Button>
+                      ) : (
+                          <Button
+                              type="link"
+                              onClick={handleResetAmount}
+                              disabled={loading}
+                              style={{ padding: 0 }}
+                          >
+                              {t('cashier.checkout.resetAmount')}
+                          </Button>
+                      )}
+                  </Col>
+              </Row>
+
               <Row style={{ marginTop: 16 }}>
                   <Col span={12}>
-                      <Text>Amount Paid:</Text>
+                      <Text>{t('cashier.checkout.amountPaid')}:</Text>
                   </Col>
                   <Col span={12} style={{ textAlign: 'right' }}>
                       <InputNumber
@@ -54,7 +134,7 @@ const CheckoutModal: React.FC<CheckoutModalProps> = ({
                           onChange={onAmountPaidChange}
                           min={0}
                           precision={0}
-                          formatter={(value) => `IQD ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+                          formatter={(value) => `${t('common.currency')} ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
                           parser={(value) => Number(value?.toString().replace(/[^\d]/g, ''))}
                           disabled={loading}
                           autoFocus
@@ -63,11 +143,11 @@ const CheckoutModal: React.FC<CheckoutModalProps> = ({
               </Row>
               <Row style={{ marginTop: 16 }}>
                   <Col span={12}>
-                      <Text strong>Change:</Text>
+                      <Text strong>{t('cashier.checkout.change')}:</Text>
                   </Col>
                   <Col span={12} style={{ textAlign: 'right' }}>
                       <Text strong style={{ fontSize: 18 }}>
-                          IQD {change.toFixed(0)}
+                          {t('common.currency')} {Number(change).toLocaleString()}
                       </Text>
                   </Col>
               </Row>
