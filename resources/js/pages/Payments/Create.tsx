@@ -87,10 +87,10 @@ export default function Create({ debt }: Props) {
                             <strong>Description:</strong> {debt.description}
                         </p>
                         <p>
-                            <strong>Total Amount:</strong> IQD {debt.amount.toLocaleString()}
+                            <strong>Total Amount:</strong> IQD {Number(debt.amount).toLocaleString()}
                         </p>
                         <p>
-                            <strong>Remaining Balance:</strong> IQD {debt.balance.toLocaleString()}
+                            <strong>Remaining Balance:</strong> IQD {Number(debt.balance).toLocaleString()}
                         </p>
                     </div>
 

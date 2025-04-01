@@ -3,11 +3,11 @@ import { useState } from 'react';
 import { Head, Link, useForm } from '@inertiajs/react';
 import AppLayout from '@/layouts/app-layout';
 import {
-  Card,
-  Form,
-  Input,
-  Button,
-  Typography,
+    Card,
+    Form,
+    Input,
+    Button,
+    Typography, Space
 } from 'antd';
 
 const { Title } = Typography;
@@ -39,6 +39,34 @@ export default function Create({ auth }) {
   const handleSubmit = () => {
     post(route('debtors.store'));
   };
+
+    const formatPhoneNumber = (value: string) => {
+        const digits = value.replace(/\D/g, '');
+
+        let formattedNumber = '';
+        if (digits.length > 0) {
+            formattedNumber += digits.substring(0, 4);
+
+            if (digits.length > 4) {
+                formattedNumber += '-' + digits.substring(4, 7);
+            }
+
+            if (digits.length > 7) {
+                formattedNumber += '-' + digits.substring(7, 9);
+            }
+
+            if (digits.length > 9) {
+                formattedNumber += '-' + digits.substring(9, 11);
+            }
+        }
+
+        return formattedNumber;
+    };
+
+    const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const formattedValue = formatPhoneNumber(e.target.value);
+        setData('phone', formattedValue);
+    };
 
   return (
     <AppLayout breadcrumbs={breadcrumbs}>
@@ -77,17 +105,22 @@ export default function Create({ auth }) {
               />
             </Form.Item>
 
-            <Form.Item
-              label="Phone"
-              validateStatus={errors.phone ? 'error' : ''}
-              help={errors.phone}
-            >
-              <Input
-                value={data.phone}
-                onChange={e => setData('phone', e.target.value)}
-                placeholder="Enter phone number"
-              />
-            </Form.Item>
+              <Form.Item
+                  label={
+                      <Space>
+                          Phone
+                      </Space>
+                  }
+                  validateStatus={errors.phone ? 'error' : ''}
+                  help={errors.phone}
+              >
+                  <Input
+                      value={data.phone}
+                      onChange={handlePhoneChange}
+                      placeholder="075X-XXX-XX-XX"
+                      maxLength={14} // 4 + 3 + 2 + 2 digits + 3 hyphens
+                  />
+              </Form.Item>
 
             <Form.Item
               label="Address"

@@ -93,16 +93,16 @@ export default function Create({ debtors, auth }) {
               validateStatus={errors.amount ? 'error' : ''}
               help={errors.amount}
             >
-              <InputNumber
-                style={{ width: '100%' }}
-                min={0}
-                step={0.01}
-                precision={2}
-                formatter={(value) => `$ ${value}`}
-                parser={(value) => value?.replace(/\$\s?|(,*)/g, '') as string}
-                value={data.amount}
-                onChange={(value) => setData('amount', value)}
-              />
+                <InputNumber
+                    style={{ width: '100%' }}
+                    value={data.amount}
+                    onChange={(value) => setData('amount', value as number)}
+                    placeholder="Enter debt amount"
+                    min={0}
+                    addonBefore="IQD"
+                    formatter={(value) => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+                    parser={(value) => value!.replace(/IQD\s?|(,*)/g, '')}
+                />
             </Form.Item>
 
             <Form.Item
