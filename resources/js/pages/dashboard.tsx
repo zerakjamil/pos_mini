@@ -122,7 +122,7 @@ export default function Dashboard() {
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title={t('dashboard.title')} />
-            <div className="flex h-full flex-1 flex-col gap-4 rounded-xl p-4">
+            <div className="flex h-full flex-1 flex-col gap-4 rounded-xl p-4" dir={'rtl'}>
                 <h1 className="text-2xl font-bold">{t('dashboard.welcome', { name: user.name })}</h1>
                 <p className="text-gray-600 mb-4">
                     {t('dashboard.loggedInAs', { role: t(`roles.${user.role}`) })}

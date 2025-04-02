@@ -157,3 +157,17 @@
         @apply bg-background text-foreground;
     }
 }
+.rtl {
+  direction: rtl;
+  text-align: right;
+}
+
+.rtl .ant-modal-footer {
+  text-align: left;
+}
+
+.rtl .ant-btn > .anticon + span,
+.rtl .ant-btn > span + .anticon {
+  margin-right: 8px;
+  margin-left: 0;
+}

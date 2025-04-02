@@ -35,17 +35,16 @@ const ProductLookupModal: React.FC<ProductLookupModalProps> = ({ visible, produc
                 showSearch
                 style={{ width: '100%' }}
                 placeholder={t('cashier.productLookup.searchPlaceholder')}
-                optionFilterProp="children"
+                optionFilterProp="label"
                 onChange={(value) => onProductSelect(value)}
-                filterOption={(input, option) => (option?.children as unknown as string).toLowerCase().includes(input.toLowerCase())}
-            >
-                {Array.isArray(products) &&
-                    products.map((product) => (
-                        <Option key={product.id} value={product.id}>
-                            {product.name} - {t('common.currency')} {formatPrice(product.price)} ({t('cashier.productLookup.inStock', { stock: product.stock })})
-                        </Option>
-                    ))}
-            </Select>
+                filterOption={(input, option) =>
+                    (option?.label ?? '').toLowerCase().includes(input.toLowerCase())
+                }
+                options={Array.isArray(products) ? products.map((product) => ({
+                    value: product.id,
+                    label: `${product.name} - ${t('common.currency')} ${formatPrice(product.price)} (${t('cashier.productLookup.inStock', { stock: product.stock })})`
+                })) : []}
+            />
         </Modal>
     );
 };

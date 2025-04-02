@@ -1,64 +1,79 @@
 {
-  "cashier": {
-    "title": "Cashier System",
-    "currentTransaction": "Current Transaction",
-    "transactionSummary": "Transaction Summary",
-    "cart": {
-      "empty": "Cart is empty",
-      "clear": "Clear Cart",
-      "checkout": "Checkout",
-        "product": "Product",
-        "price": "Price",
-        "quantity": "Quantity",
-        "subtotal": "Subtotal",
-        "action": "Action",
-        "remove": "Remove item",
-        "total": "Total"
+  "dashboard": {
+    "title": "Dashboard",
+    "welcome": "Welcome, {{name}}",
+    "loggedInAs": "You are logged in as a {{role}}.",
+    "stats": {
+      "todaySales": "Today's Sales",
+      "products": "Products",
+      "transactions": "Transactions",
+      "users": "Users"
     },
-    "product": {
-      "notFound": "Product with barcode {{barcode}} not found",
-      "added": "Added: {{name}}",
-      "lookup": "Product Lookup"
+    "quickActions": {
+      "title": "Quick Actions",
+      "newSale": "New Sale",
+      "viewProducts": "View Products",
+      "addProduct": "Add Product"
     },
-    "transaction": {
-      "completed": "Transaction completed successfully!",
-      "change": "Change: IQD {{amount}}",
-      "failed": "Transaction failed: {{message}}",
-      "amountPaidError": "Amount paid must be at least equal to the total",
-      "emptyCartError": "Cannot complete transaction: Cart is empty"
+    "alerts": {
+      "title": "Alerts",
+      "lowStockMessage": "{{count}} products with low stock",
+      "expiringMessage": "{{count}} products expiring soon",
+      "viewAll": "View All"
     },
-      "barcode": {
-          "placeholder": "Scan barcode or enter manually",
-          "productLookup": "Product Lookup",
-          "duplicateScan": "Duplicate scan detected and ignored"
-      },
-      "summary": {
-          "total": "Total",
-          "items": "Items",
-          "totalQuantity": "Total Quantity"
-      },
-      "productLookup": {
-          "title": "Product Lookup",
-          "searchPlaceholder": "Search for a product",
-          "inStock": "{{stock}} in stock"
-      },
-      "checkout": {
-          "title": "Complete Transaction",
-          "completePayment": "Complete Payment",
-          "totalAmount": "Total Amount",
-          "originalAmount": "Original: IQD {{amount}}",
-          "helped": "Helped",
-          "roundDown": "Round down to nearest 1,000",
-          "resetAmount": "Reset to original amount",
-          "amountPaid": "Amount Paid",
-          "change": "Change"
-      }
+    "recentSales": {
+      "title": "Recent Sales",
+      "viewAll": "View All Sales"
+    },
+    "lowStockProducts": {
+      "title": "Low Stock Products"
+    },
+    "expiringProducts": {
+      "title": "Expiring Products"
+    },
+    "sales": {
+      "transactionNumber": "Transaction #",
+      "amount": "Amount",
+      "date": "Date",
+      "cashier": "Cashier",
+      "action": "Action",
+      "view": "View"
+    },
+    "products": {
+      "product": "Product",
+      "currentStock": "Current Stock",
+      "reorderLevel": "Reorder Level",
+      "status": "Status",
+      "outOfStock": "Out of Stock",
+      "lowStock": "Low Stock",
+      "expirationDate": "Expiration Date",
+      "daysLeft": "Days Left",
+      "expired": "Expired",
+      "expiringSoon": "Expiring Soon"
+    }
+  },
+  "roles": {
+    "supervisor": "Supervisor",
+    "cashier": "Cashier",
+    "admin": "Administrator",
+    "manager": "Manager",
+    "user": "User"
   },
   "common": {
-    "dashboard": "Dashboard",
-    "cashier": "Cashier",
-      "currency": "IQD",
-      "ok": "OK",
-      "cancel": "Cancel"
+    "currency": "IQD",
+    "cancel": "Cancel"
+  },
+  "cashier": {
+    "checkout": {
+      "title": "Complete Transaction",
+      "completePayment": "Complete Payment",
+      "totalAmount": "Total Amount",
+      "originalAmount": "Original: IQD {{amount}}",
+      "helped": "Helped",
+      "roundDown": "Round down to nearest 1,000",
+      "resetAmount": "Reset to original amount",
+      "amountPaid": "Amount Paid",
+      "change": "Change"
+    }
   }
 }

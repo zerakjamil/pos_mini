@@ -15,47 +15,47 @@ import {
     Users
 } from 'lucide-react';
 import AppLogo from './app-logo';
+import { useTranslation } from 'react-i18next';
 
 export function AppSidebar() {
-    // Get user role from the page props inside the component
+    const { t } = useTranslation();
     const { auth } = usePage().props as any;
     const user = auth?.user;
     const isSupervisor = user?.role === 'supervisor';
 
-    // Define the navigation items
     const mainNavItems: ExtendedNavItem[] = [
         {
-            title: 'Dashboard',
+            title: t('sidebar.dashboard'),
             href: route('dashboard'),
             icon: LayoutGrid,
             active: route().current('dashboard'),
         },
         {
-            title: 'Products',
+            title: t('sidebar.products'),
             href: route('product.index'),
             icon: Package,
             active: route().current('product.index'),
         },
         {
-            title: 'Sales History',
+            title: t('sidebar.salesHistory'),
             href: route('sales.index'),
             icon: BarChart2,
             active: route().current('sales.index'),
         },
         {
-            title: 'Cashier',
+            title: t('sidebar.cashier'),
             href: route('cashier'),
             icon: ShoppingCart,
             active: route().current('cashier'),
         },
         {
-            title: 'Debtors',
+            title: t('sidebar.debtors'),
             href: route('debtors.index'),
             icon: Users,
             active: route().current('debtors.*'),
         },
         {
-            title: 'Debts',
+            title: t('sidebar.debts'),
             href: route('debts.index'),
             icon: ClipboardIcon,
             active: route().current('debts.*'),
@@ -64,20 +64,19 @@ export function AppSidebar() {
 
     const supervisorNavItems: ExtendedNavItem[] = [
         {
-            title: 'Reports',
+            title: t('sidebar.reports'),
             href: route('reports.index'),
             icon: PieChart,
             active: route().current('reports.*'),
         },
         {
-            title: 'Categories',
+            title: t('sidebar.categories'),
             href: route('categories.index'),
             icon: Folder,
             active: route().current('categories.index'),
         },
     ];
 
-    // Combine the navigation items based on user role
     const navItems = isSupervisor ? [...mainNavItems, ...supervisorNavItems] : mainNavItems;
 
     const footerNavItems: ExtendedNavItem[] = [

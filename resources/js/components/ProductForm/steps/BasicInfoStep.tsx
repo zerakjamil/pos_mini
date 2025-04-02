@@ -3,29 +3,32 @@ import React from 'react';
 import { Form, Input, Button, Select, Space, Row, Col, Card } from 'antd';
 import { TagOutlined, ShopOutlined, BarcodeOutlined } from '@ant-design/icons';
 import { StepProps } from '../types';
+import { useTranslation } from 'react-i18next';
 
 const { Option } = Select;
 
 const BasicInfoStep: React.FC<StepProps> = ({
     data,
     setData,
-    errors = {}, // Add default value
-    onNext = () => {}, // Add default function
-    categories = [], // Add default empty array
-    canProceed = true // Add default value
+    errors = {},
+    onNext = () => {},
+    categories = [],
+    canProceed = true
 }) => {
+  const { t } = useTranslation();
+
   return (
     <Card className="shadow-sm">
       <Row gutter={16}>
         <Col xs={24} md={16}>
           <Form.Item
-            label={<Space><TagOutlined /> Product Name</Space>}
+            label={<Space><TagOutlined /> {t('products.name')}</Space>}
             validateStatus={errors.name ? 'error' : ''}
             help={errors.name}
             required
           >
             <Input
-              placeholder="Enter product name"
+              placeholder={t('products.namePlaceholder')}
               value={data.name}
               onChange={(e) => setData('name', e.target.value)}
             />
@@ -33,12 +36,12 @@ const BasicInfoStep: React.FC<StepProps> = ({
         </Col>
         <Col xs={24} md={8}>
           <Form.Item
-            label={<Space><ShopOutlined /> Brand</Space>}
+            label={<Space><ShopOutlined /> {t('products.brand')}</Space>}
             validateStatus={errors.brand ? 'error' : ''}
             help={errors.brand}
           >
             <Input
-              placeholder="Enter brand name"
+              placeholder={t('products.brandPlaceholder')}
               value={data.brand}
               onChange={(e) => setData('brand', e.target.value)}
             />
@@ -49,12 +52,12 @@ const BasicInfoStep: React.FC<StepProps> = ({
       <Row gutter={16}>
         <Col xs={24} md={12}>
           <Form.Item
-            label={<Space><BarcodeOutlined /> Barcode</Space>}
+            label={<Space><BarcodeOutlined /> {t('products.barcode')}</Space>}
             validateStatus={errors.barcode ? 'error' : ''}
             help={errors.barcode}
           >
             <Input
-              placeholder="Scan or enter barcode"
+              placeholder={t('products.barcodePlaceholder')}
               value={data.barcode}
               onChange={(e) => setData('barcode', e.target.value)}
             />
@@ -62,13 +65,13 @@ const BasicInfoStep: React.FC<StepProps> = ({
         </Col>
         <Col xs={24} md={12}>
           <Form.Item
-            label="Category"
+            label={t('products.category')}
             validateStatus={errors.category_id ? 'error' : ''}
             help={errors.category_id}
             required
           >
             <Select
-              placeholder="Select a category"
+              placeholder={t('products.categoryPlaceholder')}
               value={data.category_id || undefined}
               onChange={(value) => setData('category_id', value)}
             >
@@ -89,7 +92,7 @@ const BasicInfoStep: React.FC<StepProps> = ({
           disabled={!canProceed}
           className="mt-4"
         >
-          Next: Pricing
+          {t('products.nextPricing')}
         </Button>
       </Form.Item>
     </Card>

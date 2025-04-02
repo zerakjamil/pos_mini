@@ -3,6 +3,7 @@ import React from 'react';
 import { Form, InputNumber, Button, Space, Card, Typography, Tooltip } from 'antd';
 import { DollarOutlined } from '@ant-design/icons';
 import { StepProps } from '../types';
+import { useTranslation } from 'react-i18next';
 
 const { Text } = Typography;
 
@@ -15,39 +16,41 @@ const PricingStep: React.FC<StepProps> = ({
   canProceed,
   calculatedUnitPrice
 }) => {
+  const { t } = useTranslation();
+
   return (
     <Card className="shadow-sm">
       <div className="mb-4 p-4 bg-blue-50 border border-blue-200 rounded-md">
         <Text type="secondary">
-          The unit price will be calculated automatically based on the batch price and units per batch.
+          {t('products.pricingStep.unitPriceInfo')}
         </Text>
       </div>
 
       <Form.Item
-        label={<Space><DollarOutlined /> Batch Price</Space>}
+        label={<Space><DollarOutlined /> {t('products.pricingStep.batchPrice')}</Space>}
         validateStatus={errors.batch_price ? 'error' : ''}
         help={errors.batch_price}
         required
       >
         <InputNumber
           style={{ width: '100%' }}
-          placeholder="Enter batch price"
+          placeholder={t('products.pricingStep.enterBatchPrice')}
           value={data.batch_price}
           onChange={(value) => setData('batch_price', value ?? 0)}
           min={0}
-          addonBefore="IQD"
+          addonBefore={t('common.currency')}
         />
       </Form.Item>
 
       <Form.Item
-        label="Units Per Batch"
+        label={t('products.pricingStep.unitsPerBatch')}
         validateStatus={errors.units_per_batch ? 'error' : ''}
         help={errors.units_per_batch}
         required
       >
         <InputNumber
           style={{ width: '100%' }}
-          placeholder="Number of units"
+          placeholder={t('products.pricingStep.numberOfUnits')}
           value={data.units_per_batch}
           onChange={(value) => setData('units_per_batch', value ?? 1)}
           min={1}
@@ -55,7 +58,7 @@ const PricingStep: React.FC<StepProps> = ({
       </Form.Item>
 
       <Form.Item
-        label="Unit Selling Price"
+        label={t('products.pricingStep.unitSellingPrice')}
         validateStatus={errors.price ? 'error' : ''}
         help={errors.price}
         required
@@ -63,20 +66,20 @@ const PricingStep: React.FC<StepProps> = ({
         <div className="flex items-center">
           <InputNumber
             style={{ width: '100%' }}
-            placeholder="Enter selling price per unit"
+            placeholder={t('products.pricingStep.enterSellingPricePerUnit')}
             value={data.price}
             onChange={(value) => setData('price', value ?? 0)}
             min={0}
-            addonBefore="IQD"
+            addonBefore={t('common.currency')}
           />
 
           {calculatedUnitPrice && (
-            <Tooltip title="Suggested price based on batch cost">
+            <Tooltip title={t('products.pricingStep.suggestedPriceTooltip')}>
               <Button
                 type="link"
                 onClick={() => setData('price', calculatedUnitPrice)}
               >
-                Suggested: {calculatedUnitPrice.toLocaleString()} IQD
+                {t('products.pricingStep.suggested')}: {calculatedUnitPrice.toLocaleString()} {t('common.currency')}
               </Button>
             </Tooltip>
           )}
@@ -85,14 +88,14 @@ const PricingStep: React.FC<StepProps> = ({
 
       <div className="flex justify-between mt-4">
         <Button onClick={onPrevious}>
-          Previous
+          {t('common.previous')}
         </Button>
         <Button
           type="primary"
           onClick={onNext}
           disabled={!canProceed}
         >
-          Next: Inventory
+          {t('products.pricingStep.nextInventory')}
         </Button>
       </div>
     </Card>

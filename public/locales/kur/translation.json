@@ -118,7 +118,13 @@
         "ok": "باشە",
         "cancel": "پاشگەزبوونەوە",
         "action": "کردار",
-        "view": "بینین"
+        "view": "بینین",
+        "delete": "سڕینەوە",
+        "previous": "پێشوو",
+        "apply": "جێبەجێکردن",
+        "calculate": "ژماردن",
+        "notSpecified": "دیاری نەکراوە",
+        "notApplicable": "بەردەست نییە"
     },
     "products": {
         "title": "بەرهەمەکان",
@@ -142,7 +148,6 @@
         "total": "کۆی گشتی",
         "filtered": "پاڵێوراو",
         "image": "وێنە",
-        "name": "ناو",
         "price": "نرخ",
         "stock": "کەرەستە",
         "barcode": "بارکۆد",
@@ -154,21 +159,139 @@
         "day": "ڕۆژ",
         "days": "ڕۆژەکان",
         "noDate": "بێ بەروار",
-        "noImage": "بێ وێنە"
-    },
-    "sales": {
-        "history": "مێژووی فرۆشتن",
-        "newSale": "فرۆشتنی نوێ",
-        "transactionNumber": "ژمارەی مامەڵە",
-        "date": "بەروار",
-        "totalAmount": "کۆی گشتی",
-        "amountPaid": "بڕی پارەی دراو",
-        "change": "گەڕاوە",
-        "paymentMethod": "شێوازی پارەدان",
-        "paymentMethods": {
-            "cash": "کاش",
-            "card": "کارت"
+        "noImage": "بێ وێنە",
+        "create": {
+            "title": "دروستکردنی بەرهەم",
+            "pageTitle": "دروستکردنی بەرهەمی نوێ"
         },
-        "itemsCount": "ژمارەی کاڵاکان"
+        "deleteConfirmTitle": "دڵنیابوونەوە لە سڕینەوە",
+        "deleteConfirmDescription": "ئایا دڵنیایت کە دەتەوێت {{name}} بسڕیتەوە؟ ئەم کردارە ناگەڕێتەوە.",
+        "name": "ناوی بەرهەم",
+        "namePlaceholder": "ناوی بەرهەم بنووسە",
+        "brand": "براند",
+        "brandPlaceholder": "ناوی براند بنووسە",
+        "barcodePlaceholder": "بارکۆد بخوێنەوە یان بینووسە",
+        "categoryPlaceholder": "جۆرێک هەڵبژێرە",
+        "nextPricing": "دواتر: نرخ دانان",
+        "editProduct": "دەستکاریکردنی بەرهەم",
+        "updating": "نوێکردنەوەی بەرهەم...",
+        "adding": "زیادکردنی بەرهەم...",
+        "imageStep": {
+            "title": "وێنەی بەرهەم",
+            "description": "وێنەیەکی بەرهەمەکەت باربکە (ئارەزوومەندانە)",
+            "previewAlt": "پێشبینینی بەرهەم",
+            "resetImage": "ڕێکخستنەوەی وێنە",
+            "noImage": "هیچ وێنەیەک بارنەکراوە",
+            "imageSelected": "وێنە هەڵبژێردرا",
+            "selectImage": "وێنە هەڵبژێرە",
+            "nextReview": "دواتر: پێداچوونەوە"
+        },
+        "inventoryStep": {
+            "currentStock": "کۆگای ئێستا",
+            "calculateStockTooltip": "ژماردنی کۆگا لەسەر بنەمای کۆنتەینەر و یەکەکان",
+            "currentQuantityPlaceholder": "بڕی ئێستا",
+            "reorderLevel": "ئاستی دووبارە داواکردن",
+            "reorderLevelTooltip": "دانانی ئاستی دووبارە داواکردن بە کۆنتەینەر یان یەکە",
+            "reorderThresholdPlaceholder": "سنووری دووبارە داواکردن",
+            "expirationDate": "بەرواری بەسەرچوون",
+            "selectExpirationDate": "بەرواری بەسەرچوون هەڵبژێرە",
+            "nextImage": "دواتر: وێنە",
+            "stockCalculator": "ژمێرەری کۆگا",
+            "numberOfContainers": "ژمارەی کۆنتەینەرەکان",
+            "containersPlaceholder": "بۆ نموونە، ٢٠ سندوق",
+            "unitsPerContainer": "یەکە لە هەر کۆنتەینەرێک",
+            "unitsPerContainerPlaceholder": "بۆ نموونە، ٦ یەکە لە هەر سندوقێک",
+            "totalUnits": "کۆی یەکەکان",
+            "reorderLevelCalculator": "ژمێرەری ئاستی دووبارە داواکردن",
+            "reorderLevelType": "جۆری ئاستی دووبارە داواکردن",
+            "individualUnits": "یەکەی تاک",
+            "containers": "کۆنتەینەرەکان",
+            "unitsToReorderAt": "یەکەکان بۆ دووبارە داواکردن لە",
+            "unitsToReorderAtPlaceholder": "بۆ نموونە، ١٠ یەکە",
+            "containersToReorderAt": "کۆنتەینەرەکان بۆ دووبارە داواکردن لە",
+            "containersToReorderAtPlaceholder": "بۆ نموونە، ٢ سندوق",
+            "usingStockCalculationValue": "بەکارهێنانی هەمان بەهای ژماردنی کۆگا",
+            "setUnitsPerContainerFirst": "تکایە سەرەتا یەکەکان لە هەر کۆنتەینەرێک دیاری بکە",
+            "reorderAt": "دووبارە داواکردن لە"
+        },
+        "pricingStep": {
+            "unitPriceInfo": "نرخی یەکە بە شێوەیەکی ئۆتۆماتیکی لەسەر بنەمای نرخی کۆمەڵ و یەکەکان لە هەر کۆمەڵێک دەژمێردرێت.",
+            "batchPrice": "نرخی کۆمەڵ",
+            "enterBatchPrice": "نرخی کۆمەڵ بنووسە",
+            "unitsPerBatch": "یەکەکان لە هەر کۆمەڵێک",
+            "numberOfUnits": "ژمارەی یەکەکان",
+            "unitSellingPrice": "نرخی فرۆشتنی یەکە",
+            "enterSellingPricePerUnit": "نرخی فرۆشتن بۆ هەر یەکەیەک بنووسە",
+            "suggestedPriceTooltip": "نرخی پێشنیارکراو لەسەر بنەمای تێچووی کۆمەڵ",
+            "suggested": "پێشنیارکراو",
+            "nextInventory": "دواتر: کۆگا"
+        },
+        "reviewStep": {
+            "productSummary": "کورتەی بەرهەم",
+            "reviewDetails": "پێداچوونەوە بە وردەکارییەکانی بەرهەم پێش ناردن",
+            "basicInformation": "زانیاریی بنەڕەتی",
+            "name": "ناو",
+            "brand": "براند",
+            "barcode": "بارکۆد",
+            "category": "پۆل",
+            "notSelected": "هەڵنەبژێردراوە",
+            "pricing": "نرخاندن",
+            "batchPrice": "نرخی کۆمەڵ",
+            "unitsPerBatch": "یەکەکان لە هەر کۆمەڵێک",
+            "unitCost": "تێچووی یەکە",
+            "sellingPrice": "نرخی فرۆشتن",
+            "profitPerUnit": "قازانج بۆ هەر یەکەیەک",
+            "inventory": "کۆگا",
+            "stock": "کۆگا",
+            "lowStock": "کۆگای کەم",
+            "reorderLevel": "ئاستی دووبارە داواکردن",
+            "expirationDate": "بەرواری بەسەرچوون",
+            "noExpirationDate": "بەرواری بەسەرچوون نییە",
+            "image": "وێنە",
+            "productImage": "وێنەی بەرهەم",
+            "noImage": "وێنە نییە",
+            "fixErrors": "تکایە هەڵەکان چاک بکەوە پێش ناردنی فۆرمەکە.",
+            "resetForm": "ڕێکخستنەوەی فۆرم",
+            "updateProduct": "نوێکردنەوەی بەرهەم",
+            "saveProduct": "پاشەکەوتکردنی بەرهەم"
+        },
+        "form": {
+            "steps": {
+                "basicInfo": "زانیاریی بنەڕەتی",
+                "pricing": "نرخاندن",
+                "inventory": "کۆگا",
+                "image": "وێنە",
+                "review": "پێداچوونەوە"
+            }
+        },
+        "sales": {
+            "history": "مێژووی فرۆشتن",
+            "newSale": "فرۆشتنی نوێ",
+            "transactionNumber": "ژمارەی مامەڵە",
+            "date": "بەروار",
+            "totalAmount": "کۆی گشتی",
+            "amountPaid": "بڕی پارەی دراو",
+            "change": "گەڕاوە",
+            "paymentMethod": "شێوازی پارەدان",
+            "paymentMethods": {
+                "cash": "کاش",
+                "card": "کارت"
+            },
+            "itemsCount": "ژمارەی کاڵاکان"
+        }
+    },
+    "sidebar": {
+        "dashboard": "داشبۆرد",
+        "products": "بەرهەمەکان",
+        "salesHistory": "مێژووی فرۆشتن",
+        "cashier": "کاشێر",
+        "debtors": "قەرزدارەکان",
+        "debts": "قەرزەکان",
+        "reports": "ڕاپۆرتەکان",
+        "categories": "پۆلەکان"
+    },
+    "userMenu": {
+        "settings": "ڕێکخستنەکان",
+        "logout": "چوونەدەرەوە"
     }
 }

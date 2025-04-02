@@ -10,6 +10,8 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog';
+import { useTranslation } from 'react-i18next';
+import { useLanguageDirection } from '@/hooks/useLanguageDirection';
 
 interface ProductProps {
   product: {
@@ -19,6 +21,8 @@ interface ProductProps {
 }
 
 const DeleteProduct = ({ product }: ProductProps) => {
+  const { t } = useTranslation();
+  const direction = useLanguageDirection();
   const { delete: destroy, processing } = useForm();
   const [open, setOpen] = useState(false);
 
@@ -29,32 +33,34 @@ const DeleteProduct = ({ product }: ProductProps) => {
     });
   };
 
+  const rtlClass = direction === 'rtl' ? 'rtl' : '';
+
   return (
     <>
       <Button
         variant="ghost"
-        className="text-red-500 hover:text-red-700 hover:bg-red-50"
+        className={`text-red-500 hover:text-red-700 hover:bg-red-50 ${rtlClass}`}
         onClick={() => setOpen(true)}
         disabled={processing}
       >
-        <DeleteOutlined className="mr-2" />
-        Delete
+        <DeleteOutlined className={direction === 'rtl' ? 'ml-2' : 'mr-2'} />
+        {t('common.delete')}
       </Button>
 
       <Dialog open={open} onOpenChange={setOpen}>
-        <DialogContent>
+        <DialogContent className={rtlClass} dir={'rtl'}>
           <DialogHeader>
-            <DialogTitle>Confirm Deletion</DialogTitle>
+            <DialogTitle>{t('products.deleteConfirmTitle')}</DialogTitle>
             <DialogDescription>
-              Are you sure you want to delete {product.name}? This action cannot be undone.
+              {t('products.deleteConfirmDescription', { name: product.name })}
             </DialogDescription>
           </DialogHeader>
-          <DialogFooter>
+          <DialogFooter className={`${rtlClass} flex-row-reverse`}>
             <Button variant="outline" onClick={() => setOpen(false)}>
-              Cancel
+              {t('common.cancel')}
             </Button>
             <Button variant="destructive" onClick={handleDelete} disabled={processing}>
-              Delete
+              {t('common.delete')}
             </Button>
           </DialogFooter>
         </DialogContent>

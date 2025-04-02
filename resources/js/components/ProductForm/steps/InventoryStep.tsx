@@ -4,8 +4,10 @@ import { Button, Card, Col, DatePicker, Form, InputNumber, Modal, Radio, Row, Sp
 import dayjs from 'dayjs';
 import React, { useState } from 'react';
 import { StepProps } from '../types';
+import { useTranslation } from 'react-i18next';
 
 const InventoryStep: React.FC<StepProps> = ({ data, setData, errors, onNext, onPrevious }) => {
+    const { t } = useTranslation();
     const [calculatorVisible, setCalculatorVisible] = useState(false);
     const [reorderCalculatorVisible, setReorderCalculatorVisible] = useState(false);
     const [containers, setContainers] = useState<number | null>(null);
@@ -57,8 +59,8 @@ const InventoryStep: React.FC<StepProps> = ({ data, setData, errors, onNext, onP
                     <Form.Item
                         label={
                             <Space>
-                                Current Stock
-                                <Tooltip title="Calculate stock based on containers and units">
+                                {t('products.inventoryStep.currentStock')}
+                                <Tooltip title={t('products.inventoryStep.calculateStockTooltip')}>
                                     <Button type="text" icon={<CalculatorOutlined />} onClick={() => setCalculatorVisible(true)} size="small" />
                                 </Tooltip>
                             </Space>
@@ -69,7 +71,7 @@ const InventoryStep: React.FC<StepProps> = ({ data, setData, errors, onNext, onP
                     >
                         <InputNumber
                             style={{ width: '100%' }}
-                            placeholder="Current quantity"
+                            placeholder={t('products.inventoryStep.currentQuantityPlaceholder')}
                             value={data.stock}
                             onChange={(value) => setData('stock', value ?? 0)}
                             min={0}
@@ -80,8 +82,8 @@ const InventoryStep: React.FC<StepProps> = ({ data, setData, errors, onNext, onP
                     <Form.Item
                         label={
                             <Space>
-                                Reorder Level
-                                <Tooltip title="Set reorder level in containers or units">
+                                {t('products.inventoryStep.reorderLevel')}
+                                <Tooltip title={t('products.inventoryStep.reorderLevelTooltip')}>
                                     <Button type="text" icon={<CalculatorOutlined />} onClick={openReorderCalculator} size="small" />
                                 </Tooltip>
                             </Space>
@@ -91,7 +93,7 @@ const InventoryStep: React.FC<StepProps> = ({ data, setData, errors, onNext, onP
                     >
                         <InputNumber
                             style={{ width: '100%' }}
-                            placeholder="Reorder threshold"
+                            placeholder={t('products.inventoryStep.reorderThresholdPlaceholder')}
                             value={data.reorder_level}
                             onChange={(value) => setData('reorder_level', value ?? 5)}
                             min={0}
@@ -103,7 +105,7 @@ const InventoryStep: React.FC<StepProps> = ({ data, setData, errors, onNext, onP
             <Form.Item
                 label={
                     <Space>
-                        <CalendarOutlined /> Expiration Date
+                        <CalendarOutlined /> {t('products.inventoryStep.expirationDate')}
                     </Space>
                 }
                 validateStatus={errors.expiration_date ? 'error' : ''}
@@ -111,7 +113,7 @@ const InventoryStep: React.FC<StepProps> = ({ data, setData, errors, onNext, onP
             >
                 <DatePicker
                     style={{ width: '100%' }}
-                    placeholder="Select expiration date"
+                    placeholder={t('products.inventoryStep.selectExpirationDate')}
                     value={data.expiration_date || null}
                     onChange={(date) => setData('expiration_date', date)}
                     disabledDate={(current) => current && current < dayjs().endOf('day')}
@@ -119,48 +121,48 @@ const InventoryStep: React.FC<StepProps> = ({ data, setData, errors, onNext, onP
             </Form.Item>
 
             <div className="mt-4 flex justify-between">
-                <Button onClick={onPrevious}>Previous</Button>
+                <Button onClick={onPrevious}>{t('common.previous')}</Button>
                 <Button type="primary" onClick={onNext}>
-                    Next: Image
+                    {t('products.inventoryStep.nextImage')}
                 </Button>
             </div>
 
             {/* Stock Calculator Modal */}
             <Modal
-                title="Stock Calculator"
+                title={t('products.inventoryStep.stockCalculator')}
                 open={calculatorVisible}
                 onCancel={() => setCalculatorVisible(false)}
                 footer={[
                     <Button key="cancel" onClick={() => setCalculatorVisible(false)}>
-                        Cancel
+                        {t('common.cancel')}
                     </Button>,
                     <Button key="apply" type="primary" onClick={applyCalculation}>
-                        Apply
+                        {t('common.apply')}
                     </Button>,
                 ]}
             >
                 <div className="my-4 space-y-4">
-                    <Form.Item label="Number of Containers (boxes, packages, etc.)">
-                        <InputNumber style={{ width: '100%' }} value={containers} onChange={setContainers} min={0} placeholder="e.g., 20 boxes" />
+                    <Form.Item label={t('products.inventoryStep.numberOfContainers')}>
+                        <InputNumber style={{ width: '100%' }} value={containers} onChange={setContainers} min={0} placeholder={t('products.inventoryStep.containersPlaceholder')} />
                     </Form.Item>
 
-                    <Form.Item label="Units per Container">
+                    <Form.Item label={t('products.inventoryStep.unitsPerContainer')}>
                         <InputNumber
                             style={{ width: '100%' }}
                             value={unitsPerContainer}
                             onChange={setUnitsPerContainer}
                             min={1}
-                            placeholder="e.g., 6 units per box"
+                            placeholder={t('products.inventoryStep.unitsPerContainerPlaceholder')}
                         />
                     </Form.Item>
 
                     <Button type="default" onClick={calculateStock} className="mb-2" block>
-                        Calculate
+                        {t('common.calculate')}
                     </Button>
 
                     {calculationResult !== null && (
                         <div className="rounded border border-blue-200 bg-blue-50 p-3">
-                            <strong>Total Units:</strong> {calculationResult}
+                            <strong>{t('products.inventoryStep.totalUnits')}:</strong> {calculationResult}
                             {containers && unitsPerContainer && (
                                 <span className="text-gray-500">
                                     {' '}
@@ -174,56 +176,56 @@ const InventoryStep: React.FC<StepProps> = ({ data, setData, errors, onNext, onP
 
             {/* Reorder Level Calculator Modal */}
             <Modal
-                title="Reorder Level Calculator"
+                title={t('products.inventoryStep.reorderLevelCalculator')}
                 open={reorderCalculatorVisible}
                 onCancel={() => setReorderCalculatorVisible(false)}
                 footer={[
                     <Button key="cancel" onClick={() => setReorderCalculatorVisible(false)}>
-                        Cancel
+                        {t('common.cancel')}
                     </Button>,
                     <Button key="apply" type="primary" onClick={applyReorderCalculation}>
-                        Apply
+                        {t('common.apply')}
                     </Button>,
                 ]}
             >
                 <div className="my-4 space-y-4">
-                    <Form.Item label="Reorder Level Type">
+                    <Form.Item label={t('products.inventoryStep.reorderLevelType')}>
                         <Radio.Group value={reorderMode} onChange={(e) => setReorderMode(e.target.value)}>
-                            <Radio.Button value="units">Individual Units</Radio.Button>
-                            <Radio.Button value="containers">Containers</Radio.Button>
+                            <Radio.Button value="units">{t('products.inventoryStep.individualUnits')}</Radio.Button>
+                            <Radio.Button value="containers">{t('products.inventoryStep.containers')}</Radio.Button>
                         </Radio.Group>
                     </Form.Item>
 
                     {reorderMode === 'units' ? (
-                        <Form.Item label="Units to Reorder At">
+                        <Form.Item label={t('products.inventoryStep.unitsToReorderAt')}>
                             <InputNumber
                                 style={{ width: '100%' }}
                                 value={reorderCalculationResult}
                                 onChange={setReorderCalculationResult}
                                 min={0}
-                                placeholder="e.g., 10 units"
+                                placeholder={t('products.inventoryStep.unitsToReorderAtPlaceholder')}
                             />
                         </Form.Item>
                     ) : (
                         <>
-                            <Form.Item label="Containers to Reorder At">
+                            <Form.Item label={t('products.inventoryStep.containersToReorderAt')}>
                                 <InputNumber
                                     style={{ width: '100%' }}
                                     value={reorderContainers}
                                     onChange={setReorderContainers}
                                     min={0}
-                                    placeholder="e.g., 2 boxes"
+                                    placeholder={t('products.inventoryStep.containersToReorderAtPlaceholder')}
                                 />
                             </Form.Item>
 
                             {unitsPerContainer ? (
                                 <div className="mb-4 rounded border border-blue-100 bg-blue-50 p-3">
-                                    <strong>Units per Container:</strong> {unitsPerContainer}
-                                    <div className="mt-1 text-xs text-gray-500">Using the same value from your stock calculation</div>
+                                    <strong>{t('products.inventoryStep.unitsPerContainer')}:</strong> {unitsPerContainer}
+                                    <div className="mt-1 text-xs text-gray-500">{t('products.inventoryStep.usingStockCalculationValue')}</div>
                                 </div>
                             ) : (
                                 <div className="mb-4 rounded border border-amber-100 bg-amber-50 p-3 text-amber-800">
-                                    Please set units per container in the stock calculator first
+                                    {t('products.inventoryStep.setUnitsPerContainerFirst')}
                                 </div>
                             )}
 
@@ -234,12 +236,12 @@ const InventoryStep: React.FC<StepProps> = ({ data, setData, errors, onNext, onP
                                 block
                                 disabled={!unitsPerContainer || !reorderContainers}
                             >
-                                Calculate
+                                {t('common.calculate')}
                             </Button>
 
                             {reorderCalculationResult !== null && reorderMode === 'containers' && (
                                 <div className="rounded border border-blue-200 bg-blue-50 p-3">
-                                    <strong>Reorder at:</strong> {reorderCalculationResult} units
+                                    <strong>{t('products.inventoryStep.reorderAt')}:</strong> {reorderCalculationResult} {t('products.inventoryStep.units')}
                                     {reorderContainers && unitsPerContainer && (
                                         <span className="text-gray-500">
                                             {' '}
