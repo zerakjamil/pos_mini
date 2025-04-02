@@ -1,9 +1,11 @@
 import '../css/app.css';
+import './i18n';
 
 import { createInertiaApp } from '@inertiajs/react';
 import { resolvePageComponent } from 'laravel-vite-plugin/inertia-helpers';
 import { createRoot } from 'react-dom/client';
 import { initializeTheme } from './hooks/use-appearance';
+import TranslationLoader from './components/TranslationLoader';
 
 const appName = import.meta.env.VITE_APP_NAME || 'Laravel';
 import.meta.env.VITE_SERVER_URL = import.meta.env.VITE_SERVER_URL || 'http://192.168.101.143:5173';
@@ -14,12 +16,15 @@ createInertiaApp({
     setup({ el, App, props }) {
         const root = createRoot(el);
 
-        root.render(<App {...props} />);
+        root.render(
+            <TranslationLoader>
+                <App {...props} />
+            </TranslationLoader>
+        );
     },
     progress: {
         color: '#4B5563',
     },
 });
 
-// This will set light / dark mode on load...
 initializeTheme();

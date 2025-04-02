@@ -6,6 +6,7 @@ import { usePage, Link } from '@inertiajs/react';
 import AppLayout from '@/layouts/app-layout';
 import dayjs from 'dayjs';
 import DeleteProduct from '@/pages/Products/DeleteProduct';
+import { useTranslation } from 'react-i18next';
 
 const { Text } = Typography;
 const { RangePicker } = DatePicker;
@@ -47,6 +48,8 @@ const formatIQD = (price: number): string => {
 };
 
 const ProductsPage: React.FC = () => {
+    const { t } = useTranslation();
+
     const { products = [], categories = [] } = usePage().props as unknown as {
         products: ProductType[];
         categories: CategoryType[];
@@ -102,7 +105,7 @@ const ProductsPage: React.FC = () => {
 
     const columns: ColumnsType<ProductType> = [
         {
-            title: 'Image',
+            title: t('products.image'),
             key: 'image',
             width: 80,
             render: (_, record) => (
@@ -123,20 +126,20 @@ const ProductsPage: React.FC = () => {
             ),
         },
         {
-            title: 'Name',
+            title: t('products.name'),
             dataIndex: 'name',
             key: 'name',
             render: (text, record) => <Link href={route('product.edit', record.id)}>{text}</Link>,
         },
         {
-            title: 'Price',
+            title: t('products.price'),
             dataIndex: 'price',
             key: 'price',
             render: (price) => formatIQD(price),
             sorter: (a, b) => a.price - b.price,
         },
         {
-            title: 'Category',
+            title: t('products.category'),
             dataIndex: 'category',
             key: 'category',
             render: (category) => (
@@ -148,7 +151,7 @@ const ProductsPage: React.FC = () => {
             onFilter: (value, record) => record.category === value,
         },
         {
-            title: 'Stock',
+            title: t('products.stock'),
             dataIndex: 'stock',
             key: 'stock',
             render: (stock, record) => (
@@ -163,12 +166,12 @@ const ProductsPage: React.FC = () => {
             sorter: (a, b) => a.stock - b.stock,
         },
         {
-            title: 'Barcode',
+            title: t('products.barcode'),
             dataIndex: 'barcode',
             key: 'barcode',
         },
    {
-       title: 'Expiration',
+       title: t('products.expiration'),
        key: 'expiration',
        render: (_, record) => {
            if (record.expired) {
@@ -205,12 +208,12 @@ const ProductsPage: React.FC = () => {
        },
    },
         {
-            title: 'Action',
+            title: t('common.action'),
             key: 'action',
             render: (_, record) => (
                 <Space size="middle">
                     <Link href={route('product.edit', record.id)}>
-                        <Button type="text" icon={<EditOutlined />}>Edit</Button>
+                        <Button type="text" icon={<EditOutlined />}>{t('products.edit')}</Button>
                     </Link>
                     <DeleteProduct product={record} />
                 </Space>
@@ -219,8 +222,8 @@ const ProductsPage: React.FC = () => {
     ];
 
     const breadcrumbs: BreadCrumb[] = [
-        {title: 'Dashboard', href: route('dashboard')},
-        {title: 'Products', href: route('product.index')},
+        {title: t('dashboard.title'), href: route('dashboard')},
+        {title: t('products.title'), href: route('product.index')},
     ];
 
     const resetFilters = () => {
@@ -236,22 +239,22 @@ const ProductsPage: React.FC = () => {
         <AppLayout breadcrumbs={breadcrumbs}>
             <div className="products-dashboard">
                 <div className="mb-6 flex items-center justify-between">
-                    <h1 className="text-2xl font-bold">Products Management</h1>
+                    <h1 className="text-2xl font-bold">{t('products.management')}</h1>
                     <Link href={route('product.create')}>
                         <Button type="primary" icon={<PlusOutlined />}>
-                            Add Product
+                            {t('products.addProduct')}
                         </Button>
                     </Link>
                 </div>
 
                 <div className="mb-6 p-4 bg-gray-50 border border-gray-200 rounded-md">
-                    <div className="mb-3 font-semibold">Filters</div>
+                    <div className="mb-3 font-semibold">{t('products.filters')}</div>
                     <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-4">
                         {/* Text search */}
                         <div>
-                            <div className="mb-1 text-sm text-gray-600">Search</div>
+                            <div className="mb-1 text-sm text-gray-600">{t('products.search')}</div>
                             <Input
-                                placeholder="Search by name or barcode"
+                                placeholder={t('products.searchPlaceholder')}
                                 prefix={<SearchOutlined />}
                                 value={searchText}
                                 onChange={(e) => setSearchText(e.target.value)}
@@ -260,9 +263,9 @@ const ProductsPage: React.FC = () => {
 
                         {/* Category filter */}
                         <div>
-                            <div className="mb-1 text-sm text-gray-600">Category</div>
+                            <div className="mb-1 text-sm text-gray-600">{t('products.category')}</div>
                             <Select
-                                placeholder="Filter by category"
+                                placeholder={t('products.filterByCategory')}
                                 style={{ width: '100%' }}
                                 allowClear
                                 value={searchCategory}
@@ -278,7 +281,7 @@ const ProductsPage: React.FC = () => {
 
                         {/* Stock range filter */}
                         <div>
-                            <div className="mb-1 text-sm text-gray-600">Stock Range</div>
+                            <div className="mb-1 text-sm text-gray-600">{t('products.stockRange')}</div>
                             <Slider
                                 range
                                 min={0}
@@ -290,22 +293,22 @@ const ProductsPage: React.FC = () => {
 
                         {/* Low stock filter */}
                         <div>
-                            <div className="mb-1 text-sm text-gray-600">Stock Status</div>
+                            <div className="mb-1 text-sm text-gray-600">{t('products.stockStatus')}</div>
                             <Select
-                                placeholder="Stock status"
+                                placeholder={t('products.stockStatus')}
                                 style={{ width: '100%' }}
                                 allowClear
                                 value={showLowStock}
                                 onChange={(value) => setShowLowStock(value)}
                             >
-                                <Select.Option value={true}>Low Stock</Select.Option>
-                                <Select.Option value={false}>Normal Stock</Select.Option>
+                                <Select.Option value={true}>{t('products.lowStock')}</Select.Option>
+                                <Select.Option value={false}>{t('products.normalStock')}</Select.Option>
                             </Select>
                         </div>
 
                         {/* Expiration range */}
                         <div>
-                            <div className="mb-1 text-sm text-gray-600">Expiration Date</div>
+                            <div className="mb-1 text-sm text-gray-600">{t('products.expirationDate')}</div>
                             <RangePicker
                                 style={{ width: '100%' }}
                                 value={expirationRange}
@@ -315,24 +318,24 @@ const ProductsPage: React.FC = () => {
 
                         {/* Expiration status filter */}
                         <div>
-                            <div className="mb-1 text-sm text-gray-600">Expiration Status</div>
+                            <div className="mb-1 text-sm text-gray-600">{t('products.expirationStatus')}</div>
                             <Select
-                                placeholder="Expiration status"
+                                placeholder={t('products.expirationStatus')}
                                 style={{ width: '100%' }}
                                 allowClear
                                 value={expirationStatus}
                                 onChange={(value) => setExpirationStatus(value)}
                             >
-                                <Select.Option value="expired">Expired</Select.Option>
-                                <Select.Option value={true}>Expiring Soon</Select.Option>
-                                <Select.Option value={false}>Not Expiring Soon</Select.Option>
+                                <Select.Option value="expired">{t('products.expired')}</Select.Option>
+                                <Select.Option value={true}>{t('products.expiringSoon')}</Select.Option>
+                                <Select.Option value={false}>{t('products.notExpiringSoon')}</Select.Option>
                             </Select>
                         </div>
 
                         {/* Reset button */}
                         <div className="flex items-end">
                             <Button onClick={resetFilters}>
-                                Reset Filters
+                                {t('products.resetFilters')}
                             </Button>
                         </div>
                     </div>
@@ -340,11 +343,11 @@ const ProductsPage: React.FC = () => {
 
                 {/* Product counts summary */}
                 <div className="mb-4 flex flex-wrap gap-4">
-                    <Tag color="blue">Total: {products.length}</Tag>
-                    <Tag color="orange">Low Stock: {products.filter(p => p.low_stock).length}</Tag>
-                    <Tag color="red">Expiring Soon: {products.filter(p => p.expiring_soon).length}</Tag>
-                    <Tag color="black">Expired: {products.filter(p => p.expired).length}</Tag>
-                    <Tag color="purple">Filtered: {filteredProducts.length}</Tag>
+                    <Tag color="blue">{t('products.total')}: {products.length}</Tag>
+                    <Tag color="orange">{t('products.lowStock')}: {products.filter(p => p.low_stock).length}</Tag>
+                    <Tag color="red">{t('products.expiringSoon')}: {products.filter(p => p.expiring_soon).length}</Tag>
+                    <Tag color="black">{t('products.expired')}: {products.filter(p => p.expired).length}</Tag>
+                    <Tag color="purple">{t('products.filtered')}: {filteredProducts.length}</Tag>
                 </div>
 
                 <Table

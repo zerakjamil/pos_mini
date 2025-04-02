@@ -2,63 +2,173 @@
     "cashier": {
         "title": "سیستەمی کاشێر",
         "currentTransaction": "فرۆشتنی ئێستا",
-        "transactionSummary": "کۆی فرۆشتن",
+        "transactionSummary": "پوختەی فرۆشتن",
         "cart": {
-            "empty": "سەبەتە بەتاڵە",
-            "clear": "بەتاڵکردنی سەبەتە",
+            "empty": "سەبەتەکە بەتاڵە",
+            "clear": "خاڵیکردنی سەبەتە",
             "checkout": "پارەدان",
-            "product": "کاڵا",
+            "product": "بەرهەم",
             "price": "نرخ",
             "quantity": "ژمارە",
-            "subtotal": "کۆی لاوەکی",
+            "subtotal": "کۆی بەشەکی",
             "action": "کردار",
-            "remove": "لابردن",
+            "remove": "سڕینەوە",
             "total": "کۆی گشتی"
         },
         "product": {
-            "notFound": "کاڵا بە بارکۆدی {{barcode}} نەدۆزرایەوە",
+            "notFound": "بەرهەم بە بارکۆدی {{barcode}} نەدۆزرایەوە",
             "added": "زیادکرا: {{name}}",
-            "lookup": "گەڕان بۆ کاڵا"
+            "lookup": "گەڕان بۆ بەرهەم"
         },
         "transaction": {
             "completed": "فرۆشتن بە سەرکەوتوویی تەواو بوو!",
             "change": "گەڕاوە: {{amount}} دینار",
             "failed": "فرۆشتن سەرکەوتوو نەبوو: {{message}}",
-            "amountPaidError": "پارەی دراو دەبێت لانیکەم بەرامبەر بێت بە کۆی گشتی",
+            "amountPaidError": "بڕی پارەی دراو دەبێت لانیکەم یەکسان بێت بە کۆی گشتی",
             "emptyCartError": "ناتوانرێت فرۆشتن تەواو بکرێت: سەبەتە بەتاڵە"
         },
         "barcode": {
             "placeholder": "بارکۆد سکان بکە یان بە دەست بینووسە",
-            "productLookup": "گەڕان بۆ کاڵا",
+            "productLookup": "گەڕان بۆ بەرهەم",
             "duplicateScan": "سکانی دووبارە دیاریکرا و پشتگوێ خرا"
         },
         "summary": {
             "total": "کۆی گشتی",
-            "items": "کاڵاکان",
+            "items": "بەرهەمەکان",
             "totalQuantity": "کۆی ژمارە"
         },
         "productLookup": {
-            "title": "گەڕان بۆ کاڵا",
-            "searchPlaceholder": "گەڕان بۆ کاڵا",
-            "inStock": "{{stock}} لە کۆگادا هەیە"
+            "title": "گەڕان بۆ بەرهەم",
+            "searchPlaceholder": "گەڕان بۆ بەرهەم",
+            "inStock": "{{stock}} لە کۆگادا بەردەستە"
         },
         "checkout": {
             "title": "تەواوکردنی فرۆشتن",
             "completePayment": "تەواوکردنی پارەدان",
             "totalAmount": "کۆی پارە",
-            "originalAmount": "نرخی ڕاستەقینە: {{amount}} دینار",
-            "helped": "داشکان",
+            "originalAmount": "نرخی سەرەتایی: {{amount}} دینار",
+            "helped": "داشکاندن",
             "roundDown": "داشکاندن بۆ نزیکترین ١٠٠٠",
-            "resetAmount": "گەڕانەوە بۆ نرخی ڕاستەقینە",
-            "amountPaid": "پارەی دراو",
+            "resetAmount": "گەڕانەوە بۆ نرخی سەرەتایی",
+            "amountPaid": "بڕی پارەی دراو",
             "change": "گەڕاوە"
         }
     },
+    "dashboard": {
+        "title": "داشبۆرد",
+        "welcome": "بەخێربێیت، {{name}}",
+        "loggedInAs": "تۆ وەک {{role}} چوویتە ژوورەوە",
+        "stats": {
+            "todaySales": "فرۆشتنی ئەمڕۆ",
+            "products": "بەرهەمەکان",
+            "transactions": "مامەڵەکان",
+            "users": "بەکارهێنەران"
+        },
+        "quickActions": {
+            "title": "کردارە خێراکان",
+            "newSale": "فرۆشتنی نوێ",
+            "viewProducts": "بینینی بەرهەمەکان",
+            "addProduct": "زیادکردنی بەرهەم"
+        },
+        "alerts": {
+            "title": "ئاگادارییەکان",
+            "lowStockMessage": "{{count}} بەرهەم لە کۆگادا کەمە",
+            "expiringMessage": "{{count}} بەرهەم بەسەرچوونیان نزیکە",
+            "viewAll": "بینینی هەموویان"
+        },
+        "recentSales": {
+            "title": "دوایین فرۆشتنەکان",
+            "viewAll": "بینینی هەموو فرۆشتنەکان"
+        },
+        "lowStockProducts": {
+            "title": "بەرهەمەکانی کۆگا کەمن"
+        },
+        "expiringProducts": {
+            "title": "بەرهەمە بەسەرچووەکان"
+        },
+        "sales": {
+            "transactionNumber": "ژمارەی مامەڵە",
+            "amount": "بڕی پارە",
+            "date": "بەروار",
+            "cashier": "کاشێر"
+        },
+        "products": {
+            "product": "بەرهەم",
+            "currentStock": "بەردەستی ئێستا",
+            "reorderLevel": "ئاستی داواکردنەوە",
+            "status": "دۆخ",
+            "outOfStock": "بەردەست نییە",
+            "lowStock": "بەردەستی کەمە",
+            "expirationDate": "بەرواری بەسەرچوون",
+            "daysLeft": "ڕۆژی ماوە",
+            "expired": "بەسەرچووە",
+            "expiringSoon": "بەم زووانە بەسەردەچێت"
+        }
+    },
+    "roles": {
+        "supervisor": "سەرپەرشتیار",
+        "cashier": "کاشێر",
+        "admin": "بەڕێوەبەر",
+        "manager": "بەڕێوەبەر",
+        "user": "بەکارهێنەر"
+    },
     "common": {
         "dashboard": "داشبۆرد",
-        "cashier": "کاشێر",
         "currency": "دینار",
         "ok": "باشە",
-        "cancel": "هەڵوەشاندنەوە"
+        "cancel": "پاشگەزبوونەوە",
+        "action": "کردار",
+        "view": "بینین"
+    },
+    "products": {
+        "title": "بەرهەمەکان",
+        "management": "بەڕێوەبردنی بەرهەمەکان",
+        "addProduct": "زیادکردنی بەرهەم",
+        "filters": "پاڵێوەرەکان",
+        "search": "گەڕان",
+        "searchPlaceholder": "گەڕان بە ناو یان بارکۆد",
+        "category": "جۆر",
+        "filterByCategory": "پاڵاوتن بە جۆر",
+        "stockRange": "ڕێژەی کەرەستە",
+        "stockStatus": "دۆخی کەرەستە",
+        "lowStock": "کەرەستەی کەم",
+        "normalStock": "کەرەستەی ئاسایی",
+        "expirationDate": "بەرواری بەسەرچوون",
+        "expirationStatus": "دۆخی بەسەرچوون",
+        "expired": "بەسەرچوو",
+        "expiringSoon": "خەریکە بەسەردەچێت",
+        "notExpiringSoon": "لە نزیکدا بەسەرناچێت",
+        "resetFilters": "سڕینەوەی پاڵێوەرەکان",
+        "total": "کۆی گشتی",
+        "filtered": "پاڵێوراو",
+        "image": "وێنە",
+        "name": "ناو",
+        "price": "نرخ",
+        "stock": "کەرەستە",
+        "barcode": "بارکۆد",
+        "expiration": "بەسەرچوون",
+        "edit": "دەستکاریکردن",
+        "delete": "سڕینەوە",
+        "month": "مانگ",
+        "months": "مانگەکان",
+        "day": "ڕۆژ",
+        "days": "ڕۆژەکان",
+        "noDate": "بێ بەروار",
+        "noImage": "بێ وێنە"
+    },
+    "sales": {
+        "history": "مێژووی فرۆشتن",
+        "newSale": "فرۆشتنی نوێ",
+        "transactionNumber": "ژمارەی مامەڵە",
+        "date": "بەروار",
+        "totalAmount": "کۆی گشتی",
+        "amountPaid": "بڕی پارەی دراو",
+        "change": "گەڕاوە",
+        "paymentMethod": "شێوازی پارەدان",
+        "paymentMethods": {
+            "cash": "کاش",
+            "card": "کارت"
+        },
+        "itemsCount": "ژمارەی کاڵاکان"
     }
 }

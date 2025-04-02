@@ -5,6 +5,7 @@ import { Head, Link } from '@inertiajs/react';
 import { Button, Card, Table, Tag, Typography } from 'antd';
 import React from 'react';
 import { useSalesTable } from '@/pages/Sales/hooks/useSalesTable';
+import { useTranslation } from 'react-i18next';
 
 const { Title } = Typography;
 
@@ -43,21 +44,22 @@ interface SalesIndexProps {
 }
 
 const SalesIndex: React.FC<SalesIndexProps> = ({ sales }) => {
+    const { t } = useTranslation();
     const breadcrumbs: BreadcrumbItem[] = [
-        { title: 'Dashboard', href: route('dashboard') },
-        { title: 'Sales History', href: route('sales.index') },
+        { title: t('dashboard.title'), href: route('dashboard') },
+        { title: t('sales.history'), href: route('sales.index') },
     ];
 
     const { columns } = useSalesTable();
 
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
-            <Head title="Sales History" />
+            <Head title={t('sales.history')} />
             <div className="flex h-full flex-1 flex-col gap-4 rounded-xl p-4">
                 <div className="mb-4 flex items-center justify-between">
-                    <Title level={4}>Sales History</Title>
+                    <Title level={4}>{t('sales.history')}</Title>
                     <Link href={route('cashier')}>
-                        <Button type="primary">New Sale</Button>
+                        <Button type="primary">{t('sales.newSale')}</Button>
                     </Link>
                 </div>
 
@@ -77,5 +79,4 @@ const SalesIndex: React.FC<SalesIndexProps> = ({ sales }) => {
         </AppLayout>
     );
 };
-
 export default SalesIndex;
