@@ -1,6 +1,8 @@
 <?php
 
-use App\Http\Controllers\{
+use App\Http\Controllers\{CardDebtController,
+    CardDebtPaymentController,
+    CardTypeController,
     DebtController,
     DebtorController,
     DebtPaymentController,
@@ -11,8 +13,7 @@ use App\Http\Controllers\{
     ReportsController,
     SalesController,
     UserController,
-    SettingsController
-};
+    SettingsController};
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -64,6 +65,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('/products/{product}/edit', [ProductController::class, 'edit'])->name('product.edit');
         Route::put('/products/{product}', [ProductController::class, 'update'])->name('product.update');
         Route::delete('/products/{product}', [ProductController::class, 'destroy'])->name('product.destroy');
+        Route::get('/products/{product}', [ProductController::class, 'show'])->name('product.show');
 
         // Category Management
         Route::resource('categories', CategoryController::class);
@@ -81,6 +83,19 @@ Route::middleware(['auth', 'verified'])->group(function () {
         // Debt Management System
         Route::resource('debtors', DebtorController::class);
         Route::resource('debts', DebtController::class);
+
+        // Card Debts
+        Route::resource('card-debts', CardDebtController::class);
+
+        // Card Debt Payments
+        Route::get('card-debts/{cardDebt}/payments/create', [CardDebtPaymentController::class, 'create'])->name('card-debts.payments.create');
+        Route::post('card-debts/{cardDebt}/payments', [CardDebtPaymentController::class, 'store'])->name('card-debts.payments.store');
+        Route::get('card-debts/payments/{payment}/edit', [CardDebtPaymentController::class, 'edit'])->name('card-debts.payments.edit');
+        Route::put('card-debts/payments/{payment}', [CardDebtPaymentController::class, 'update'])->name('card-debts.payments.update');
+        Route::delete('card-debts/payments/{payment}', [CardDebtPaymentController::class, 'destroy'])->name('card-debts.payments.destroy');
+
+        // Card Types Management
+        Route::resource('card-types', CardTypeController::class);
 
         // Debt Payments
         Route::resource('payments', DebtPaymentController::class)
@@ -108,4 +123,4 @@ Route::middleware('auth')->group(function () {
 });
 
 // Include authentication routes
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';
