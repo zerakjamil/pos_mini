@@ -3,6 +3,7 @@ import { Head } from '@inertiajs/react';
 import { Card, Divider, Tabs } from 'antd';
 import AppLayout from '@/layouts/app-layout';
 import { BreadcrumbItem, ProfitData } from './types/types';
+import { useTranslation } from 'react-i18next';
 
 import ReportHeader from './components/ReportHeader';
 import ReportTable from './components/ReportTable';
@@ -21,6 +22,7 @@ interface ReportProps {
 }
 
 const ReportsPage: React.FC<ReportProps> = ({ dailyProfits, weeklyProfits, monthlyProfits }) => {
+  const { t } = useTranslation();
   const { activeTab, setActiveTab, getActiveData, summary } = useReportData(
     dailyProfits,
     weeklyProfits,
@@ -30,8 +32,8 @@ const ReportsPage: React.FC<ReportProps> = ({ dailyProfits, weeklyProfits, month
   const { printReport } = usePrintReport();
 
   const breadcrumbs: BreadcrumbItem[] = [
-    { title: 'Dashboard', href: route('dashboard') },
-    { title: 'Reports', href: route('reports.index') },
+    { title: t('dashboard.title'), href: route('dashboard') },
+    { title: t('reports.title'), href: route('reports.index') },
   ];
 
   const handlePrint = () => {
@@ -48,7 +50,7 @@ const ReportsPage: React.FC<ReportProps> = ({ dailyProfits, weeklyProfits, month
 
   return (
     <AppLayout breadcrumbs={breadcrumbs}>
-      <Head title="Sales Reports" />
+      <Head title={t('reports.salesReports')} />
       <div className="flex h-full flex-1 flex-col gap-4 rounded-xl p-4">
         <ReportHeader onPrint={handlePrint} />
 
@@ -56,13 +58,13 @@ const ReportsPage: React.FC<ReportProps> = ({ dailyProfits, weeklyProfits, month
           <FormulaExplanation />
 
           <Tabs defaultActiveKey="daily" onChange={(key) => setActiveTab(key as string)}>
-            <TabPane tab="Daily" key="daily">
+            <TabPane tab={t('reports.tabs.daily')} key="daily">
               {renderTabContent(dailyProfits)}
             </TabPane>
-            <TabPane tab="Weekly" key="weekly">
+            <TabPane tab={t('reports.tabs.weekly')} key="weekly">
               {renderTabContent(weeklyProfits)}
             </TabPane>
-            <TabPane tab="Monthly" key="monthly">
+            <TabPane tab={t('reports.tabs.monthly')} key="monthly">
               {renderTabContent(monthlyProfits)}
             </TabPane>
           </Tabs>
