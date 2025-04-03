@@ -39,7 +39,7 @@ export function useSalesTable() {
       render: (amount: number) => `${t('common.currency')} ${Number(amount).toLocaleString()}`,
     },
     {
-      title: t('sales.paymentMethod'),
+      title: t('sales.paymentMethods.title'),
       dataIndex: 'payment_method',
       key: 'payment_method',
       render: (method: string) => (

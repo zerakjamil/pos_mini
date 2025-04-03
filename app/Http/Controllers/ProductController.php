@@ -41,7 +41,39 @@ class ProductController extends Controller
             'categories' => $categories,
         ]);
     }
+/**
+ * Display the specified product.
+ */
+public function show(Product $product): Response
+{
+    $product->load('category');
 
+    $productData = [
+        'id' => $product->id,
+        'name' => $product->name,
+        'price' => $product->price,
+        'batch_price' => $product->batch_price,
+        'units_per_batch' => $product->units_per_batch,
+        'category' => $product->category ? [
+            'id' => $product->category->id,
+            'name' => $product->category->name,
+        ] : null,
+        'stock' => $product->stock,
+        'barcode' => $product->barcode,
+        'reorder_level' => $product->reorder_level,
+        'brand' => $product->brand,
+        'expiration_date' => $product->expiration_date,
+        'days_until_expiration' => $product->days_until_expiration,
+        'image_path' => $product->image_path ? Storage::url($product->image_path) : null,
+        'is_expiring_soon' => $product->isExpiringSoon(),
+        'is_expired' => $product->isExpired(),
+        'is_low_stock' => $product->isLowStock(),
+    ];
+
+    return Inertia::render('Products/Show', [
+        'product' => $productData
+    ]);
+}
     /**
      * Display the cashier interface.
      */
