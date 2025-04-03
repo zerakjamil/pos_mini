@@ -10,7 +10,6 @@ import {
     LayoutGrid,
     Package,
     PieChart,
-    Settings,
     ShoppingCart,
     Users
 } from 'lucide-react';
