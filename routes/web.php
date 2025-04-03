@@ -1,29 +1,25 @@
 <?php
 
-use App\Http\Controllers\DebtController;
-use App\Http\Controllers\DebtorController;
-use App\Http\Controllers\DebtPaymentController;
-use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\DashboardController;
-use App\Http\Controllers\ProductController;
-use App\Http\Controllers\CategoryController;
-use App\Http\Controllers\ReportsController;
-use App\Http\Controllers\SalesController;
-use App\Http\Controllers\UserController;
-use App\Http\Controllers\SettingsController;
-use Illuminate\Foundation\Application;
+use App\Http\Controllers\{
+    DebtController,
+    DebtorController,
+    DebtPaymentController,
+    ProfileController,
+    DashboardController,
+    ProductController,
+    CategoryController,
+    ReportsController,
+    SalesController,
+    UserController,
+    SettingsController
+};
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
 /*
 |--------------------------------------------------------------------------
-| Web Routes
+| Public Routes
 |--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider within a group which
-| contains the "web" middleware group. Now create something great!
-|
 */
 
 Route::get('/', function () {
@@ -34,11 +30,20 @@ Route::get('/home', function () {
     return Inertia::render('Home');
 })->name('home');
 
+/*
+|--------------------------------------------------------------------------
+| Authenticated Routes
+|--------------------------------------------------------------------------
+*/
+
 Route::middleware(['auth', 'verified'])->group(function () {
+    // Dashboard
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
+    // Products (View Only)
     Route::get('/products', [ProductController::class, 'index'])->name('product.index');
 
+    // Sales (View)
     Route::get('/sales', [SalesController::class, 'index'])->name('sales.index');
     Route::get('/sales/{sale}', [SalesController::class, 'show'])->name('sales.show');
 
@@ -46,41 +51,55 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/cashier', [ProductController::class, 'cashier'])->name('cashier');
     Route::post('/sales', [SalesController::class, 'store'])->name('sales.store');
 
-    // Supervisor-only routes
+    /*
+    |--------------------------------------------------------------------------
+    | Supervisor Routes
+    |--------------------------------------------------------------------------
+    */
+
     Route::middleware(['role:supervisor'])->group(function () {
-        // Product management
+        // Product Management
         Route::get('/products/create', [ProductController::class, 'create'])->name('product.create');
         Route::post('/products', [ProductController::class, 'store'])->name('product.store');
         Route::get('/products/{product}/edit', [ProductController::class, 'edit'])->name('product.edit');
         Route::put('/products/{product}', [ProductController::class, 'update'])->name('product.update');
         Route::delete('/products/{product}', [ProductController::class, 'destroy'])->name('product.destroy');
 
-        Route::get('/reports', [ReportsController::class, 'index'])->name('reports.index');
-
+        // Category Management
         Route::resource('categories', CategoryController::class);
 
-        // User management
+        // Reporting
+        Route::get('/reports', [ReportsController::class, 'index'])->name('reports.index');
+
+        // User Management
         Route::resource('users', UserController::class);
 
         // Settings
         Route::get('/settings', [SettingsController::class, 'index'])->name('settings.index');
         Route::put('/settings', [SettingsController::class, 'update'])->name('settings.update');
 
-        Route::middleware(['verified'])->group(function () {
-            Route::resource('debtors', DebtorController::class);
-            Route::resource('debts', DebtController::class);
-            Route::resource('payments', DebtPaymentController::class)
-                ->except(['index', 'create', 'store']);
-            Route::get('debts/{debt}/payments', [DebtPaymentController::class, 'index'])
-                ->name('debts.payments.index');
-            Route::get('debts/{debt}/payments/create', [DebtPaymentController::class, 'create'])
-                ->name('debts.payments.create');
-            Route::post('debts/{debt}/payments', [DebtPaymentController::class, 'store'])
-                ->name('debts.payments.store');
-        });
-    });
+        // Debt Management System
+        Route::resource('debtors', DebtorController::class);
+        Route::resource('debts', DebtController::class);
 
+        // Debt Payments
+        Route::resource('payments', DebtPaymentController::class)
+            ->except(['index', 'create', 'store']);
+
+        Route::get('debts/{debt}/payments', [DebtPaymentController::class, 'index'])
+            ->name('debts.payments.index');
+        Route::get('debts/{debt}/payments/create', [DebtPaymentController::class, 'create'])
+            ->name('debts.payments.create');
+        Route::post('debts/{debt}/payments', [DebtPaymentController::class, 'store'])
+            ->name('debts.payments.store');
+    });
 });
+
+/*
+|--------------------------------------------------------------------------
+| Profile Routes
+|--------------------------------------------------------------------------
+*/
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -88,4 +107,5 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
+// Include authentication routes
 require __DIR__.'/auth.php';
