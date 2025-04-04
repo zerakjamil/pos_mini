@@ -3,11 +3,13 @@ import { Head, useForm } from '@inertiajs/react';
 import AppLayout from '@/layouts/app-layout';
 import { Button, Form, Input, Switch, Card, Typography, ColorPicker } from 'antd';
 import type { Color } from 'antd/es/color-picker';
+import { useTranslation } from 'react-i18next';
 
 const { Title } = Typography;
 const { TextArea } = Input;
 
 export default function Create() {
+  const { t } = useTranslation();
   const [colorHex, setColorHex] = useState<string>('#1677ff');
 
   const { data, setData, post, processing, errors } = useForm({
@@ -18,9 +20,9 @@ export default function Create() {
   });
 
   const breadcrumbs = [
-    { title: 'Dashboard', href: route('dashboard') },
-    { title: 'Categories', href: route('categories.index') },
-    { title: 'Create', href: route('categories.create') }
+    { title: t('common.dashboard'), href: route('dashboard') },
+    { title: t('categories.title'), href: route('categories.index') },
+    { title: t('categories.create'), href: route('categories.create') }
   ];
 
   const handleSubmit = () => {
@@ -35,15 +37,15 @@ export default function Create() {
 
   return (
     <AppLayout breadcrumbs={breadcrumbs}>
-      <Head title="Create Category" />
+      <Head title={t('categories.createCategory')} />
 
       <div className="container" style={{ padding: '24px' }}>
-        <Title level={2}>Create Category</Title>
+        <Title level={2}>{t('categories.createCategory')}</Title>
 
         <Card>
           <Form layout="vertical" onFinish={handleSubmit}>
             <Form.Item
-              label="Name"
+              label={t('categories.name')}
               required
               validateStatus={errors.name ? 'error' : ''}
               help={errors.name}
@@ -51,25 +53,25 @@ export default function Create() {
               <Input
                 value={data.name}
                 onChange={e => setData('name', e.target.value)}
-                placeholder="Enter category name"
+                placeholder={t('categories.enterCategoryName')}
               />
             </Form.Item>
 
             <Form.Item
-              label="Description"
+              label={t('categories.description')}
               validateStatus={errors.description ? 'error' : ''}
               help={errors.description}
             >
               <TextArea
                 value={data.description || ''}
                 onChange={e => setData('description', e.target.value)}
-                placeholder="Enter description"
+                placeholder={t('categories.enterDescription')}
                 rows={4}
               />
             </Form.Item>
 
             <Form.Item
-              label="Color"
+              label={t('categories.color')}
               validateStatus={errors.color_code ? 'error' : ''}
               help={errors.color_code}
             >
@@ -81,7 +83,7 @@ export default function Create() {
             </Form.Item>
 
             <Form.Item
-              label="Status"
+              label={t('categories.status')}
               validateStatus={errors.active ? 'error' : ''}
               help={errors.active}
             >
@@ -89,12 +91,14 @@ export default function Create() {
                 checked={data.active}
                 onChange={checked => setData('active', checked)}
               />
-              <span style={{ marginLeft: '8px' }}>{data.active ? 'Active' : 'Inactive'}</span>
+              <span style={{ marginLeft: '8px' }}>
+                {data.active ? t('common.active') : t('common.inactive')}
+              </span>
             </Form.Item>
 
             <Form.Item>
               <Button type="primary" htmlType="submit" loading={processing}>
-                Create Category
+                {t('categories.createCategory')}
               </Button>
             </Form.Item>
           </Form>
