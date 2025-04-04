@@ -11,6 +11,7 @@ import {
   message
 } from 'antd';
 import { Trash } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 
 const { Title } = Typography;
 const { TextArea } = Input;
@@ -28,7 +29,6 @@ interface Props {
   debtor: Debtor;
 }
 
-// Add index signature to satisfy FormDataType constraint
 interface DebtorForm {
   name: string;
   email: string;
@@ -39,11 +39,13 @@ interface DebtorForm {
 }
 
 export default function Edit({ debtor }: Props) {
+  const { t } = useTranslation();
+
   const breadcrumbs = [
-    { title: 'Dashboard', href: route('dashboard') },
-    { title: 'Debtors', href: route('debtors.index') },
+    { title: t('common.dashboard'), href: route('dashboard') },
+    { title: t('debtors.title'), href: route('debtors.index') },
     { title: debtor.name, href: route('debtors.show', debtor.id) },
-    { title: 'Edit', href: route('debtors.edit', debtor.id) }
+    { title: t('common.edit'), href: route('debtors.edit', debtor.id) }
   ];
 
   const { data, setData, put, delete: destroy, processing, errors } = useForm<DebtorForm>({
@@ -57,7 +59,7 @@ export default function Edit({ debtor }: Props) {
   const handleSubmit = () => {
     put(route('debtors.update', debtor.id), {
       onSuccess: () => {
-        message.success('Debtor updated successfully');
+        message.success(t('debtors.updateSuccess'));
       }
     });
   };
@@ -65,27 +67,27 @@ export default function Edit({ debtor }: Props) {
   const handleDelete = () => {
     destroy(route('debtors.destroy', debtor.id), {
       onSuccess: () => {
-        message.success('Debtor deleted successfully');
+        message.success(t('debtors.deleteSuccess'));
       }
     });
   };
 
   return (
     <AppLayout breadcrumbs={breadcrumbs}>
-      <Head title={`Edit Debtor - ${debtor.name}`} />
+      <Head title={t('debtors.editTitle', { name: debtor.name })} />
 
       <div className="container" style={{ padding: '24px' }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '20px' }}>
-          <Title level={2}>Edit Debtor: {debtor.name}</Title>
+          <Title level={2}>{t('debtors.editDebtor', { name: debtor.name })}</Title>
           <Popconfirm
-            title="Delete debtor"
-            description="Are you sure you want to delete this debtor and all associated debts?"
+            title={t('debtors.deleteConfirmTitle')}
+            description={t('debtors.deleteConfirmDescription')}
             onConfirm={handleDelete}
-            okText="Yes"
-            cancelText="No"
+            okText={t('common.yes')}
+            cancelText={t('common.no')}
             okButtonProps={{ danger: true }}
           >
-            <Button danger icon={<Trash size={16} />}>Delete Debtor</Button>
+            <Button danger icon={<Trash size={16} />}>{t('debtors.deleteDebtor')}</Button>
           </Popconfirm>
         </div>
 
@@ -102,7 +104,7 @@ export default function Edit({ debtor }: Props) {
             }}
           >
             <Form.Item
-              label="Name"
+              label={t('debtors.name')}
               required
               validateStatus={errors.name ? 'error' : ''}
               help={errors.name}
@@ -114,19 +116,7 @@ export default function Edit({ debtor }: Props) {
             </Form.Item>
 
             <Form.Item
-              label="Email"
-              validateStatus={errors.email ? 'error' : ''}
-              help={errors.email}
-            >
-              <Input
-                type="email"
-                value={data.email}
-                onChange={e => setData('email', e.target.value)}
-              />
-            </Form.Item>
-
-            <Form.Item
-              label="Phone"
+              label={t('debtors.phone')}
               validateStatus={errors.phone ? 'error' : ''}
               help={errors.phone}
             >
@@ -137,19 +127,7 @@ export default function Edit({ debtor }: Props) {
             </Form.Item>
 
             <Form.Item
-              label="Address"
-              validateStatus={errors.address ? 'error' : ''}
-              help={errors.address}
-            >
-              <TextArea
-                rows={3}
-                value={data.address}
-                onChange={e => setData('address', e.target.value)}
-              />
-            </Form.Item>
-
-            <Form.Item
-              label="Notes"
+              label={t('debtors.notes')}
               validateStatus={errors.notes ? 'error' : ''}
               help={errors.notes}
             >
@@ -162,10 +140,10 @@ export default function Edit({ debtor }: Props) {
 
             <div style={{ display: 'flex', justifyContent: 'space-between' }}>
               <Link href={route('debtors.show', debtor.id)}>
-                <Button>Cancel</Button>
+                <Button>{t('common.cancel')}</Button>
               </Link>
               <Button type="primary" htmlType="submit" loading={processing}>
-                Update Debtor
+                {t('debtors.updateDebtor')}
               </Button>
             </div>
           </Form>

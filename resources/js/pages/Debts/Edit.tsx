@@ -14,6 +14,7 @@ import {
 } from 'antd';
 import { Trash } from 'lucide-react';
 import dayjs from 'dayjs';
+import { useTranslation } from 'react-i18next';
 
 const { Title } = Typography;
 const { TextArea } = Input;
@@ -27,11 +28,13 @@ interface DebtForm {
 }
 
 export default function Edit({ debt, debtors }) {
+  const { t } = useTranslation();
+
   const breadcrumbs = [
-    { title: 'Dashboard', href: route('dashboard') },
-    { title: 'Debts', href: route('debts.index') },
+    { title: t('common.dashboard'), href: route('dashboard') },
+    { title: t('debts.title'), href: route('debts.index') },
     { title: debt.description, href: route('debts.show', debt.id) },
-    { title: 'Edit', href: route('debts.edit', debt.id) }
+    { title: t('common.edit'), href: route('debts.edit', debt.id) }
   ];
 
   const { data, setData, put, delete: destroy, processing, errors } = useForm<DebtForm>({
@@ -44,7 +47,7 @@ export default function Edit({ debt, debtors }) {
   const handleSubmit = () => {
     put(route('debts.update', debt.id), {
       onSuccess: () => {
-        message.success('Debt updated successfully');
+        message.success(t('debts.updateSuccess'));
       }
     });
   };
@@ -52,27 +55,27 @@ export default function Edit({ debt, debtors }) {
   const handleDelete = () => {
     destroy(route('debts.destroy', debt.id), {
       onSuccess: () => {
-        message.success('Debt deleted successfully');
+        message.success(t('debts.deleteSuccess'));
       }
     });
   };
 
   return (
     <AppLayout breadcrumbs={breadcrumbs}>
-      <Head title={`Edit Debt - ${debt.description}`} />
+      <Head title={t('debts.editTitle', { description: debt.description })} />
 
       <div className="container" style={{ padding: '24px' }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '20px' }}>
-          <Title level={2}>Edit Debt</Title>
+          <Title level={2}>{t('debts.editDebt')}</Title>
           <Popconfirm
-            title="Delete debt"
-            description="Are you sure you want to delete this debt?"
+            title={t('debts.deleteConfirmTitle')}
+            description={t('debts.deleteConfirmDescription')}
             onConfirm={handleDelete}
-            okText="Yes"
-            cancelText="No"
+            okText={t('common.yes')}
+            cancelText={t('common.no')}
             okButtonProps={{ danger: true }}
           >
-            <Button danger icon={<Trash size={16} />}>Delete Debt</Button>
+            <Button danger icon={<Trash size={16} />}>{t('debts.deleteDebt')}</Button>
           </Popconfirm>
         </div>
 
@@ -88,13 +91,13 @@ export default function Edit({ debt, debtors }) {
             }}
           >
             <Form.Item
-              label="Debtor"
+              label={t('debts.debtor')}
               required
               validateStatus={errors.debtor_id ? 'error' : ''}
               help={errors.debtor_id}
             >
               <Select
-                placeholder="Select a debtor"
+                placeholder={t('debts.selectDebtor')}
                 value={data.debtor_id}
                 onChange={(value) => setData('debtor_id', value)}
                 showSearch
@@ -107,7 +110,7 @@ export default function Edit({ debt, debtors }) {
             </Form.Item>
 
             <Form.Item
-              label="Amount"
+              label={t('debts.amount')}
               required
               validateStatus={errors.amount ? 'error' : ''}
               help={errors.amount}
@@ -116,16 +119,16 @@ export default function Edit({ debt, debtors }) {
                     style={{ width: '100%' }}
                     value={data.amount}
                     onChange={(value) => setData('amount', value as number)}
-                    placeholder="Enter debt amount"
+                    placeholder={t('debts.enterAmount')}
                     min={0}
-                    addonBefore="IQD"
+                    addonBefore={t('common.currency')}
                     formatter={(value) => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
                     parser={(value) => value!.replace(/IQD\s?|(,*)/g, '')}
                 />
             </Form.Item>
 
             <Form.Item
-              label="Description"
+              label={t('debts.description')}
               required
               validateStatus={errors.description ? 'error' : ''}
               help={errors.description}
@@ -134,12 +137,12 @@ export default function Edit({ debt, debtors }) {
                 rows={3}
                 value={data.description}
                 onChange={(e) => setData('description', e.target.value)}
-                placeholder="Enter debt description"
+                placeholder={t('debts.enterDescription')}
               />
             </Form.Item>
 
             <Form.Item
-              label="Due Date"
+              label={t('debts.dueDate')}
               required
               validateStatus={errors.due_date ? 'error' : ''}
               help={errors.due_date}
@@ -153,10 +156,10 @@ export default function Edit({ debt, debtors }) {
 
             <div style={{ display: 'flex', justifyContent: 'space-between' }}>
               <Link href={route('debts.show', debt.id)}>
-                <Button>Cancel</Button>
+                <Button>{t('common.cancel')}</Button>
               </Link>
               <Button type="primary" htmlType="submit" loading={processing}>
-                Update Debt
+                {t('debts.updateDebt')}
               </Button>
             </div>
           </Form>
