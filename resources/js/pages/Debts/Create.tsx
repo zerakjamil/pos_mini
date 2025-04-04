@@ -1,4 +1,3 @@
-// resources/js/Pages/Debts/Create.tsx
 import { useState } from 'react';
 import { Head, Link, useForm } from '@inertiajs/react';
 import AppLayout from '@/layouts/app-layout';
@@ -14,6 +13,7 @@ import {
   message
 } from 'antd';
 import dayjs from 'dayjs';
+import { useTranslation } from 'react-i18next';
 
 const { Title } = Typography;
 const { TextArea } = Input;
@@ -27,10 +27,12 @@ interface DebtForm {
 }
 
 export default function Create({ debtors, auth }) {
+  const { t } = useTranslation();
+
   const breadcrumbs = [
-    { title: 'Dashboard', href: route('dashboard') },
-    { title: 'Debts', href: route('debts.index') },
-    { title: 'Create', href: route('debts.create') }
+    { title: t('common.dashboard'), href: route('dashboard') },
+    { title: t('debts.title'), href: route('debts.index') },
+    { title: t('common.create'), href: route('debts.create') }
   ];
 
   const { data, setData, post, processing, errors } = useForm<DebtForm>({
@@ -43,18 +45,18 @@ export default function Create({ debtors, auth }) {
   const handleSubmit = () => {
     post(route('debts.store'), {
       onSuccess: () => {
-        message.success('Debt created successfully');
+        message.success(t('debts.createSuccess'));
       }
     });
   };
 
   return (
     <AppLayout breadcrumbs={breadcrumbs}>
-      <Head title="Create Debt" />
+      <Head title={t('debts.createTitle')} />
 
       <div className="container" style={{ padding: '24px' }}>
         <div style={{ marginBottom: '20px' }}>
-          <Title level={2}>Create New Debt</Title>
+          <Title level={2}>{t('debts.createNewDebt')}</Title>
         </div>
 
         <Card>
@@ -69,13 +71,13 @@ export default function Create({ debtors, auth }) {
             }}
           >
             <Form.Item
-              label="Debtor"
+              label={t('debts.debtor')}
               required
               validateStatus={errors.debtor_id ? 'error' : ''}
               help={errors.debtor_id}
             >
               <Select
-                placeholder="Select a debtor"
+                placeholder={t('debts.selectDebtor')}
                 value={data.debtor_id}
                 onChange={(value) => setData('debtor_id', value)}
                 showSearch
@@ -88,7 +90,7 @@ export default function Create({ debtors, auth }) {
             </Form.Item>
 
             <Form.Item
-              label="Amount"
+              label={t('debts.amount')}
               required
               validateStatus={errors.amount ? 'error' : ''}
               help={errors.amount}
@@ -97,16 +99,16 @@ export default function Create({ debtors, auth }) {
                     style={{ width: '100%' }}
                     value={data.amount}
                     onChange={(value) => setData('amount', value as number)}
-                    placeholder="Enter debt amount"
+                    placeholder={t('debts.enterAmount')}
                     min={0}
-                    addonBefore="IQD"
+                    addonBefore={t('common.currency')}
                     formatter={(value) => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
                     parser={(value) => value!.replace(/IQD\s?|(,*)/g, '')}
                 />
             </Form.Item>
 
             <Form.Item
-              label="Description"
+              label={t('debts.description')}
               required
               validateStatus={errors.description ? 'error' : ''}
               help={errors.description}
@@ -115,12 +117,12 @@ export default function Create({ debtors, auth }) {
                 rows={3}
                 value={data.description}
                 onChange={(e) => setData('description', e.target.value)}
-                placeholder="Enter debt description"
+                placeholder={t('debts.enterDescription')}
               />
             </Form.Item>
 
             <Form.Item
-              label="Due Date"
+              label={t('debts.dueDate')}
               required
               validateStatus={errors.due_date ? 'error' : ''}
               help={errors.due_date}
@@ -134,10 +136,10 @@ export default function Create({ debtors, auth }) {
 
             <div style={{ display: 'flex', justifyContent: 'space-between' }}>
               <Link href={route('debts.index')}>
-                <Button>Cancel</Button>
+                <Button>{t('common.cancel')}</Button>
               </Link>
               <Button type="primary" htmlType="submit" loading={processing}>
-                Create Debt
+                {t('debts.createDebt')}
               </Button>
             </div>
           </Form>
