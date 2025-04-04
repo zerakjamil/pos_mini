@@ -17,6 +17,7 @@ import {
 } from 'antd';
 import { Trash } from 'lucide-react';
 import dayjs from 'dayjs';
+import { useTranslation } from 'react-i18next';
 
 const { Title, Text } = Typography;
 const { TextArea } = Input;
@@ -31,12 +32,13 @@ interface PaymentForm {
 }
 
 export default function Edit({ payment, auth }) {
+  const { t } = useTranslation();
   const debt = payment.debt;
   const breadcrumbs = [
-    { title: 'Dashboard', href: route('dashboard') },
-    { title: 'Debts', href: route('debts.index') },
+    { title: t('common.dashboard'), href: route('dashboard') },
+    { title: t('debts.title'), href: route('debts.index') },
     { title: debt.description, href: route('debts.show', debt.id) },
-    { title: 'Edit Payment', href: route('payments.edit', payment.id) }
+    { title: t('payments.editPayment'), href: route('payments.edit', payment.id) }
   ];
 
   const { data, setData, put, delete: destroy, processing, errors } = useForm<PaymentForm>({
@@ -50,7 +52,7 @@ export default function Edit({ payment, auth }) {
   const handleSubmit = () => {
     put(route('payments.update', payment.id), {
       onSuccess: () => {
-        message.success('Payment updated successfully');
+        message.success(t('payments.updateSuccess'));
       }
     });
   };
@@ -58,54 +60,54 @@ export default function Edit({ payment, auth }) {
   const handleDelete = () => {
     destroy(route('payments.destroy', payment.id), {
       onSuccess: () => {
-        message.success('Payment deleted successfully');
+        message.success(t('payments.deleteSuccess'));
       }
     });
   };
 
   const paymentMethods = [
-    { value: 'cash', label: 'Cash' },
-    { value: 'bank_transfer', label: 'Bank Transfer' },
-    { value: 'check', label: 'Check' },
-    { value: 'credit_card', label: 'Credit Card' },
-    { value: 'other', label: 'Other' },
+    { value: 'cash', label: t('payments.methods.cash') },
+    { value: 'bank_transfer', label: t('payments.methods.bankTransfer') },
+    { value: 'check', label: t('payments.methods.check') },
+    { value: 'credit_card', label: t('payments.methods.creditCard') },
+    { value: 'other', label: t('payments.methods.other') },
   ];
 
   return (
     <AppLayout breadcrumbs={breadcrumbs}>
-      <Head title="Edit Payment" />
+      <Head title={t('payments.editPayment')} />
 
       <div className="container" style={{ padding: '24px' }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '20px' }}>
-          <Title level={2}>Edit Payment</Title>
+          <Title level={2}>{t('payments.editPayment')}</Title>
           <Popconfirm
-            title="Delete payment"
-            description="Are you sure you want to delete this payment?"
+            title={t('payments.deleteConfirmTitle')}
+            description={t('payments.deleteConfirmDescription')}
             onConfirm={handleDelete}
-            okText="Yes"
-            cancelText="No"
+            okText={t('common.yes')}
+            cancelText={t('common.no')}
             okButtonProps={{ danger: true }}
           >
-            <Button danger icon={<Trash size={16} />}>Delete Payment</Button>
+            <Button danger icon={<Trash size={16} />}>{t('payments.deletePayment')}</Button>
           </Popconfirm>
         </div>
 
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '24px' }}>
-          <Card title="Debt Information">
+          <Card title={t('debts.debtInformation')}>
             <Descriptions bordered column={1} size="small">
-              <Descriptions.Item label="Debtor">{debt.debtor.name}</Descriptions.Item>
-              <Descriptions.Item label="Description">{debt.description}</Descriptions.Item>
-              <Descriptions.Item label="Due Date">{new Date(debt.due_date).toLocaleDateString()}</Descriptions.Item>
-              <Descriptions.Item label="Total Amount">${debt.amount.toFixed(2)}</Descriptions.Item>
-              <Descriptions.Item label="Balance">
+              <Descriptions.Item label={t('debtors.debtor')}>{debt.debtor.name}</Descriptions.Item>
+              <Descriptions.Item label={t('categories.description')}>{debt.description}</Descriptions.Item>
+              <Descriptions.Item label={t('debts.dueDate')}>{new Date(debt.due_date).toLocaleDateString()}</Descriptions.Item>
+              <Descriptions.Item label={t('debts.totalAmount')}>{t('common.currency')}{Number(debt.amount).toLocaleString()}</Descriptions.Item>
+              <Descriptions.Item label={t('debts.balance')}>
                 <Text strong type={debt.balance > 0 ? "danger" : "success"}>
-                  ${debt.balance.toFixed(2)}
+                  {t('common.currency')}{Number(debt.balance).toLocaleString()}
                 </Text>
               </Descriptions.Item>
             </Descriptions>
           </Card>
 
-          <Card title="Payment Details">
+          <Card title={t('payments.paymentDetails')}>
             <Form
               layout="vertical"
               onFinish={handleSubmit}
@@ -118,7 +120,7 @@ export default function Edit({ payment, auth }) {
               }}
             >
               <Form.Item
-                label="Amount"
+                label={t('payments.amount')}
                 required
                 validateStatus={errors.amount ? 'error' : ''}
                 help={errors.amount}
@@ -128,7 +130,7 @@ export default function Edit({ payment, auth }) {
                   min={0.01}
                   step={0.01}
                   precision={2}
-                  formatter={(value) => `$ ${value}`}
+                  formatter={(value) => `${t('common.currency')} ${value}`}
                   parser={(value) => value?.replace(/\$\s?|(,*)/g, '') as string}
                   value={data.amount}
                   onChange={(value) => setData('amount', value as number)}
@@ -136,7 +138,7 @@ export default function Edit({ payment, auth }) {
               </Form.Item>
 
               <Form.Item
-                label="Payment Date"
+                label={t('payments.paymentDate')}
                 required
                 validateStatus={errors.payment_date ? 'error' : ''}
                 help={errors.payment_date}
@@ -149,7 +151,7 @@ export default function Edit({ payment, auth }) {
               </Form.Item>
 
               <Form.Item
-                label="Payment Method"
+                label={t('payments.paymentMethod')}
                 validateStatus={errors.payment_method ? 'error' : ''}
                 help={errors.payment_method}
               >
@@ -164,19 +166,19 @@ export default function Edit({ payment, auth }) {
               </Form.Item>
 
               <Form.Item
-                label="Reference Number"
+                label={t('payments.referenceNumber')}
                 validateStatus={errors.reference_number ? 'error' : ''}
                 help={errors.reference_number}
               >
                 <Input
                   value={data.reference_number}
                   onChange={(e) => setData('reference_number', e.target.value)}
-                  placeholder="Check #, Receipt #, etc."
+                  placeholder={t('payments.referenceNumberPlaceholder')}
                 />
               </Form.Item>
 
               <Form.Item
-                label="Notes"
+                label={t('payments.notes')}
                 validateStatus={errors.notes ? 'error' : ''}
                 help={errors.notes}
               >
@@ -184,16 +186,16 @@ export default function Edit({ payment, auth }) {
                   rows={3}
                   value={data.notes}
                   onChange={(e) => setData('notes', e.target.value)}
-                  placeholder="Additional notes about this payment"
+                  placeholder={t('payments.notesPlaceholder')}
                 />
               </Form.Item>
 
               <div style={{ display: 'flex', justifyContent: 'space-between' }}>
                 <Link href={route('payments.show', payment.id)}>
-                  <Button>Cancel</Button>
+                  <Button>{t('common.cancel')}</Button>
                 </Link>
                 <Button type="primary" htmlType="submit" loading={processing}>
-                  Update Payment
+                  {t('payments.updatePayment')}
                 </Button>
               </div>
             </Form>

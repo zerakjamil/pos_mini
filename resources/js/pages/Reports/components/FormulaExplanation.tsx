@@ -1,22 +1,25 @@
 import React from 'react';
 import { Alert, Space, Typography } from 'antd';
+import { useTranslation } from 'react-i18next';
 
 const { Paragraph } = Typography;
 
 const FormulaExplanation: React.FC = () => {
+  const { t } = useTranslation();
+
   return (
     <Alert
-      message="How Profits Are Calculated"
+      message={t('reports.formulaExplanation.title')}
       description={
         <Space direction="vertical">
           <Paragraph>
-            <strong>Cost of Goods</strong> = (Batch Price ÷ Units per Batch) × Quantity Sold
+            <strong>{t('reports.formulaExplanation.costOfGoods')}</strong> = {t('reports.formulaExplanation.costOfGoodsFormula')}
           </Paragraph>
           <Paragraph>
-            <strong>Gross Profit</strong> = Total Revenue − Cost of Goods
+            <strong>{t('reports.formulaExplanation.grossProfit')}</strong> = {t('reports.formulaExplanation.grossProfitFormula')}
           </Paragraph>
           <Paragraph>
-            <strong>Profit Margin</strong> = (Gross Profit ÷ Total Revenue) × 100%
+            <strong>{t('reports.formulaExplanation.profitMargin')}</strong> = {t('reports.formulaExplanation.profitMarginFormula')}
           </Paragraph>
         </Space>
       }
