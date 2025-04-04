@@ -69,10 +69,22 @@ export function AppSidebar() {
             active: route().current('reports.*'),
         },
         {
+            title: t('sidebar.cardDebts'),
+            href: route('card-debts.index'),
+            icon: PieChart,
+            active: route().current('card-debts.*'),
+        },
+        {
             title: t('sidebar.categories'),
             href: route('categories.index'),
             icon: Folder,
             active: route().current('categories.index'),
+        },
+        {
+            title: t('sidebar.cardTypes'),
+            href: route('card-types.index'),
+            icon: Folder,
+            active: route().current('card-types.index'),
         },
     ];
 
