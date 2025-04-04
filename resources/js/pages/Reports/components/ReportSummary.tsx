@@ -3,6 +3,7 @@ import { Row, Col } from 'antd';
 import { DollarOutlined, PercentageOutlined } from '@ant-design/icons';
 import StatisticCard from './StatisticCard';
 import { formatCurrency, formatPercentage } from '../utils/formatters';
+import { useTranslation } from 'react-i18next';
 
 interface ReportSummaryProps {
   summary: {
@@ -14,6 +15,8 @@ interface ReportSummaryProps {
 }
 
 const ReportSummary: React.FC<ReportSummaryProps> = ({ summary = {} }) => {
+  const { t } = useTranslation();
+
   const parseNumericValue = (val: any): number => {
     if (val === null || val === undefined) return 0;
     if (typeof val === 'number') return val;
@@ -42,7 +45,7 @@ const ReportSummary: React.FC<ReportSummaryProps> = ({ summary = {} }) => {
     <Row gutter={24} className="mt-4">
       <Col xs={24} sm={12} md={6}>
         <StatisticCard
-          title="Total Revenue"
+          title={t('reports.summary.totalRevenue')}
           value={numTotalRevenue}
           formatter={formatCurrency}
           valueStyle={{ color: '#3f8600' }}
@@ -51,7 +54,7 @@ const ReportSummary: React.FC<ReportSummaryProps> = ({ summary = {} }) => {
       </Col>
       <Col xs={24} sm={12} md={6}>
         <StatisticCard
-          title="Cost of Goods"
+          title={t('reports.summary.costOfGoods')}
           value={numTotalCost}
           formatter={formatCurrency}
           valueStyle={{ color: '#cf1322' }}
@@ -60,7 +63,7 @@ const ReportSummary: React.FC<ReportSummaryProps> = ({ summary = {} }) => {
       </Col>
       <Col xs={24} sm={12} md={6}>
         <StatisticCard
-          title="Gross Profit"
+          title={t('reports.summary.grossProfit')}
           value={numTotalProfit}
           formatter={formatCurrency}
           valueStyle={{ color: '#3f8600' }}
@@ -69,7 +72,7 @@ const ReportSummary: React.FC<ReportSummaryProps> = ({ summary = {} }) => {
       </Col>
       <Col xs={24} sm={12} md={6}>
         <StatisticCard
-          title="Profit Margin"
+          title={t('reports.summary.profitMargin')}
           value={numAvgMargin}
           formatter={formatPercentage}
           valueStyle={{ color: numAvgMargin > 0 ? '#3f8600' : '#cf1322' }}

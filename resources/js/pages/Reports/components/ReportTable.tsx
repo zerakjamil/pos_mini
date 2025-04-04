@@ -3,6 +3,7 @@ import { Table, Tooltip } from 'antd';
 import { InfoCircleOutlined } from '@ant-design/icons';
 import { ProfitData } from '../types/types';
 import { formatCurrency, formatPercentage } from '../utils/formatters';
+import { useTranslation } from 'react-i18next';
 
 interface ReportTableProps {
   data: ProfitData[];
@@ -15,14 +16,16 @@ interface ReportTableProps {
 }
 
 const ReportTable: React.FC<ReportTableProps> = ({ data, summary }) => {
+  const { t } = useTranslation();
+
   const columns = [
     {
-      title: 'Date',
+      title: t('reports.table.date'),
       dataIndex: 'date',
       key: 'date',
     },
     {
-      title: 'Sales Count',
+      title: t('reports.table.salesCount'),
       dataIndex: 'sales_count',
       key: 'sales_count',
       render: (count: number) => count.toLocaleString('en-US'),
@@ -30,8 +33,8 @@ const ReportTable: React.FC<ReportTableProps> = ({ data, summary }) => {
     {
       title: (
         <span>
-          Total Revenue
-          <Tooltip title="Sum of all sales transactions">
+          {t('reports.table.totalRevenue')}
+          <Tooltip title={t('reports.table.totalRevenueTooltip')}>
             <InfoCircleOutlined style={{ marginLeft: 5 }} />
           </Tooltip>
         </span>
@@ -43,8 +46,8 @@ const ReportTable: React.FC<ReportTableProps> = ({ data, summary }) => {
     {
       title: (
         <span>
-          Cost of Goods
-          <Tooltip title="Total cost to purchase all sold items (batch price ÷ units per batch × quantity sold)">
+          {t('reports.table.costOfGoods')}
+          <Tooltip title={t('reports.table.costOfGoodsTooltip')}>
             <InfoCircleOutlined style={{ marginLeft: 5 }} />
           </Tooltip>
         </span>
@@ -56,8 +59,8 @@ const ReportTable: React.FC<ReportTableProps> = ({ data, summary }) => {
     {
       title: (
         <span>
-          Gross Profit
-          <Tooltip title="Revenue minus Cost of Goods">
+          {t('reports.table.grossProfit')}
+          <Tooltip title={t('reports.table.grossProfitTooltip')}>
             <InfoCircleOutlined style={{ marginLeft: 5 }} />
           </Tooltip>
         </span>
@@ -69,8 +72,8 @@ const ReportTable: React.FC<ReportTableProps> = ({ data, summary }) => {
     {
       title: (
         <span>
-          Profit Margin
-          <Tooltip title="(Gross Profit ÷ Revenue) × 100%">
+          {t('reports.table.profitMargin')}
+          <Tooltip title={t('reports.table.profitMarginTooltip')}>
             <InfoCircleOutlined style={{ marginLeft: 5 }} />
           </Tooltip>
         </span>
@@ -91,7 +94,7 @@ const ReportTable: React.FC<ReportTableProps> = ({ data, summary }) => {
         <Table.Summary fixed>
           <Table.Summary.Row>
             <Table.Summary.Cell index={0} colSpan={2}>
-              <strong>Total</strong>
+              <strong>{t('reports.table.total')}</strong>
             </Table.Summary.Cell>
             <Table.Summary.Cell index={2}>
               <strong>{formatCurrency(summary.totalRevenue)}</strong>
