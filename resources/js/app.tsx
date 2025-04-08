@@ -6,6 +6,7 @@ import { resolvePageComponent } from 'laravel-vite-plugin/inertia-helpers';
 import { createRoot } from 'react-dom/client';
 import { initializeTheme } from './hooks/use-appearance';
 import TranslationLoader from './components/TranslationLoader';
+import { RtlProvider } from '@/contexts/RtlContext';
 
 const appName = import.meta.env.VITE_APP_NAME || 'Laravel';
 import.meta.env.VITE_SERVER_URL = import.meta.env.VITE_SERVER_URL || 'http://192.168.101.143:5173';
@@ -17,9 +18,11 @@ createInertiaApp({
         const root = createRoot(el);
 
         root.render(
-            <TranslationLoader>
-                <App {...props} />
-            </TranslationLoader>
+            <RtlProvider>
+                <TranslationLoader>
+                    <App {...props} />
+                </TranslationLoader>
+            </RtlProvider>
         );
     },
     progress: {

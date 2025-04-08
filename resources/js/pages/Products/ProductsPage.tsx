@@ -213,7 +213,7 @@ const ProductsPage: React.FC = () => {
             render: (_, record) => (
                 <Space size="middle">
                     <Link href={route('product.edit', record.id)}>
-                        <Button type="text" icon={<EditOutlined />}>{t('products.edit')}</Button>
+                        <Button type="text" icon={<EditOutlined />}>{t('products.edit.title')}</Button>
                     </Link>
                     <DeleteProduct product={record} />
                 </Space>
@@ -237,7 +237,7 @@ const ProductsPage: React.FC = () => {
 
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
-            <div className="products-dashboard" dir={'rtl'}>
+            <div className="products-dashboard">
                 <div className="mb-6 flex items-center justify-between">
                     <h1 className="text-2xl font-bold">{t('products.management')}</h1>
                     <Link href={route('product.create')}>

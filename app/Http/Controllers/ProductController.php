@@ -118,7 +118,6 @@ public function show(Product $product): Response
     {
         $categories = $this->getActiveCategories();
 
-        // Format product data for the form
         $productData = $this->formatProductForForm($product);
 
         return Inertia::render('Products/Edit', [
@@ -276,8 +275,8 @@ public function show(Product $product): Response
         return [
             'id' => $product->id,
             'name' => $product->name,
-            'price' => $product->price / 100,
-            'batch_price' => $product->batch_price / 100,
+            'price' => $product->price,
+            'batch_price' => $product->batch_price,
             'units_per_batch' => $product->units_per_batch,
             'category_id' => $product->category_id,
             'stock' => $product->stock,

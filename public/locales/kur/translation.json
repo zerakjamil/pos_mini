@@ -136,10 +136,14 @@
         "total": "کۆی گشتی",
         "description": "وەسف",
         "createdAt": "دروستکراوە لە",
-        "updatedAt": "نوێکراوەتەوە لە"
+        "updatedAt": "نوێکراوەتەوە لە",
+        "save": "پاراستن",
+        "reset": "سڕینەوە"
     },
     "products": {
         "title": "کاڵاکان",
+        "saveAndAddAnother": "پاراستن و زیادکردنی کاڵای نوێ",
+        "updateProduct": "نوێکردنەوەی کاڵا",
         "management": "بەڕێوەبردنی کاڵاکان",
         "productTitle": "کاڵا: {{name}}",
         "backToProducts": "گەڕانەوە بۆ کاڵاکان",
@@ -179,7 +183,10 @@
         "stock": "کۆگا",
         "barcode": "بارکۆد",
         "expiration": "بەسەرچوون",
-        "edit": "گۆڕانکاری",
+        "edit": {
+            "title": "گۆڕانکاری لە کاڵا",
+            "pageTitle": "گۆڕانکاری لە کاڵا"
+        },
         "delete": "سڕینەوە",
         "month": "مانگ",
         "months": "مانگ",
@@ -211,7 +218,8 @@
             "noImage": "هیچ وێنەیەک بار نەکراوە",
             "imageSelected": "وێنە هەڵبژێردرا",
             "selectImage": "وێنە هەڵبژێرە",
-            "nextReview": "دواتر: چاوپێداخشاندن"
+            "nextReview": "دواتر: چاوپێداخشاندن",
+            "upload": "بارکردنی وێنە"
         },
         "inventoryStep": {
             "currentStock": "کۆگای ئێستا",
@@ -465,7 +473,7 @@
         "notesPlaceholder": "تێبینی زیاتر لەسەر ئەم پارەدانە",
         "methods": {
             "cash": "نەقد",
-            "bankTransfer": "حەواڵەی بانکی",
+            "bank_transfer": "حەواڵەی بانکی",
             "check": "چەک",
             "creditCard": "کارتی بانک",
             "other": "شێوازی تر"

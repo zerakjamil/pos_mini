@@ -4,25 +4,35 @@ import Backend from 'i18next-http-backend';
 import LanguageDetector from 'i18next-browser-languagedetector';
 
 i18n
-.use(Backend)
-.use(LanguageDetector)
-.use(initReactI18next)
-.init({
-  fallbackLng: 'kur',
-  debug: process.env.NODE_ENV === 'development',
-  load: 'languageOnly',
+  .use(Backend)
+  .use(LanguageDetector)
+  .use(initReactI18next)
+  .init({
+    fallbackLng: 'en',
+    supportedLngs: ['en', 'kur'],
+    debug: process.env.NODE_ENV === 'development',
 
-  caches: ['localStorage'],
-  cacheTTL: 48 * 60 * 60, // 48 hours
+    detection: {
+      order: ['localStorage', 'navigator'],
+      caches: ['localStorage'],
+    },
 
-  backend: {
-    loadPath: '/locales/{{lng}}/{{ns}}.json',
-  },
+    backend: {
+      loadPath: '/locales/{{lng}}/{{ns}}.json',
+    },
 
-  react: {
-    useSuspense: false,
-    wait: true
-  }
-});
+    react: {
+      useSuspense: false,
+    },
+
+    interpolation: {
+      escapeValue: false,
+    }
+  });
+
+if (document.documentElement) {
+  document.documentElement.dir = i18n.language === 'kur' ? 'rtl' : 'ltr';
+  document.documentElement.lang = i18n.language;
+}
 
 export default i18n;

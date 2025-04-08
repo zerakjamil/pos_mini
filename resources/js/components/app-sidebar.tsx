@@ -15,12 +15,15 @@ import {
 } from 'lucide-react';
 import AppLogo from './app-logo';
 import { useTranslation } from 'react-i18next';
+import { LanguageSwitcher } from '@/components/LanguageSwither';
+import { useRtl } from '@/contexts/RtlContext';
 
 export function AppSidebar() {
     const { t } = useTranslation();
     const { auth } = usePage().props as any;
     const user = auth?.user;
     const isSupervisor = user?.role === 'supervisor';
+    const {isRtl} = useRtl();
 
     const mainNavItems: ExtendedNavItem[] = [
         {
@@ -59,32 +62,15 @@ export function AppSidebar() {
             icon: ClipboardIcon,
             active: route().current('debts.*'),
         },
+
     ];
 
     const supervisorNavItems: ExtendedNavItem[] = [
-        {
-            title: t('sidebar.reports'),
-            href: route('reports.index'),
-            icon: PieChart,
-            active: route().current('reports.*'),
-        },
-        {
-            title: t('sidebar.cardDebts'),
-            href: route('card-debts.index'),
-            icon: PieChart,
-            active: route().current('card-debts.*'),
-        },
         {
             title: t('sidebar.categories'),
             href: route('categories.index'),
             icon: Folder,
             active: route().current('categories.index'),
-        },
-        {
-            title: t('sidebar.cardTypes'),
-            href: route('card-types.index'),
-            icon: Folder,
-            active: route().current('card-types.index'),
         },
     ];
 
@@ -95,7 +81,7 @@ export function AppSidebar() {
     ];
 
     return (
-        <Sidebar collapsible="icon" variant="inset">
+        <Sidebar collapsible="icon" variant="inset" side={isRtl ? 'right' : 'left'} className="h-screen">
             <SidebarHeader>
                 <SidebarMenu>
                     <SidebarMenuItem>
@@ -114,6 +100,7 @@ export function AppSidebar() {
 
             <SidebarFooter>
                 <NavFooter items={footerNavItems} className="mt-auto" />
+                <LanguageSwitcher />
                 <NavUser />
             </SidebarFooter>
         </Sidebar>

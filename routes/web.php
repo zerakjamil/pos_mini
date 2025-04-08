@@ -1,8 +1,6 @@
 <?php
 
-use App\Http\Controllers\{CardDebtController,
-    CardDebtPaymentController,
-    CardTypeController,
+use App\Http\Controllers\{
     DebtController,
     DebtorController,
     DebtPaymentController,
@@ -10,7 +8,6 @@ use App\Http\Controllers\{CardDebtController,
     DashboardController,
     ProductController,
     CategoryController,
-    ReportsController,
     SalesController,
     UserController,
     SettingsController};
@@ -70,9 +67,6 @@ Route::middleware(['auth', 'verified'])->group(function () {
         // Category Management
         Route::resource('categories', CategoryController::class);
 
-        // Reporting
-        Route::get('/reports', [ReportsController::class, 'index'])->name('reports.index');
-
         // User Management
         Route::resource('users', UserController::class);
 
@@ -83,19 +77,6 @@ Route::middleware(['auth', 'verified'])->group(function () {
         // Debt Management System
         Route::resource('debtors', DebtorController::class);
         Route::resource('debts', DebtController::class);
-
-        // Card Debts
-        Route::resource('card-debts', CardDebtController::class);
-
-        // Card Debt Payments
-        Route::get('card-debts/{cardDebt}/payments/create', [CardDebtPaymentController::class, 'create'])->name('card-debts.payments.create');
-        Route::post('card-debts/{cardDebt}/payments', [CardDebtPaymentController::class, 'store'])->name('card-debts.payments.store');
-        Route::get('card-debts/payments/{payment}/edit', [CardDebtPaymentController::class, 'edit'])->name('card-debts.payments.edit');
-        Route::put('card-debts/payments/{payment}', [CardDebtPaymentController::class, 'update'])->name('card-debts.payments.update');
-        Route::delete('card-debts/payments/{payment}', [CardDebtPaymentController::class, 'destroy'])->name('card-debts.payments.destroy');
-
-        // Card Types Management
-        Route::resource('card-types', CardTypeController::class);
 
         // Debt Payments
         Route::resource('payments', DebtPaymentController::class)

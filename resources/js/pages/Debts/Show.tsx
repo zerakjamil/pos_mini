@@ -1,4 +1,3 @@
-// resources/js/Pages/Debts/Show.tsx
 import { Head, Link } from '@inertiajs/react';
 import AppLayout from '@/layouts/app-layout';
 import {
@@ -13,13 +12,16 @@ import {
   Popconfirm
 } from 'antd';
 import { Edit, PlusCircle, Trash } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 
 const { Title, Text } = Typography;
 
 export default function Show({ debt }) {
+  const { t } = useTranslation();
+
   const breadcrumbs = [
-    { title: 'Dashboard', href: route('dashboard') },
-    { title: 'Debts', href: route('debts.index') },
+    { title: t('dashboard.title'), href: route('dashboard') },
+    { title: t('debts.title'), href: route('debts.index') },
     { title: debt.description, href: route('debts.show', debt.id) }
   ];
 
@@ -39,45 +41,45 @@ export default function Show({ debt }) {
 
   const columns = [
     {
-      title: 'Date',
+      title: t('payments.columns.date'),
       dataIndex: 'payment_date',
       key: 'payment_date',
       render: (date) => new Date(date).toLocaleDateString(),
     },
     {
-      title: 'Amount',
+      title: t('payments.columns.amount'),
       dataIndex: 'amount',
       key: 'amount',
       align: 'right',
-      render: (amount) => `IQD ${Number(amount).toLocaleString()}`,
+      render: (amount) => `${t('common.currency')} ${Number(amount).toLocaleString()}`,
     },
     {
-      title: 'Method',
+      title: t('payments.columns.method'),
       dataIndex: 'payment_method',
       key: 'payment_method',
     },
     {
-      title: 'Reference',
+      title: t('payments.columns.reference'),
       dataIndex: 'reference_number',
       key: 'reference_number',
     },
     {
-      title: 'Actions',
+      title: t('common.actions'),
       key: 'actions',
       align: 'right',
       render: (_, record) => (
         <Space size="small">
           <Link href={route('payments.edit', record.id)}>
-            <Button type="default" icon={<Edit size={16} />} size="small" />
+            <Button type="default" icon={<Edit size={16} />} size="small" aria-label={t('common.edit')} />
           </Link>
           <Popconfirm
-            title="Delete payment"
-            description="Are you sure you want to delete this payment?"
+            title={t('payments.deleteConfirmTitle')}
+            description={t('payments.deleteConfirmDescription')}
             onConfirm={() => handleDeletePayment(record.id)}
-            okText="Yes"
-            cancelText="No"
+            okText={t('common.yes')}
+            cancelText={t('common.no')}
           >
-            <Button danger type="default" icon={<Trash size={16} />} size="small" />
+            <Button danger type="default" icon={<Trash size={16} />} size="small" aria-label={t('common.delete')} />
           </Popconfirm>
         </Space>
       ),
@@ -90,48 +92,48 @@ export default function Show({ debt }) {
 
   return (
     <AppLayout breadcrumbs={breadcrumbs}>
-      <Head title={`Debt - ${debt.description}`} />
+      <Head title={t('debts.showTitle', { description: debt.description })} />
 
       <div className="container" style={{ padding: '24px' }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '20px' }}>
-          <Title level={2}>Debt Details</Title>
+          <Title level={2}>{t('debts.details')}</Title>
           <Space>
             <Link href={route('debts.edit', debt.id)}>
-              <Button icon={<Edit size={16} />}>Edit Debt</Button>
+              <Button icon={<Edit size={16} />}>{t('debts.editDebt')}</Button>
             </Link>
             <Link href={route('debts.payments.create', debt.id)}>
-              <Button type="primary" icon={<PlusCircle size={16} />}>Record Payment</Button>
+              <Button type="primary" icon={<PlusCircle size={16} />}>{t('payments.recordPayment')}</Button>
             </Link>
           </Space>
         </div>
 
         <Card>
-          <Descriptions title="Debt Information" bordered column={2} layout="vertical">
-            <Descriptions.Item label="Debtor">
+          <Descriptions title={t('debts.information')} bordered column={2} layout="vertical">
+            <Descriptions.Item label={t('debts.debtor')}>
               <Link href={route('debtors.show', debt.debtor_id)}>
                 {debt.debtor.name}
               </Link>
             </Descriptions.Item>
-            <Descriptions.Item label="Status">
-              <Tag color={getStatusColor(debt.status)}>{debt.status.toUpperCase()}</Tag>
+            <Descriptions.Item label={t('debts.status.title')}>
+              <Tag color={getStatusColor(debt.status)}>{t(`debts.status.${debt.status}`)}</Tag>
             </Descriptions.Item>
-            <Descriptions.Item label="Description">{debt.description}</Descriptions.Item>
-            <Descriptions.Item label="Due Date">{new Date(debt.due_date).toLocaleDateString()}</Descriptions.Item>
-            <Descriptions.Item label="Total Amount">IQD {Number(amount).toLocaleString()}</Descriptions.Item>
-            <Descriptions.Item label="Balance">IQD {Number(balance).toLocaleString()}</Descriptions.Item>
-            <Descriptions.Item label="Paid Amount">IQD {Number(totalPaid).toLocaleString()}</Descriptions.Item>
-            <Descriptions.Item label="Created At">{new Date(debt.created_at).toLocaleDateString()}</Descriptions.Item>
+            <Descriptions.Item label={t('debts.description')}>{debt.description}</Descriptions.Item>
+            <Descriptions.Item label={t('debts.dueDate')}>{new Date(debt.due_date).toLocaleDateString()}</Descriptions.Item>
+            <Descriptions.Item label={t('debts.totalAmount')}>{t('common.currency')} {Number(amount).toLocaleString()}</Descriptions.Item>
+            <Descriptions.Item label={t('debts.balance')}>{t('common.currency')} {Number(balance).toLocaleString()}</Descriptions.Item>
+            <Descriptions.Item label={t('debts.paidAmount')}>{t('common.currency')} {Number(totalPaid).toLocaleString()}</Descriptions.Item>
+            <Descriptions.Item label={t('debts.createdAt')}>{new Date(debt.created_at).toLocaleDateString()}</Descriptions.Item>
           </Descriptions>
         </Card>
 
         <Divider />
 
-        <Card title="Payment History">
+        <Card title={t('payments.history')}>
           <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '16px' }}>
-            <Title level={4}>Payments</Title>
+            <Title level={4}>{t('payments.title')}</Title>
             <Link href={route('debts.payments.create', debt.id)}>
               <Button type="primary" icon={<PlusCircle size={16} />}>
-                Add Payment
+                {t('payments.addPayment')}
               </Button>
             </Link>
           </div>
@@ -142,7 +144,7 @@ export default function Show({ debt }) {
             rowKey="id"
             pagination={false}
             locale={{
-              emptyText: 'No payments recorded yet'
+              emptyText: t('payments.noPaymentsRecorded')
             }}
           />
         </Card>

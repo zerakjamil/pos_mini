@@ -13,7 +13,7 @@ export default function Index({ debt, payments }) {
     const breadcrumbs = [
         { title: t('common.dashboard'), href: route('dashboard') },
         { title: t('debts.title'), href: route('debts.index') },
-        { title: debt.description, href: route('debts.show', debt.id) },
+        { title: t('debt.description'), href: route('debts.show', debt.id) },
         { title: t('payments.title'), href: route('debts.payments.index', debt.id) },
     ];
 
