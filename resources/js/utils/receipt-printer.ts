@@ -10,189 +10,153 @@ interface ReceiptData {
 
 export const printReceipt = (data: ReceiptData): void => {
   const { cartItems, total, amountPaid, change, transactionNumber } = data;
-
-  // Open a new window with the receipt
   const receiptWindow = window.open('', '_blank', 'width=300,height=600');
 
   if (!receiptWindow) {
-    console.error('Could not open receipt window. Please check your popup blocker settings.');
+    console.error('Could not open receipt window');
     return;
   }
 
-  // Get current date and time
   const now = new Date();
-  const dateStr = now.toLocaleDateString();
-  const timeStr = now.toLocaleTimeString();
+  const dateStr = now.toLocaleDateString('ar-IQ');
+  const timeStr = now.toLocaleTimeString('ar-IQ');
 
-  // Generate receipt HTML
   let receiptHtml = `
-    <html>
+    <html dir="ltr">
     <head>
       <title>Receipt</title>
       <style>
+        @media print {
+          @page { margin: 0; }
+          body { margin: 0.5cm; }
+        }
         body {
           font-family: 'Courier New', monospace;
           font-size: 12px;
-          width: 300px;
+          width: 80mm;
           margin: 0 auto;
-          padding: 10px;
+          padding: 5px;
         }
-        .header {
-          text-align: center;
-          margin-bottom: 10px;
-        }
-        .store-name {
-          font-size: 16px;
-          font-weight: bold;
-        }
-        .store-info {
-          font-size: 10px;
-        }
-        .divider {
-          border-top: 1px dashed #000;
-          margin: 10px 0;
-        }
+        .header { text-align: center; margin-bottom: 10px; }
+        .store-name { font-size: 16px; font-weight: bold; }
+        .store-info { font-size: 10px; margin: 2px 0; }
+        .divider { border-top: 1px dotted #000; margin: 5px 0; }
         .item {
           display: flex;
           justify-content: space-between;
-          margin-bottom: 5px;
+          margin: 3px 0;
+          font-size: 11px;
         }
-        .item-name {
-          flex: 2;
-        }
-        .item-qty {
-          flex: 1;
-          text-align: center;
-        }
-        .item-price {
-          flex: 1;
-          text-align: right;
-        }
+        .item-total { text-align: right; font-weight: bold; }
         .totals {
-          margin-top: 10px;
+          margin-top: 5px;
           text-align: right;
+          font-size: 12px;
         }
         .total-line {
           display: flex;
           justify-content: space-between;
+          margin: 2px 0;
         }
-        .thank-you {
-          text-align: center;
-          margin-top: 20px;
+        .grand-total {
           font-size: 14px;
-        }
-        .transaction-number {
-          text-align: center;
           font-weight: bold;
+        }
+        .footer {
+          text-align: center;
           margin-top: 10px;
+          font-size: 10px;
         }
-        .actions {
-          display: flex;
-          justify-content: space-between;
-          margin-top: 30px;
-        }
-        @media print {
-          body {
-            width: 100%;
-            margin: 0;
-            padding: 0;
-          }
-          .actions {
-            display: none;
-          }
+        .barcode {
+          text-align: center;
+          margin: 10px 0;
+          font-family: 'Courier', monospace;
         }
       </style>
     </head>
     <body>
       <div class="header">
-        <div class="store-name">POS SYSTEM STORE</div>
-        <div class="store-info">123 Main Street, City, State ZIP</div>
-        <div class="store-info">Tel: (123) 456-7890</div>
-        <div class="store-info">Date: ${dateStr} Time: ${timeStr}</div>
+        <div class="store-name">سوپەر ماركێت</div>
+        <div class="store-info">Kurdistan Region - Iraq</div>
+        <div class="store-info">Tel: 0750 000 0000</div>
+        <div class="store-info">VAT Reg: 12345678</div>
+        <div class="store-info">Date: ${dateStr}</div>
+        <div class="store-info">Time: ${timeStr}</div>
+        <div class="store-info">Receipt #: ${transactionNumber || 'N/A'}</div>
       </div>
-
-      <div class="transaction-number">Transaction #: ${transactionNumber || 'N/A'}</div>
 
       <div class="divider"></div>
 
       <div class="items">
         <div class="item" style="font-weight: bold;">
-          <div class="item-name">Item</div>
-          <div class="item-qty">Qty</div>
-          <div class="item-price">Price</div>
+          <span>Item</span>
+          <span>Qty</span>
+          <span>Price</span>
         </div>
   `;
 
-  // Add items to receipt
   cartItems.forEach(item => {
     receiptHtml += `
       <div class="item">
-        <div class="item-name">${item.name}</div>
-        <div class="item-qty">${item.quantity}</div>
-        <div class="item-price">$${item.price.toFixed(2)}</div>
+        <span>${item.name}</span>
+        <span>x${item.quantity}</span>
+        <span>${Number(item.price).toLocaleString()} د.ع</span>
       </div>
-      <div class="item">
-        <div class="item-name"></div>
-        <div class="item-qty"></div>
-        <div class="item-price">$${item.subtotal.toFixed(2)}</div>
+      <div class="item-total">
+        <span>${Number(item.subtotal).toLocaleString()} د.ع</span>
       </div>
     `;
   });
 
-  // Add totals to receipt
   receiptHtml += `
       </div>
 
       <div class="divider"></div>
 
       <div class="totals">
-        <div class="total-line">
-          <div>Subtotal:</div>
-          <div>$${total.toFixed(2)}</div>
+        <div class="total-line grand-total">
+          <span>Total:</span>
+          <span>${Number(total).toLocaleString()} د.ع</span>
         </div>
         <div class="total-line">
-          <div>Tax:</div>
-          <div>$0.00</div>
-        </div>
-        <div class="total-line" style="font-weight: bold;">
-          <div>Total:</div>
-          <div>$${total.toFixed(2)}</div>
+          <span>Cash:</span>
+          <span>${amountPaid ? Number(amountPaid).toLocaleString() : '0'} د.ع</span>
         </div>
         <div class="total-line">
-          <div>Amount Paid:</div>
-          <div>$${amountPaid ? amountPaid.toFixed(2) : '0.00'}</div>
-        </div>
-        <div class="total-line">
-          <div>Change:</div>
-          <div>$${change.toFixed(2)}</div>
+          <span>Change:</span>
+          <span>${Number(change).toLocaleString()} د.ع</span>
         </div>
       </div>
 
       <div class="divider"></div>
 
-      <div class="thank-you">
-        Thank you for your purchase!
+      <div class="footer">
+        <p>Thank you for shopping with us!</p>
+        <p>سوپاس بۆ کڕینەکەت</p>
       </div>
 
-      <div class="actions">
-        <button onclick="window.print()">Print Receipt</button>
+      <div class="barcode">
+        |||||||||||||||||||||||||
+        ${transactionNumber || 'N/A'}
+      </div>
+
+      <div style="text-align: center; margin-top: 20px;">
+        <button onclick="window.print()">Print</button>
         <button onclick="window.close()">Close</button>
       </div>
     </body>
     </html>
   `;
 
-  // Write the HTML to the new window and print
   receiptWindow.document.open();
   receiptWindow.document.write(receiptHtml);
   receiptWindow.document.close();
 
-  // Auto-print if supported
   setTimeout(() => {
     try {
       receiptWindow.print();
     } catch (e) {
-      console.error('Failed to auto-print:', e);
+      console.error('Print failed:', e);
     }
   }, 500);
 };

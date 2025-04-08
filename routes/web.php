@@ -1,13 +1,13 @@
 <?php
 
-use App\Http\Controllers\{
-    DebtController,
+use App\Http\Controllers\{DebtController,
     DebtorController,
     DebtPaymentController,
     ProfileController,
     DashboardController,
     ProductController,
     CategoryController,
+    ReportsController,
     SalesController,
     UserController,
     SettingsController};
@@ -64,6 +64,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::delete('/products/{product}', [ProductController::class, 'destroy'])->name('product.destroy');
         Route::get('/products/{product}', [ProductController::class, 'show'])->name('product.show');
 
+        //Reportig
+        Route::get('/reports', [ReportsController::class, 'index'])->name('reports.index');
+        
         // Category Management
         Route::resource('categories', CategoryController::class);
 
