@@ -654,6 +654,20 @@
           "description": "Description",
           "createdAt": "Created At"
       }
+  },
+    "login": {
+        "title": "Login",
+        "email": "Email",
+        "password": "Password",
+        "loginButton": "Login",
+        "forgotPassword": "Forgot Password?",
+        "rememberMe": "Remember Me",
+        "invalidCredentials": "Invalid email or password.",
+        "loginSuccess": "Login successful",
+        "logInToYourAccount": "Log in to your account",
+        "description": "Enter your email and password below to log in"
+    },
+    "email": "Email",
+    "password": "Password",
+    "rememberMe": "Remember Me"
   }
-  }
-  

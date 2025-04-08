@@ -175,7 +175,7 @@ const ProductsPage: React.FC = () => {
        key: 'expiration',
        render: (_, record) => {
            if (record.expired) {
-               return <Badge status="error" text="Expired" />;
+               return <Badge status="error" text={t('dashboard.products.expired')} />;
            } else if (record.days_until_expiration !== undefined) {
                if (record.days_until_expiration > 30) {
                    const months = Math.floor(record.days_until_expiration / 30);
@@ -191,7 +191,7 @@ const ProductsPage: React.FC = () => {
                    return (
                        <Text type="danger" style={{ fontWeight: 'bold' }}>
                            <WarningOutlined style={{ marginRight: 4 }} />
-                           {record.days_until_expiration}ۆژ ر
+                           {record.days_until_expiration}  رۆژ
                        </Text>
                    );
                } else {
