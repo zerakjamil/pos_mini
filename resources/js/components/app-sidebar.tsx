@@ -67,6 +67,12 @@ export function AppSidebar() {
 
     const supervisorNavItems: ExtendedNavItem[] = [
         {
+            title: t('sidebar.reports'),
+            href: route('reports.index'),
+            icon: PieChart,
+            active: route().current('reports.*'),
+        },
+        {
             title: t('sidebar.categories'),
             href: route('categories.index'),
             icon: Folder,
