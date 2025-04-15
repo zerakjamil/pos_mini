@@ -7,6 +7,7 @@ import TransactionDetails from './components/TransactionDetails';
 import TransactionItemsTable from './components/TransactionItemsTable';
 import { usePrintReceipt } from './hooks/usePrintReceipt';
 import { useTranslation } from 'react-i18next';
+import AppLayout from '@/layouts/app-layout';
 
 const { Content, Header, Footer } = Layout;
 
@@ -16,15 +17,15 @@ interface SalesShowProps {
 
 const SalesShow: React.FC<SalesShowProps> = ({ sale }) => {
     const { printReceipt } = usePrintReceipt();
-    const {t} = useTranslation('common');
+    const { t } = useTranslation('sale/show');
 
     const handlePrint = () => {
         printReceipt(sale);
     };
 
     return (
-        <Layout style={{ minHeight: '100vh' }}>
-            <Head title={`${t('sales.sale')} ${sale.transaction_number}`} />
+        <AppLayout style={{ minHeight: '100vh' }}>
+            <Head title={`${t('sales:sales.sale')} ${sale.transaction_number}`} />
 
             <Header style={{ background: '#fff', padding: '0 16px' }}>
                 <SaleHeader transactionNumber={sale.transaction_number} onPrint={handlePrint} />
@@ -37,8 +38,10 @@ const SalesShow: React.FC<SalesShowProps> = ({ sale }) => {
                 </Space>
             </Content>
 
-            <Footer style={{ textAlign: 'center' }}>{t('app.footer',{ year: new Date().getFullYear() })}</Footer>
-        </Layout>
+            <Footer style={{ textAlign: 'center' }}>
+                {t('app.footer', { year: new Date().getFullYear() })}
+            </Footer>
+        </AppLayout>
     );
 };
 
