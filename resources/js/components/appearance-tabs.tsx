@@ -2,14 +2,16 @@ import { Appearance, useAppearance } from '@/hooks/use-appearance';
 import { cn } from '@/lib/utils';
 import { LucideIcon, Monitor, Moon, Sun } from 'lucide-react';
 import { HTMLAttributes } from 'react';
+import { useTranslation } from 'react-i18next';
 
 export default function AppearanceToggleTab({ className = '', ...props }: HTMLAttributes<HTMLDivElement>) {
+    const { t } = useTranslation('settings/appearance');
     const { appearance, updateAppearance } = useAppearance();
 
     const tabs: { value: Appearance; icon: LucideIcon; label: string }[] = [
-        { value: 'light', icon: Sun, label: 'Light' },
-        { value: 'dark', icon: Moon, label: 'Dark' },
-        { value: 'system', icon: Monitor, label: 'System' },
+        { value: 'light', icon: Sun, label: t('modes.light') },
+        { value: 'dark', icon: Moon, label: t('modes.dark') },
+        { value: 'system', icon: Monitor, label: t('modes.system') },
     ];
 
     return (
@@ -25,7 +27,7 @@ export default function AppearanceToggleTab({ className = '', ...props }: HTMLAt
                             : 'text-neutral-500 hover:bg-neutral-200/60 hover:text-black dark:text-neutral-400 dark:hover:bg-neutral-700/60',
                     )}
                 >
-                    <Icon className="-ml-1 h-4 w-4" />
+                    <Icon className="h-4 w-4 ml-1" />
                     <span className="ml-1.5 text-sm">{label}</span>
                 </button>
             ))}

@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Head, useForm, usePage } from '@inertiajs/react';
 import { Page, PageProps } from '@inertiajs/core';
-import { Card, Col, message, Row } from 'antd';
+import { Card, Col, message, Row, Space, Select, Tooltip, Button } from 'antd';
 import AppLayout from '@/layouts/app-layout';
 import { useTranslation } from 'react-i18next';
 
@@ -13,12 +13,21 @@ import CheckoutModal from '../components/cashier/CheckoutModal';
 import ProductLookupModal from '../components/cashier/ProductLookupModal';
 import TransactionSummary from '../components/cashier/TransactionSummary';
 import { addProductToCart, calculateTotal, removeItemFromCart, updateItemQuantity } from '../utils/cashier-utils';
-import { openCashDrawer, printReceipt } from '../utils/receipt-printer';
+import { openCashDrawer, printReceipt, printReceiptByTransactionNumber } from '../utils/receipt-printer';
 
 import { CartItem, ProductType } from '@/types/cashier';
+import { UserOutlined } from '@ant-design/icons';
+
+interface DebtorType {
+    id: string;
+    name: string;
+    phone?: string;
+    debts_sum_balance?: number;
+}
 
 interface CashierPageProps extends PageProps {
     products: ProductType[];
+    debtors: DebtorType[];
 }
 
 interface TransactionResponse {
@@ -47,10 +56,12 @@ interface SaleItemSubmission {
 
 interface SaleFormData {
     payment_method: string;
+    payment_type: 'cash' | 'debt'; // Add this field
     items: SaleItemSubmission[];
     total_amount: number;
     amount_paid: number;
     change: number;
+    debtor_id?: string;
     [key: string]: any;
 }
 
@@ -61,7 +72,38 @@ interface TransactionError {
 
 const CashierSystem: React.FC = () => {
     const { t } = useTranslation();
-    const { products } = usePage<Page<CashierPageProps>>().props;
+    const pageProps = usePage<Page<CashierPageProps>>().props;
+    const products = pageProps.products as ProductType[];
+    const debtors = pageProps.debtors as DebtorType[];
+
+    const { flash } = usePage().props;
+
+    useEffect(() => {
+        // Check if flash exists and has success property
+        if (flash && flash.success) {
+            message.success(flash.success);
+
+            // If there's a transaction number, you can handle receipt printing here
+            if (flash.transaction_number) {
+                printReceiptByTransactionNumber(flash.transaction_number);
+                openCashDrawer();
+            }
+
+            // Reset the cart and other state after successful transaction
+            setCartItems([]);
+            setTotal(0);
+            setAmountPaid(null);
+            setChange(0);
+            setSelectedDebtor(null);
+            setPaymentType('cash');
+        }
+
+        // Check if flash exists and has error property
+        if (flash && flash.error) {
+            message.error(flash.error);
+        }
+    }, [flash]);
+
     const breadcrumbs: BreadcrumbItem[] = [
         { title: 'Dashboard', href: route('dashboard') },
         { title: 'Cashier', href: route('cashier') },
@@ -69,6 +111,8 @@ const CashierSystem: React.FC = () => {
 
     const [cartItems, setCartItems] = useState<CartItem[]>([]);
     const [total, setTotal] = useState<number>(0);
+    const [selectedDebtor, setSelectedDebtor] = useState<string | null>(null);
+    const [creatingDebt, setCreatingDebt] = useState<boolean>(false);
 
     const [checkoutModalVisible, setCheckoutModalVisible] = useState<boolean>(false);
     const [amountPaid, setAmountPaid] = useState<number | null>(null);
@@ -78,14 +122,18 @@ const CashierSystem: React.FC = () => {
     const [productLookupVisible, setProductLookupVisible] = useState<boolean>(false);
     const [selectedProduct, setSelectedProduct] = useState<string | null>(null);
 
+    const [paymentType, setPaymentType] = useState<'cash' | 'debt'>('cash');
+
     const barcodeScannerRef = useRef<BarcodeScannerRef>(null);
 
     const { data, setData, post, processing, reset } = useForm<SaleFormData>({
         payment_method: 'cash',
+        payment_type: 'cash',
         items: [],
         total_amount: 0,
         amount_paid: 0,
         change: 0,
+        debtor_id: undefined,
     });
 
     useEffect(() => {
@@ -102,50 +150,10 @@ const CashierSystem: React.FC = () => {
         if (processingTransaction) {
             post(route('sales.store'), {
                 preserveScroll: true,
-                onSuccess: (response: TransactionResponse) => {
-                    console.log('Transaction successful, server response:', response);
-                    const transactionNumber = response.props?.flash?.transaction_number || response.data?.transaction_number;
-
-                    openCashDrawer();
-                    printReceipt({
-                        cartItems,
-                        total,
-                        amountPaid,
-                        change,
-                        transactionNumber,
-                    });
-
-                    // User feedback
-                    message.success('Transaction completed successfully!');
-                    message.info(`Change: IQD ${change.toFixed(0)}`);
-
-                    // Reset state
-                    setTimeout(() => {
-                        setCartItems([]);
-                        setTotal(0);
-                        setCheckoutModalVisible(false);
-                        setProcessingTransaction(false);
-                        reset();
-
-                        if (barcodeScannerRef.current) {
-                            barcodeScannerRef.current.focusInput();
-                        }
-                    }, 1500);
-                },
-                onError: (errors: TransactionError) => {
-                    console.error('Transaction failed, error response:', errors);
-                    const errorMessage =
-                        typeof errors === 'string'
-                            ? errors
-                            : errors.message || Object.values(errors).flat().join(', ') || 'Unknown error occurred';
-
-                    message.error(`Transaction failed: ${errorMessage}`);
-                    setProcessingTransaction(false);
-                },
+                onStart: () => setProcessingTransaction(true),
                 onFinish: () => {
-                    if (barcodeScannerRef.current) {
-                        barcodeScannerRef.current.focusInput();
-                    }
+                    setProcessingTransaction(false);
+                    setCheckoutModalVisible(false);
                 },
             });
         }
@@ -185,6 +193,21 @@ const CashierSystem: React.FC = () => {
         }
     };
 
+    const handleAddAsDebt = () => {
+        if (cartItems.length === 0) {
+            message.warning('Cart is empty');
+            return;
+        }
+
+        if (!selectedDebtor) {
+            message.warning('Please select a debtor first');
+            return;
+        }
+
+        setPaymentType('debt');
+        setCheckoutModalVisible(true);
+    };
+
     const handleUpdateQuantity = (itemId: string, quantity: number) => {
         setCartItems(updateItemQuantity(itemId, quantity, cartItems));
     };
@@ -206,6 +229,7 @@ const CashierSystem: React.FC = () => {
         setCheckoutModalVisible(true);
         setAmountPaid(total);
         setChange(0);
+        setPaymentType('cash'); // Reset to cash payment by default
     };
 
     const handleAmountPaidChange = (value: number | null) => {
@@ -214,38 +238,40 @@ const CashierSystem: React.FC = () => {
         setChange(value && value >= total ? value - total : 0);
     };
 
-    const prepareItemsForSubmission = (items: CartItem[]): SaleItemSubmission[] => {
-        return items.map((item) => ({
+    const submitTransaction = () => {
+        setProcessingTransaction(true);
+
+        // Prepare the items data
+        const itemsData = cartItems.map(item => ({
             id: item.id,
             name: item.name,
             quantity: item.quantity,
             price: item.price,
-            subtotal: item.quantity * item.price,
+            subtotal: item.quantity * item.price
         }));
-    };
 
-    const submitTransaction = () => {
-        if (cartItems.length === 0) {
-            message.error('Cannot complete transaction: Cart is empty');
-            return;
-        }
+        // Set the payment method based on payment type
+        const paymentMethod = paymentType === 'debt' ? 'debt' : 'cash';
 
-        if (!amountPaid || amountPaid < total) {
-            message.error('Amount paid must be at least equal to the total');
-            return;
-        }
-
-        setProcessingTransaction(true);
-
-        const formData: SaleFormData = {
-            payment_method: 'cash',
-            items: prepareItemsForSubmission(cartItems),
+        // Set the form data based on payment type
+        setData({
+            payment_method: paymentMethod, // Set payment method based on payment type
+            payment_type: paymentType,
+            items: itemsData,
             total_amount: total,
-            amount_paid: amountPaid,
-            change: change,
-        };
+            amount_paid: paymentType === 'cash' ? amountPaid || 0 : 0,
+            change: paymentType === 'cash' ? change : 0,
+            debtor_id: paymentType === 'debt' ? selectedDebtor : undefined,
+        });
 
-        setData(formData);
+        // Submit the form
+        post(route('sales.store'), {
+            onStart: () => setProcessingTransaction(true),
+            onFinish: () => {
+                setProcessingTransaction(false);
+                setCheckoutModalVisible(false);
+            },
+        });
     };
 
     return (
@@ -256,7 +282,6 @@ const CashierSystem: React.FC = () => {
                     <Col xs={24} lg={16}>
                         <Card title={t('cashier.currentTransaction')} className="h-full">
                             <BarcodeScanner ref={barcodeScannerRef} onBarcodeScan={handleBarcodeScan} onProductLookup={handleProductLookup} />
-
                             <CartTable cartItems={cartItems} onUpdateQuantity={handleUpdateQuantity} onRemoveItem={handleRemoveItem} total={total} />
                         </Card>
                     </Col>
@@ -269,13 +294,16 @@ const CashierSystem: React.FC = () => {
                 </Row>
             </div>
 
-            {/* Modals */}
             <CheckoutModal
                 visible={checkoutModalVisible}
                 total={total}
                 amountPaid={amountPaid}
                 change={change}
+                paymentType={paymentType}
+                selectedDebtor={selectedDebtor}
                 onAmountPaidChange={handleAmountPaidChange}
+                onPaymentTypeChange={setPaymentType}
+                onDebtorChange={setSelectedDebtor}
                 onComplete={submitTransaction}
                 onCancel={() => setCheckoutModalVisible(false)}
                 loading={processingTransaction || processing}
