@@ -8,17 +8,34 @@ use Inertia\Inertia;
 
 class DebtorController extends Controller
 {
-    public function index()
-    {
-        $debtors = Debtor::withCount('debts')
-            ->withSum('debts', 'amount')
-            ->withSum('debts', 'balance')
-            ->get();
+   public function index()
+{
+    $debtors = Debtor::with('debts')
+        ->withCount('debts')
+        ->get()
+        ->map(function ($debtor) {
+            $totalAmount = $debtor->debts->sum('amount');
+            $totalBalance = $debtor->debts->sum('balance');
 
-        return Inertia::render('Debtors/Index', [
-            'debtors' => $debtors
-        ]);
-    }
+            return [
+                'id' => $debtor->id,
+                'name' => $debtor->name,
+                'email' => $debtor->email,
+                'phone' => $debtor->phone,
+                'address' => $debtor->address,
+                'notes' => $debtor->notes,
+                'created_at' => $debtor->created_at,
+                'updated_at' => $debtor->updated_at,
+                'debts_count' => $debtor->debts_count,
+                'amount' => $totalAmount,
+                'balance' => $totalBalance,
+            ];
+        });
+
+    return Inertia::render('Debtors/Index', [
+        'debtors' => $debtors
+    ]);
+}
 
     public function create()
     {
