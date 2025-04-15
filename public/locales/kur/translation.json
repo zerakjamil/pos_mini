@@ -44,6 +44,7 @@
         },
         "checkout": {
             "title": "تەواوکردنی فرۆشتن",
+            "exactAmount": "بڕی پارەی تەواو",
             "completePayment": "تەواوکردنی پارەدان",
             "totalAmount": "کۆی پارە",
             "originalAmount": "نرخی سەرەتایی: {{amount}} دینار",
@@ -51,7 +52,29 @@
             "roundDown": "کەمکردنەوە بۆ نزیکترین ١٠٠٠",
             "resetAmount": "گەڕانەوە بۆ نرخی سەرەتایی",
             "amountPaid": "بڕی پارەی دراو",
-            "change": "گەڕاوە"
+            "change": "گەڕاوە",
+            "total": "کۆی گشتی: {{amount}} دینار",
+            "cancel": "هەڵوەشاندنەوە",
+            "complete": "تەواوکردنی مامەڵە",
+            "paymentType": {
+                "cash": "پارەی نەقد",
+                "debt": "زیادکردن وەک قەرز"
+            },
+            "selectDebtor": "هەڵبژاردنی قەرزدار:",
+            "debtorPlaceholder": "قەرزدارێک هەڵبژێرە",
+            "debtorBalance": "(باڵانس: {{amount}} دینار)",
+            "debtMessage": "ئەمە تۆمارێکی قەرز دروست دەکات بۆ قەرزداری هەڵبژێردراو بە بڕی {{amount}} دینار",
+            "existingDebt": "قەرزی پێشوو",
+            "debtDescription": "ئەم فرۆشتنە وەک قەرز تۆمار دەکرێت بۆ قەرزداری هەڵبژێردراو.",
+            "debtWarning": "ئاگاداری: فرۆشتنی قەرز",
+            "debtAmount": "بڕی قەرز",
+            "clear": "پاککردنەوە",
+            "totalPaid": "کۆی گشتی",
+            "addDenomination": "زیادکردن",
+            "selectPaymentMethod": "هەڵبژاردنی شێوازی پارەدان",
+            "cashPayment": "پارەدانی نەقد",
+            "debtPayment": "پارەدانی قەرز",
+            "quickPayment" : "پارەدانی خێرا"
         }
     },
     "dashboard": {
@@ -138,7 +161,14 @@
         "createdAt": "دروستکراوە لە",
         "updatedAt": "نوێکراوەتەوە لە",
         "save": "پاراستن",
-        "reset": "سڕینەوە"
+        "reset": "سڕینەوە",
+        "month": "مانگ",
+        "months": "مانگ",
+        "day": "ڕۆژ",
+        "days": "ڕۆژ",
+        "year": "ساڵ",
+        "years": "ساڵ",
+        "customDate" : "بەرواری تایبەتی"
     },
     "products": {
         "title": "کاڵاکان",
@@ -223,6 +253,9 @@
         },
         "inventoryStep": {
             "currentStock": "کۆگای ئێستا",
+            "selectExpirationPeriod": "ماوەی بەسەرچوون هەڵبژێرە",
+            "noExpiration": "بەسەرچوون نیە",
+            "expiresOn": "بەسەردەچێت لە",
             "calculateStockTooltip": "ژمێرکردنی کۆگا لەسەر بنەمای کارتۆن و دانەکان",
             "currentQuantityPlaceholder": "بڕی ئێستا",
             "reorderLevel": "ئاستی داواکردنەوە",
@@ -250,13 +283,21 @@
             "reorderAt": "داواکردنەوە لە"
         },
         "pricingStep": {
-            "unitPriceInfo": "نرخی دانە بە شێوەیەکی خۆکار لەسەر بنەمای نرخی کۆمەڵ و دانەکان لە هەر کۆمەڵێکدا دەژمێردرێت.",
             "batchPrice": "نرخی کۆمەڵ",
             "enterBatchPrice": "نرخی کۆمەڵ بنووسە",
             "unitsPerBatch": "دانەکان لە هەر کۆمەڵێکدا",
             "numberOfUnits": "ژمارەی دانەکان",
             "unitSellingPrice": "نرخی فرۆشتنی دانە",
             "enterSellingPricePerUnit": "نرخی فرۆشتن بۆ هەر دانەیەک بنووسە",
+            "containersCount": "ژمارەی کارتۆنەکان",
+            "numberOfContainers": "ژمارەی کارتۆنەکان بنووسە",
+            "unitsPerContainer": "دانە لە هەر کارتۆنێکدا",
+            "unitsPerContainerPlaceholder": "دانە لە هەر کارتۆنێکدا بنووسە",
+            "totalUnits": "کۆی دانەکان",
+            "totalBatchAmount": "کۆی نرخی کۆمەڵ",
+            "totalImportCost": "کۆی تێچووی هاوردە",
+            "costPerUnit": "تێچووی هەر دانەیەک",
+            "costPerUnitTooltip": "تێچووی هەر دانەیەک بەپێی کۆی نرخی کۆمەڵ دابەش بەسەر کۆی دانەکان",
             "suggestedPriceTooltip": "نرخی پێشنیارکراو لەسەر بنەمای تێچووی کۆمەڵ",
             "suggested": "پێشنیارکراو",
             "nextInventory": "دواتر: کۆگا"
@@ -310,7 +351,8 @@
             "paymentMethod": "شێوازی پارەدان",
             "paymentMethods": {
                 "cash": "نەقد",
-                "card": "کارت"
+                "card": "کارت",
+                "debt": "قەرز"
             },
             "itemsCount": "ژمارەی کاڵاکان"
         }
@@ -342,7 +384,8 @@
         "paymentMethods": {
             "title": "شێوازی پارەدان",
             "cash": "نەقد",
-            "card": "کارت"
+            "card": "کارت",
+            "debt": "قەرز"
         },
         "cashier": "کاشێر",
         "items": "کاڵاکان",
@@ -668,13 +711,18 @@
         "email": "ئیمەیل",
         "password": "تێپەڕی نووسین",
         "loginButton": "چوونەژوورەوە",
+        "rememberMe" : "لە بیرم مەکە",
         "forgotPassword": "تێپەڕی نووسینت لەبیرکردووە؟",
-        "rememberMe": "بیرم لەوە بکەرەوە",
         "invalidCredentials": "تێپەڕی نووسین یان ئیمەیل نادروستە.",
         "loginSuccess": "چوونەژوورەوە بە سەرکەوتوویی پێشکەشکرا",
         "logInToYourAccount": "چوونەژوورەوە بۆ ئەکاونتەکەت",
-        "description": "ئیمەیل و وشەی نهێنی خۆت لە خوارەوە بنووسە بۆ چوونە ژوورەوە"    },
+        "description": "ئیمەیل و وشەی نهێنی خۆت لە خوارەوە بنووسە بۆ چوونە ژوورەوە"
+    },
         "email" : "ئیمەیل",
     "password" : "تێپەڕە ووشە ",
-    "rememberMe" : "لە بیرم مەکە"
+    "paymentMethod" : "شێوازی پارەدان",
+    "contacts" : {
+        "noPhoneAvailable" : "ژمارە تەلەفۆن بەردەست نیە"
+    }
 }
+

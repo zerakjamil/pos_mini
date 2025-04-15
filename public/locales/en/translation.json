@@ -44,6 +44,7 @@
       },
       "checkout": {
           "title": "Complete Transaction",
+          "exactAmount": "Exact Amount",
           "completePayment": "Complete Payment",
           "totalAmount": "Total Amount",
           "originalAmount": "Original: {{amount}} IQD",
@@ -51,7 +52,27 @@
           "roundDown": "Round down to nearest 1,000",
           "resetAmount": "Reset to original amount",
           "amountPaid": "Amount Paid",
-          "change": "Change"
+          "change": "Change",
+          "total": "Total: IQD {{amount}}",
+          "cancel": "Cancel",
+          "complete": "Complete Transaction",
+          "paymentType": {
+              "cash": "Cash Payment",
+              "debt": "Add as Debt"
+
+          },
+          "selectDebtor": "Select Debtor",
+          "debtorPlaceholder": "Search for a debtor...",
+          "existingDebt": "Existing Debt",
+          "debtDescription": "This sale will be recorded as debt for the selected debtor.",
+          "debtWarning": "Warning: Debt Sale",
+          "debtAmount": "Debt Amount",
+          "clear": "Clear",
+          "totalPaid": "Total",
+          "addDenomination": "Add",
+          "selectPaymentMethod": "Select Payment Method",
+          "cashPayment": "Cash Payment",
+          "debtPayment": "Debt Payment"
       }
   },
   "dashboard": {
@@ -298,15 +319,21 @@
           "date": "Date",
           "totalAmount": "Total Amount",
           "amountPaid": "Amount Paid",
+          "change": "Change: IQD {{amount}}",
+          "selectDebtor": "Select Debtor:",
+          "debtorPlaceholder": "Select a debtor",
+          "debtorBalance": "(Balance: IQD {{amount}})",
+          "debtMessage": "This will create a debt record for the selected debtor with the total amount of IQD {{amount}}"
+      },
           "change": "Change",
           "paymentMethod": "Payment Method",
           "paymentMethods": {
               "cash": "Cash",
-              "card": "Card"
+              "card": "Card",
+              "debt": "Debt"
           },
           "itemsCount": "Items Count"
-      }
-  },
+      },
   "sidebar": {
       "dashboard": "Dashboard",
       "products": "Products",
@@ -334,7 +361,8 @@
       "paymentMethods": {
           "title": "Payment Method",
           "cash": "Cash",
-          "card": "Card"
+          "card": "Card",
+            "debt": "Debt"
       },
       "cashier": "Cashier",
       "items": "Items",
@@ -669,5 +697,9 @@
     },
     "email": "Email",
     "password": "Password",
-    "rememberMe": "Remember Me"
+    "rememberMe": "Remember Me",
+    "paymentMethod" : "Payment Method",
+    "contacts" : {
+        "noPhoneAvailable" : "Not Available"
+    }
   }
