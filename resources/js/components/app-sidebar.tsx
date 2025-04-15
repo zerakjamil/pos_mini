@@ -28,39 +28,33 @@ export function AppSidebar() {
     const mainNavItems: ExtendedNavItem[] = [
         {
             title: t('sidebar.dashboard'),
-            href: route('dashboard'),
+            href: '/dashboard',
             icon: LayoutGrid,
-            active: route().current('dashboard'),
         },
         {
             title: t('sidebar.products'),
-            href: route('product.index'),
+            href: '/products',
             icon: Package,
-            active: route().current('product.index'),
         },
         {
             title: t('sidebar.salesHistory'),
-            href: route('sales.index'),
+            href: '/sales',
             icon: BarChart2,
-            active: route().current('sales.index'),
         },
         {
             title: t('sidebar.cashier'),
-            href: route('cashier'),
+            href: '/cashier',
             icon: ShoppingCart,
-            active: route().current('cashier'),
         },
         {
             title: t('sidebar.debtors'),
-            href: route('debtors.index'),
+            href: '/debtors',
             icon: Users,
-            active: route().current('debtors.*'),
         },
         {
             title: t('sidebar.debts'),
-            href: route('debts.index'),
+            href: '/debts',
             icon: ClipboardIcon,
-            active: route().current('debts.*'),
         },
 
     ];
@@ -68,15 +62,13 @@ export function AppSidebar() {
     const supervisorNavItems: ExtendedNavItem[] = [
         {
             title: t('sidebar.reports'),
-            href: route('reports.index'),
+            href: '/reports',
             icon: PieChart,
-            active: route().current('reports.*'),
         },
         {
             title: t('sidebar.categories'),
-            href: route('categories.index'),
+            href: '/categories',
             icon: Folder,
-            active: route().current('categories.index'),
         },
     ];
 

@@ -31,6 +31,6 @@
     "error": "Failed to delete cashier"
   },
   "pagination": {
-    "showing": "Showing {from} to {to} of {total} entries"
+    "showing": "Showing {{from}} to {{to}} of {{total}} entries"
   }
 }
