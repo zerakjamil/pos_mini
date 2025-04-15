@@ -1,0 +1,36 @@
+{
+  "title": "Create Cashier",
+  "form": {
+    "name": "Name",
+    "namePlaceholder": "Enter cashier name",
+    "email": "Email",
+    "emailPlaceholder": "Enter cashier email",
+    "phone": "Phone",
+    "phonePlaceholder": "Enter cashier phone number",
+    "password": "Password",
+    "passwordPlaceholder": "Enter password",
+    "confirmPassword": "Confirm Password",
+    "confirmPasswordPlaceholder": "Confirm password"
+  },
+  "dashboard": {
+    "title": "Dashboard"
+  },
+  "cashiers": {
+    "title": "Cashiers",
+    "create": {
+      "title": "Create Cashier"
+    }
+  },
+  "common": {
+    "back": "Back",
+    "save": "Save",
+    "cancel": "Cancel",
+    "formErrors": "Please correct the following errors:"
+  },
+  "validation": {
+    "required": "{{field}} is required",
+    "email": "Please enter a valid email address",
+    "minLength": "{{field}} must be at least {{length}} characters",
+    "passwordMatch": "The passwords do not match"
+  }
+}

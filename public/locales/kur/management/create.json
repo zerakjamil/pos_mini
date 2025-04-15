@@ -1,0 +1,36 @@
+{
+  "title": "دروستکردنی کاشێر",
+  "form": {
+    "name": "ناو",
+    "namePlaceholder": "ناوی کاشێر بنووسە",
+    "email": "ئیمەیل",
+    "emailPlaceholder": "ئیمەیلی کاشێر بنووسە",
+    "phone": "ژمارەی تەلەفۆن",
+    "phonePlaceholder": "ژمارەی تەلەفۆنی کاشێر بنووسە",
+    "password": "وشەی نهێنی",
+    "passwordPlaceholder": "وشەی نهێنی بنووسە",
+    "confirmPassword": "دڵنیاکردنەوەی وشەی نهێنی",
+    "confirmPasswordPlaceholder": "وشەی نهێنی دووبارە بنووسەوە"
+  },
+  "dashboard": {
+    "title": "داشبۆرد"
+  },
+  "cashiers": {
+    "title": "کاشێرەکان",
+    "create": {
+      "title": "دروستکردنی کاشێر"
+    }
+  },
+  "common": {
+    "back": "گەڕانەوە",
+    "save": "پاشەکەوتکردن",
+    "cancel": "هەڵوەشاندنەوە",
+    "formErrors": "تکایە ئەم هەڵانە ڕاست بکەوە:"
+  },
+  "validation": {
+    "required": "{{field}} پێویستە",
+    "email": "تکایە ئیمەیلێکی دروست بنووسە",
+    "minLength": "{{field}} دەبێت لانیکەم {{length}} پیت بێت",
+    "passwordMatch": "وشە نهێنییەکان یەک ناگرنەوە"
+  }
+}
