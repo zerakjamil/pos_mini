@@ -1,0 +1,75 @@
+{
+  "sales": {
+    "sale": "Sale",
+    "details": "Transaction Details",
+    "transactionNumber": "Transaction Number",
+    "date": "Date",
+    "cashier": "Cashier",
+    "customer": "Customer",
+    "paymentMethod": "Payment Method",
+    "totalAmount": "Total Amount",
+    "amountPaid": "Amount Paid",
+    "change": "Change",
+    "discount": "Discount",
+    "tax": "Tax",
+    "subtotal": "Subtotal",
+    "print": "Print",
+    "back": "Back",
+    "items": {
+      "title": "Sale Items",
+      "product": "Product",
+      "quantity": "Quantity",
+      "unitPrice": "Unit Price",
+      "discount": "Discount",
+      "total": "Total"
+    },
+    "status": {
+        "title": "Status",
+        "completed": "Completed",
+      "pending": "Pending",
+      "cancelled": "Cancelled"
+    },
+    "paymentMethods": {
+      "cash": "Cash",
+      "card": "Card",
+      "bankTransfer": "Bank Transfer",
+      "other": "Other"
+    },
+    "receipt": {
+      "title": "Sales Receipt",
+      "storeName": "Store Name",
+      "storeAddress": "Store Address",
+      "storePhone": "Store Phone",
+      "thankYou": "Thank you for your purchase!",
+      "printDate": "Print Date"
+    },
+    "actions": {
+      "viewDetails": "View Details",
+      "printReceipt": "Print Receipt",
+      "backToSales": "Back to Sales"
+    },
+    "noItems": "No items found",
+    "currency": "IQD"
+  },
+  "app": {
+    "footer": "© {{year}} Mini POS System. All rights reserved."
+  },
+  "common": {
+    "loading": "Loading...",
+    "error": "An error occurred",
+    "success": "Success",
+    "noData": "No data found",
+    "actions": "Actions",
+    "save": "Save",
+    "cancel": "Cancel",
+    "edit": "Edit",
+    "delete": "Delete",
+    "view": "View",
+    "search": "Search",
+    "filter": "Filter",
+    "reset": "Reset",
+    "confirm": "Confirm",
+    "yes": "Yes",
+    "no": "No"
+  }
+}

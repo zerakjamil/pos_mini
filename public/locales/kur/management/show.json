@@ -1,0 +1,35 @@
+{
+  "title": "زانیاری کاشێر",
+  "personalInfo": "زانیاری کەسی",
+  "accountInfo": "زانیاری هەژمار",
+  "createdAt": "دروستکراوە لە",
+  "updatedAt": "نوێکراوەتەوە لە",
+  "userRole": "ڕۆڵی بەکارهێنەر",
+
+  "cashiers": {
+    "actions": {
+      "back": "گەڕانەوە",
+      "edit": "دەستکاری"
+    },
+      "show" : {
+            "title": "زانیاری کاشێر",
+          "createdAt": "دروستکراوە لە",
+          "accountInfo": "زانیاری هەژمار",
+          "updatedAt": "نوێکراوەتەوە لە",
+            "userRole": "ڕۆڵی بەکارهێنەر",
+          "personalInfo": "زانیاری کەسی"
+      },
+      "form" : {
+          "name": "ناو",
+          "email": "ئیمەیل",
+          "phone": "ژمارەی تەلەفۆن"
+      },
+    "list": {
+      "status": "دۆخ"
+    }
+  },
+  "common": {
+    "active": "چالاک",
+    "inactive": "ناچالاک"
+  }
+}

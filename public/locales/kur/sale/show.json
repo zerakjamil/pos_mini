@@ -1,0 +1,75 @@
+{
+  "sales": {
+    "sale": "فرۆشتن",
+    "details": "وردەکاریەکانی مامەڵە",
+    "transactionNumber": "ژمارەی مامەڵە",
+    "date": "بەروار",
+    "cashier": "کاشێر",
+    "customer": "کڕیار",
+    "paymentMethod": "شێوازی پارەدان",
+    "totalAmount": "کۆی گشتی بڕ",
+    "amountPaid": "بڕی پارەی دراو",
+    "change": "گۆڕانکاری",
+    "discount": "داشکاندن",
+    "tax": "باج",
+    "subtotal": "ژێر کۆ",
+    "print": "چاپکردن",
+    "back": "گەڕانەوە",
+    "items": {
+      "title": "بڕگەکانی فرۆشتن",
+      "product": "بەرهەم",
+      "quantity": "بڕ",
+      "unitPrice": "نرخی یەکە",
+      "discount": "داشکاندن",
+      "total": "کۆی گشتی"
+    },
+    "status": {
+        "title": "دۆخ",
+        "completed": "تەواوکراو",
+      "pending": "چاوەڕوان",
+      "cancelled": "هەڵوەشاوەتەوە"
+    },
+    "paymentMethods": {
+      "cash": "نەختینە",
+      "card": "کارت",
+      "bankTransfer": "گواستنەوەی بانکی",
+      "other": "هی تر"
+    },
+    "receipt": {
+      "title": "پسووڵەی فرۆشتن",
+      "storeName": "ناوی فرۆشگا",
+      "storeAddress": "ناونیشانی فرۆشگا",
+      "storePhone": "تەلەفۆنی فرۆشگا",
+      "thankYou": "سوپاس بۆ کڕینەکەت!",
+      "printDate": "بەرواری چاپکردن"
+    },
+    "actions": {
+      "viewDetails": "بینینی وردەکاریەکان",
+      "printReceipt": "چاپکردنی پسووڵە",
+      "backToSales": "گەڕانەوە بۆ فرۆشتنەکان"
+    },
+    "noItems": "هیچ بڕگەیەک نەدۆزرایەوە",
+    "currency": "د.ع"
+  },
+  "app": {
+    "footer": "© {{year}} سیستەمی فرۆشگای بچووک. هەموو مافەکان پارێزراون."
+  },
+  "common": {
+    "loading": "چاوەڕێ بکە...",
+    "error": "هەڵەیەک ڕوویدا",
+    "success": "سەرکەوتوو بوو",
+    "noData": "هیچ داتایەک نەدۆزرایەوە",
+    "actions": "کردارەکان",
+    "save": "پاشەکەوتکردن",
+    "cancel": "هەڵوەشاندنەوە",
+    "edit": "دەستکاریکردن",
+    "delete": "سڕینەوە",
+    "view": "بینین",
+    "search": "گەڕان",
+    "filter": "فلتەرکردن",
+    "reset": "ڕێکخستنەوە",
+    "confirm": "دڵنیاکردنەوە",
+    "yes": "بەڵێ",
+    "no": "نەخێر"
+  }
+}

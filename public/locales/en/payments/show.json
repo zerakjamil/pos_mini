@@ -1,0 +1,34 @@
+{
+  "payments": {
+    "title": "Payment Details",
+    "information": "Payment Information",
+    "amount": "Amount",
+    "date": "Date",
+    "paymentMethod": "Payment Method",
+    "referenceNumber": "Reference Number",
+    "notes": "Notes",
+    "notSpecified": "Not specified",
+    "relatedDebt": "Related Debt",
+    "debtor": "Debtor",
+    "description": "Description",
+    "dueDate": "Due Date",
+    "balance": "Balance",
+    "actions": {
+      "edit": "Edit",
+      "delete": "Delete",
+      "backToDebt": "Back to Debt"
+    },
+    "deleteConfirmation": {
+      "title": "Delete payment",
+      "description": "Are you sure you want to delete this payment?",
+      "confirm": "Yes",
+      "cancel": "No"
+    },
+    "breadcrumbs": {
+      "dashboard": "Dashboard",
+      "debts": "Debts",
+      "payment": "Payment #{{id}}"
+    },
+    "currency": "IQD"
+  }
+}

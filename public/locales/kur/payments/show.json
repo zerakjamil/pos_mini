@@ -1,0 +1,34 @@
+{
+  "payments": {
+    "title": "وردەکاریەکانی پارەدان",
+    "information": "زانیاریەکانی پارەدان",
+    "amount": "بڕ",
+    "date": "بەروار",
+    "paymentMethod": "شێوازی پارەدان",
+    "referenceNumber": "ژمارەی سەرچاوە",
+    "notes": "تێبینیەکان",
+    "notSpecified": "دیاری نەکراوە",
+    "relatedDebt": "قەرزی پەیوەندیدار",
+    "debtor": "قەرزدار",
+    "description": "وەسف",
+    "dueDate": "بەرواری دواکەوتن",
+    "balance": "باڵانس",
+    "actions": {
+      "edit": "دەستکاریکردن",
+      "delete": "سڕینەوە",
+      "backToDebt": "گەڕانەوە بۆ قەرز"
+    },
+    "deleteConfirmation": {
+      "title": "سڕینەوەی پارەدان",
+      "description": "ئایا دڵنیایت کە دەتەوێت ئەم پارەدانە بسڕیتەوە؟",
+      "confirm": "بەڵێ",
+      "cancel": "نەخێر"
+    },
+    "breadcrumbs": {
+      "dashboard": "داشبۆرد",
+      "debts": "قەرزەکان",
+      "payment": "پارەدان #{{id}}"
+    },
+    "currency": "د.ع"
+  }
+}

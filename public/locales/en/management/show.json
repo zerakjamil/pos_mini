@@ -1,0 +1,21 @@
+{
+  "title": "Cashier Details",
+  "personalInfo": "Personal Information",
+  "accountInfo": "Account Information",
+  "createdAt": "Created At",
+  "updatedAt": "Updated At",
+  "userRole": "User Role",
+  "cashiers": {
+    "actions": {
+      "back": "Back",
+      "edit": "Edit"
+    },
+    "list": {
+      "status": "Status"
+    }
+  },
+  "common": {
+    "active": "Active",
+    "inactive": "Inactive"
+  }
+}
