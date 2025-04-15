@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\{Category, Product};
+use App\Models\{Category, Product, Debtor};
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
@@ -75,7 +75,7 @@ public function show(Product $product): Response
     ]);
 }
     /**
-     * Display the cashier interface.
+     * Display the management interface.
      */
     public function cashier(): Response
     {
@@ -94,8 +94,22 @@ public function show(Product $product): Response
                 ];
             });
 
+        // Get debtors with their current balance
+        $debtors = Debtor::withSum('debts', 'balance')
+            ->orderBy('name')
+            ->get()
+            ->map(function ($debtor) {
+                return [
+                    'id' => (string)$debtor->id,
+                    'name' => $debtor->name,
+                    'phone' => $debtor->phone ?? '',
+                    'debts_sum_balance' => (float)($debtor->debts_sum_balance ?? 0), // Ensure it's a number
+                ];
+            });
+
         return Inertia::render('CashierSystem', [
             'products' => $products,
+            'debtors' => $debtors,
         ]);
     }
 
