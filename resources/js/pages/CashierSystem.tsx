@@ -106,7 +106,7 @@ const CashierSystem: React.FC = () => {
 
     const breadcrumbs: BreadcrumbItem[] = [
         { title: 'Dashboard', href: route('dashboard') },
-        { title: 'Cashier', href: route('cashier') },
+        { title: 'Cashiers', href: route('cashier') },
     ];
 
     const [cartItems, setCartItems] = useState<CartItem[]>([]);
