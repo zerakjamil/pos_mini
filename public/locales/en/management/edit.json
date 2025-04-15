@@ -1,0 +1,101 @@
+{
+  "dashboard": {
+    "title": "Dashboard"
+  },
+  "cashiers": {
+    "title": "Cashiers",
+    "edit": {
+      "title": "Edit Cashier",
+      "description": "Update cashier information and account settings."
+    },
+    "create": {
+      "title": "Create Cashier",
+      "description": "Add a new cashier to the system."
+    },
+    "show": {
+      "title": "Cashier Details",
+      "personalInfo": "Personal Information",
+      "accountInfo": "Account Information",
+      "createdAt": "Created At",
+      "updatedAt": "Updated At",
+      "userRole": "User Role"
+    },
+    "form": {
+      "name": "Name",
+      "namePlaceholder": "Enter cashier name",
+      "email": "Email",
+      "emailPlaceholder": "Enter email address",
+      "phone": "Phone Number",
+      "phonePlaceholder": "Enter phone number (optional)",
+      "status": "Status",
+      "selectStatus": "Select status",
+      "active": "Active",
+      "inactive": "Inactive",
+      "password": "Password",
+      "passwordPlaceholder": "Enter new password",
+      "passwordHelp": "Leave blank to keep current password",
+      "confirmPassword": "Confirm Password",
+      "confirmPasswordPlaceholder": "Confirm new password"
+    },
+    "list": {
+      "title": "Cashiers List",
+      "description": "Manage all cashiers in the system",
+      "empty": "No cashiers found",
+      "search": "Search cashiers",
+      "filter": "Filter by status",
+      "allCashiers": "All Cashiers",
+      "activeCashiers": "Active Cashiers",
+      "inactiveCashiers": "Inactive Cashiers",
+      "addNew": "Add New Cashier"
+    },
+    "actions": {
+      "back": "Back to List",
+      "edit": "Edit Cashier",
+      "delete": "Delete Cashier",
+      "view": "View Details",
+      "activate": "Activate Cashier",
+      "deactivate": "Deactivate Cashier"
+    },
+    "messages": {
+      "createSuccess": "Cashier created successfully",
+      "updateSuccess": "Cashier updated successfully",
+      "deleteSuccess": "Cashier deleted successfully",
+      "deleteConfirm": "Are you sure you want to delete this cashier?",
+      "statusChangeSuccess": "Cashier status changed successfully"
+    }
+  },
+  "common": {
+    "save": "Save Changes",
+    "saving": "Saving...",
+    "cancel": "Cancel",
+    "back": "Back",
+    "edit": "Edit",
+    "delete": "Delete",
+    "create": "Create",
+    "actions": "Actions",
+    "confirm": "Confirm",
+    "formErrors": "Please correct the following errors:",
+    "active": "Active",
+    "inactive": "Inactive",
+    "status": "Status",
+    "search": "Search",
+    "filter": "Filter",
+    "noResults": "No results found",
+    "loading": "Loading...",
+    "currency": "$"
+  },
+  "validation": {
+    "required": "{{field}} is required",
+    "email": "Please enter a valid email address",
+    "passwordMatch": "Passwords do not match",
+    "minLength": "{{field}} must be at least {length} characters",
+    "maxLength": "{{field}} must not exceed {length} characters",
+    "phoneFormat": "Please enter a valid phone number",
+    "unique": "{{field}} is already in use"
+  },
+  "roles": {
+    "supervisor": "Supervisor",
+    "cashier": "Cashier",
+    "admin": "Administrator"
+  }
+}
