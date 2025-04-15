@@ -6,6 +6,7 @@
   "nav": {
     "profile": "Profile",
     "password": "Password",
-    "appearance": "Appearance"
+    "appearance": "Appearance",
+      "cashiers": "Cashiers Management"
   }
 }

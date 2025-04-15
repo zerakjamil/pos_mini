@@ -45,6 +45,7 @@ export default function Index({ debtors }: Props) {
     { title: t('debtors.title'), href: route('debtors.index') }
   ];
 
+
   const columns: ColumnType[] = [
     {
       title: t('debtors.columns.name'),
@@ -61,7 +62,13 @@ export default function Index({ debtors }: Props) {
       key: 'contact',
       render: (_, record) => (
         <div>
-          <div>{record.email}</div>
+            {record.phone === null &&
+                <div>
+                    <span>
+                        {t('contacts.noPhoneAvailable')}
+                    </span>
+                </div>
+            }
           <div>{record.phone}</div>
         </div>
       ),
@@ -74,14 +81,14 @@ export default function Index({ debtors }: Props) {
     },
     {
       title: t('debtors.columns.totalAmount'),
-      dataIndex: 'debts_amount_sum',
+      dataIndex: 'amount',
       key: 'debts_amount_sum',
       align: 'right',
       render: (amount) => amount ? `${t('common.currency')} ${Number(amount).toLocaleString()}` : `${t('common.currency')} 0`,
     },
     {
       title: t('debtors.columns.balance'),
-      dataIndex: 'debts_balance_sum',
+      dataIndex: 'balance',
       key: 'debts_balance_sum',
       align: 'right',
       render: (balance) => {
