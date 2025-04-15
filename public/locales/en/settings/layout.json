@@ -1,0 +1,11 @@
+{
+  "page": {
+    "title": "Settings",
+    "description": "Manage your profile and account settings"
+  },
+  "nav": {
+    "profile": "Profile",
+    "password": "Password",
+    "appearance": "Appearance"
+  }
+}

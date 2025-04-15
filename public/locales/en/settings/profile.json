@@ -1,0 +1,25 @@
+{
+  "breadcrumb": "Profile settings",
+  "page_title": "Profile settings",
+  "profile_information": {
+    "title": "Profile information",
+    "description": "Update your name and email address"
+  },
+  "form": {
+    "name": {
+      "label": "Name",
+      "placeholder": "Full name"
+    },
+    "email": {
+      "label": "Email address",
+      "placeholder": "Email address"
+    },
+    "save_button": "Save",
+    "saved_message": "Saved"
+  },
+  "verification": {
+    "unverified": "Your email address is unverified.",
+    "resend_link": "Click here to resend the verification email.",
+    "link_sent": "A new verification link has been sent to your email address."
+  }
+}

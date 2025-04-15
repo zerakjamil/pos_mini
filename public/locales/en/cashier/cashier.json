@@ -1,0 +1,36 @@
+{
+  "breadcrumb": {
+    "home": "Dashboard",
+    "cashiers": "Cashiers"
+  },
+  "page": {
+    "title": "Cashiers Management"
+  },
+  "table": {
+    "name": "Name",
+    "email": "Email",
+    "phone": "Phone",
+    "status": "Status",
+    "actions": "Actions"
+  },
+  "status": {
+    "active": "Active",
+    "inactive": "Inactive"
+  },
+  "actions": {
+    "create": "Add Cashier",
+    "edit": "Edit",
+    "view": "View",
+    "delete": "Delete"
+  },
+  "delete": {
+    "confirm": "Are you sure you want to delete this cashier?",
+    "yes": "Yes",
+    "no": "No",
+    "success": "Cashier deleted successfully",
+    "error": "Failed to delete cashier"
+  },
+  "pagination": {
+    "showing": "Showing {from} to {to} of {total} entries"
+  }
+}

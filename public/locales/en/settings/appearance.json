@@ -1,0 +1,13 @@
+{
+  "breadcrumb": "Appearance settings",
+  "page_title": "Appearance settings",
+  "heading": {
+    "title": "Appearance settings",
+    "description": "Update your account's appearance settings"
+  },
+    "modes": {
+        "light": "Light",
+        "dark": "Dark",
+        "system": "System"
+    }
+}
