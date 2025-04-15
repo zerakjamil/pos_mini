@@ -49,7 +49,7 @@ export function useSalesTable() {
       ),
     },
     {
-      title: t('roles.cashier'),
+      title: t('roles.management'),
       dataIndex: 'cashier_name',
       key: 'cashier_name',
     },

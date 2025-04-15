@@ -54,13 +54,13 @@ class User extends Authenticatable
     }
 
     /**
-     * Check if the user is a cashier.
+     * Check if the user is a management.
      *
      * @return bool
      */
     public function isCashier(): bool
     {
-        return $this->role === 'cashier';
+        return $this->role === 'management';
     }
 
     /**
