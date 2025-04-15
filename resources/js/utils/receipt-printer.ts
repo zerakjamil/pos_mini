@@ -5,11 +5,128 @@ interface ReceiptData {
   total: number;
   amountPaid: number | null;
   change: number;
-  transactionNumber?: string;
+  transactionNumber: string;
 }
+
+// Add a new function to print receipt by transaction number
+export const printReceiptByTransactionNumber = async (transactionNumber: string): Promise<void> => {
+  try {
+    // Fetch the sale details from the server
+    const response = await fetch(`/api/sales/${transactionNumber}`);
+
+    if (!response.ok) {
+      throw new Error('Failed to fetch sale details');
+    }
+
+    const saleData = await response.json();
+
+    // Format the data for the receipt printer
+    const receiptData: ReceiptData = {
+      cartItems: saleData.items.map((item: any) => ({
+        id: item.product_id,
+        name: item.product_name,
+        quantity: item.quantity,
+        price: item.unit_price,
+        subtotal: item.subtotal
+      })),
+      total: saleData.total_amount,
+      amountPaid: saleData.amount_paid,
+      change: saleData.change_amount,
+      transactionNumber: saleData.transaction_number
+    };
+
+    // Call the original printReceipt function with the formatted data
+    printReceipt(receiptData);
+  } catch (error) {
+    console.error('Error printing receipt:', error);
+    // Fallback to a simple receipt if we can't fetch the details
+    printSimpleReceipt(transactionNumber);
+  }
+};
+
+// Simple receipt with just the transaction number
+const printSimpleReceipt = (transactionNumber: string): void => {
+  const receiptWindow = window.open('', '_blank', 'width=300,height=300');
+
+  if (!receiptWindow) {
+    console.error('Could not open receipt window');
+    return;
+  }
+
+  const now = new Date();
+  const dateStr = now.toLocaleDateString('ar-IQ');
+  const timeStr = now.toLocaleTimeString('ar-IQ');
+
+  let receiptHtml = `
+    <html dir="ltr">
+    <head>
+      <title>Receipt</title>
+      <style>
+        body {
+          font-family: 'Courier New', monospace;
+          font-size: 12px;
+          width: 80mm;
+          margin: 0 auto;
+          padding: 5px;
+        }
+        .header { text-align: center; margin-bottom: 10px; }
+        .store-name { font-size: 16px; font-weight: bold; }
+        .store-info { font-size: 10px; margin: 2px 0; }
+        .footer { text-align: center; margin-top: 10px; font-size: 10px; }
+      </style>
+    </head>
+    <body>
+      <div class="header">
+        <div class="store-name">سوپەر ماركێت</div>
+        <div class="store-info">Kurdistan Region - Iraq</div>
+        <div class="store-info">Tel: 0750 000 0000</div>
+        <div class="store-info">Date: ${dateStr}</div>
+        <div class="store-info">Time: ${timeStr}</div>
+        <div class="store-info">Receipt #: ${transactionNumber}</div>
+      </div>
+
+      <div style="text-align: center; margin: 20px 0;">
+        <p>Transaction completed successfully!</p>
+        <p>Thank you for your purchase.</p>
+      </div>
+
+      <div class="footer">
+        <p>Thank you for shopping with us!</p>
+        <p>سوپاس بۆ کڕینەکەت</p>
+      </div>
+
+      <div style="text-align: center; margin-top: 20px;">
+        <button onclick="window.print()">Print</button>
+        <button onclick="window.close()">Close</button>
+      </div>
+    </body>
+    </html>
+  `;
+
+  receiptWindow.document.open();
+  receiptWindow.document.write(receiptHtml);
+  receiptWindow.document.close();
+
+  setTimeout(() => {
+    try {
+      receiptWindow.print();
+    } catch (e) {
+      console.error('Print failed:', e);
+    }
+  }, 500);
+};
 
 export const printReceipt = (data: ReceiptData): void => {
   const { cartItems, total, amountPaid, change, transactionNumber } = data;
+
+  // Check if cartItems is undefined or not an array
+  if (!cartItems || !Array.isArray(cartItems)) {
+    console.error('Invalid cartItems:', cartItems);
+    // Fall back to simple receipt
+    printSimpleReceipt(transactionNumber);
+    return;
+  }
+
   const receiptWindow = window.open('', '_blank', 'width=300,height=600');
 
   if (!receiptWindow) {
@@ -82,7 +199,7 @@ export const printReceipt = (data: ReceiptData): void => {
         <div class="store-info">VAT Reg: 12345678</div>
         <div class="store-info">Date: ${dateStr}</div>
         <div class="store-info">Time: ${timeStr}</div>
-        <div class="store-info">Receipt #: ${transactionNumber || 'N/A'}</div>
+        <div class="store-info">Receipt #: ${transactionNumber}</div>
       </div>
 
       <div class="divider"></div>
@@ -137,7 +254,7 @@ export const printReceipt = (data: ReceiptData): void => {
 
       <div class="barcode">
         |||||||||||||||||||||||||
-        ${transactionNumber || 'N/A'}
+        ${transactionNumber}
       </div>
 
       <div style="text-align: center; margin-top: 20px;">
