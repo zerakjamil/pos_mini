@@ -1,4 +1,4 @@
-import { Transaction } from '../types/cashier';
+import { Transaction } from '../types/management';
 
 export const generateReceipt = (sale: Transaction): string => {
   // Get current date and time

@@ -1,7 +1,8 @@
 import React from 'react';
-import { Button, Typography } from 'antd';
-import { ArrowLeftOutlined, PrinterOutlined } from '@ant-design/icons';
+import { Button, Space, Typography } from 'antd';
+import { ArrowLeft, Printer } from 'lucide-react';
 import { Link } from '@inertiajs/react';
+import { useTranslation } from 'react-i18next';
 
 const { Title } = Typography;
 
@@ -11,22 +12,26 @@ interface SaleHeaderProps {
 }
 
 const SaleHeader: React.FC<SaleHeaderProps> = ({ transactionNumber, onPrint }) => {
+  const { t } = useTranslation('sale/show');
+
   return (
-    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', height: '100%' }}>
-      <div style={{ display: 'flex', alignItems: 'center' }}>
-        <Link href="/sales">
-          <Button icon={<ArrowLeftOutlined />} style={{ marginRight: 16 }}>
-            Back to Sales
+    <div className="flex justify-between items-center py-4">
+      <Space>
+        <Link href={route('sales.index')}>
+          <Button icon={<ArrowLeft className="h-4 w-4 mr-2" />}>
+            {t('sales.actions.backToSales')}
           </Button>
         </Link>
-        <Title level={4} style={{ margin: 0 }}>Transaction: {transactionNumber}</Title>
-      </div>
+        <Title level={4} style={{ margin: 0 }}>
+          {t('sales.sale')} #{transactionNumber}
+        </Title>
+      </Space>
       <Button
         type="primary"
-        icon={<PrinterOutlined />}
+        icon={<Printer className="h-4 w-4 mr-2" />}
         onClick={onPrint}
       >
-        Print Receipt
+        {t('sales.actions.printReceipt')}
       </Button>
     </div>
   );
