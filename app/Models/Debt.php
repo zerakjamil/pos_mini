@@ -21,6 +21,8 @@ class Debt extends Model
     ];
 
     protected $casts = [
+        'amount' => 'float',
+        'balance' => 'float',
         'due_date' => 'date',
     ];
 
@@ -29,22 +31,29 @@ class Debt extends Model
         return $this->belongsTo(Debtor::class);
     }
 
+    public function sale(): BelongsTo
+    {
+        return $this->belongsTo(Sale::class);
+    }
+
     public function payments(): HasMany
     {
         return $this->hasMany(DebtPayment::class);
     }
 
+    // Helper method to update status based on balance
     public function updateStatus(): void
     {
         if ($this->balance <= 0) {
             $this->status = 'paid';
         } elseif ($this->balance < $this->amount) {
             $this->status = 'partial';
-        } elseif ($this->due_date->isPast()) {
+        } elseif ($this->due_date < now()) {
             $this->status = 'overdue';
         } else {
             $this->status = 'pending';
         }
+
         $this->save();
     }
 }

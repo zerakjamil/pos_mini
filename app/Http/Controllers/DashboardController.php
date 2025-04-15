@@ -74,7 +74,7 @@ class DashboardController extends Controller
     }
 
     /**
-     * Get recent sales with cashier information.
+     * Get recent sales with management information.
      */
     private function getRecentSales(User $user, bool $isSupervisor): array
     {
