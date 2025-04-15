@@ -1,6 +1,7 @@
 <?php
 
-use App\Http\Controllers\{DebtController,
+use App\Http\Controllers\{CashierController,
+    DebtController,
     DebtorController,
     DebtPaymentController,
     ProfileController,
@@ -45,10 +46,26 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/sales', [SalesController::class, 'index'])->name('sales.index');
     Route::get('/sales/{sale}', [SalesController::class, 'show'])->name('sales.show');
 
-    // Cashier - accessible by all authenticated users
+    // Cashiers - accessible by all authenticated users
     Route::get('/cashier', [ProductController::class, 'cashier'])->name('cashier');
     Route::post('/sales', [SalesController::class, 'store'])->name('sales.store');
 
+    Route::post('/debts', [App\Http\Controllers\DebtController::class, 'store'])->name('debts.store');
+    // Debt Management System
+    Route::resource('debtors', DebtorController::class);
+    Route::resource('debts', DebtController::class);
+
+    // Debt Payments
+    Route::resource('payments', DebtPaymentController::class)
+        ->except(['index', 'create', 'store']);
+
+    Route::get('debts/{debt}/payments', [DebtPaymentController::class, 'index'])
+        ->name('debts.payments.index');
+    Route::get('debts/{debt}/payments/create', [DebtPaymentController::class, 'create'])
+        ->name('debts.payments.create');
+    Route::post('debts/{debt}/payments', [DebtPaymentController::class, 'store'])
+        ->name('debts.payments.store');
+});
     /*
     |--------------------------------------------------------------------------
     | Supervisor Routes
@@ -64,9 +81,12 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::delete('/products/{product}', [ProductController::class, 'destroy'])->name('product.destroy');
         Route::get('/products/{product}', [ProductController::class, 'show'])->name('product.show');
 
+        // Cashiers
+        Route::resource('cashiers-management', CashierController::class);
+
         //Reportig
         Route::get('/reports', [ReportsController::class, 'index'])->name('reports.index');
-        
+
         // Category Management
         Route::resource('categories', CategoryController::class);
 
@@ -76,22 +96,6 @@ Route::middleware(['auth', 'verified'])->group(function () {
         // Settings
         Route::get('/settings', [SettingsController::class, 'index'])->name('settings.index');
         Route::put('/settings', [SettingsController::class, 'update'])->name('settings.update');
-
-        // Debt Management System
-        Route::resource('debtors', DebtorController::class);
-        Route::resource('debts', DebtController::class);
-
-        // Debt Payments
-        Route::resource('payments', DebtPaymentController::class)
-            ->except(['index', 'create', 'store']);
-
-        Route::get('debts/{debt}/payments', [DebtPaymentController::class, 'index'])
-            ->name('debts.payments.index');
-        Route::get('debts/{debt}/payments/create', [DebtPaymentController::class, 'create'])
-            ->name('debts.payments.create');
-        Route::post('debts/{debt}/payments', [DebtPaymentController::class, 'store'])
-            ->name('debts.payments.store');
-    });
 });
 
 /*
@@ -106,5 +110,5 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-// Include authentication routes
 require __DIR__ . '/auth.php';
+require __DIR__ . '/settings.php';
