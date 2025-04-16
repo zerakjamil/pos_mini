@@ -1,0 +1,1 @@
+const n=t=>{if(t==null)return"IQD 0";const r=typeof t=="string"?parseFloat(t):t;return isNaN(r)?"IQD 0":`IQD ${Number(r).toLocaleString("en-US",{minimumFractionDigits:0,maximumFractionDigits:0})}`},i=t=>{if(t==null)return"0.00%";const r=typeof t=="string"?parseFloat(t):t;return isNaN(r)?"0.00%":`${(r*100).toFixed(2)}%`};export{i as a,n as f};

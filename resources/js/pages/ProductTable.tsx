@@ -82,9 +82,9 @@ const ProductTable: React.FC<ProductTableProps> = ({ products }) => {
 
         // Apply the filter to the table
         const barcodeColumn = columns.find(col => col.dataIndex === 'barcode');
-        if (barcodeColumn && barcodeColumn.filteredValue !== [barcode]) {
-          barcodeColumn.filteredValue = [barcode];
-        }
+          if (barcodeColumn && !barcodeColumn.filteredValue.includes(barcode)) {
+              barcodeColumn.filteredValue = [barcode];
+          }
 
         // Show a notification
         message.info(`Scanning barcode: ${barcode}`);
