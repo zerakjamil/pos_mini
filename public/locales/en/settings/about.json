@@ -1,0 +1,48 @@
+{
+  "page_title": "About Us",
+  "breadcrumb": "About",
+  "heading": {
+    "title": "About Our Team",
+    "description": "Meet the developers behind this application"
+  },
+  "tabs": {
+    "team": "Our Team",
+    "mission": "Our Mission"
+  },
+  "skills": "Skills",
+  "contact": "Contact",
+  "mission": {
+    "title": "Our Mission",
+    "subtitle": "What drives our development philosophy",
+    "description1": "We are committed to creating software solutions that are not only functional but also intuitive and delightful to use. Our team focuses on clean, maintainable code and responsive designs that work across all devices.",
+    "description2": "With a combined experience of over a decade in web development, we bring expertise in modern frontend frameworks, backend systems, and DevOps practices to deliver robust applications that scale.",
+    "footer": "Founded in 2021, we've been helping businesses transform their ideas into reality."
+  },
+  "developers": {
+    "zerak": {
+      "name": "zerak jamil",
+      "role": "Full Stack Developer",
+      "bio": "Experienced Full Stack Developer with 4+ years of experience building web applications with React, TypeScript and PHP. Passionate about creating clean, efficient code and delivering exceptional user experiences."
+    },
+    "abdulrahman": {
+      "name": "Abdul rahman",
+      "role": "Backend Developer",
+      "bio": "Creative Backend Developer specializing in modern frameworks and security systems. Focused on building scalable, secure applications that meet the needs of users and businesses."
+    }
+  },
+  "buttons": {
+    "github": "GitHub",
+    "download_cv": "Download CV",
+    "viber": "Viber",
+    "telegram": "Telegram",
+    "whatsapp": "WhatsApp",
+      "website" : "Portfolio",
+      "phone" : "Phone"
+  },
+    "direction": "ltr",
+    "copy": {
+        "success": "Copied!",
+        "error": "Error!",
+        "try_again": "Please try again"
+    }
+}
