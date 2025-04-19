@@ -37,6 +37,11 @@ export default function SettingsLayout({ children }: PropsWithChildren) {
             href: '/settings/appearance',
             icon: null,
         },
+        {
+            title: t('nav.aboutUs'),
+            href: '/settings/about',
+            icon: null,
+        }
     ];
 
     if (isSupervisor) {
