@@ -70,4 +70,12 @@ class User extends Authenticatable
     {
         return $this->hasMany(Sale::class);
     }
+
+    /**
+     * Get the safe accounts associated with the user.
+     */
+    public function safeAccounts()
+    {
+        return $this->hasMany(SafeAccount::class);
+    }
 }

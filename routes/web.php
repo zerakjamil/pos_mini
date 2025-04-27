@@ -9,6 +9,8 @@ use App\Http\Controllers\{CashierController,
     ProductController,
     CategoryController,
     ReportsController,
+    SafeAccountController,
+    SafeTransactionController,
     SalesController,
     UserController,
     SettingsController};
@@ -93,6 +95,18 @@ Route::middleware(['auth', 'verified'])->group(function () {
         // User Management
         Route::resource('users', UserController::class);
 
+        Route::resource('safe-accounts', SafeAccountController::class);
+        Route::resource('safe-transactions', SafeTransactionController::class);
+
+        Route::get('/my-account/{accountNumber}', [SafeAccountController::class, 'myAccount'])
+        ->name('my-account');
+    Route::post('/transfer-funds', [SafeTransactionController::class, 'transferFunds'])
+        ->name('transfer-funds');
+
+    Route::get('/safe-transactions', [SafeTransactionController::class, 'index'])
+        ->name('safe-transactions');
+    Route::post('/api/safe-transactions', [SafeTransactionController::class, 'store']);
+    Route::get('/api/safe-transactions/{id}', [SafeTransactionController::class, 'show']);
 });
 
 
