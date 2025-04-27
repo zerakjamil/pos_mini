@@ -2,8 +2,10 @@
 
 namespace App\Providers;
 
-use App\Models\Cashier;
-use App\Policies\CashierPolicy;
+use App\Models\SafeAccount;
+use App\Models\SafeTransaction;
+use App\Policies\SafeAccountPolicy;
+use App\Policies\SafeTransactionPolicy;
 use Illuminate\Support\ServiceProvider;
 
 class AuthServiceProvider extends ServiceProvider
@@ -15,7 +17,10 @@ class AuthServiceProvider extends ServiceProvider
      */
     protected $policies = [
         Cashier::class => CashierPolicy::class,
+        SafeAccount::class => SafeAccountPolicy::class,
+        SafeTransaction::class => SafeTransactionPolicy::class,
     ];
+
     /**
      * Register services.
      */

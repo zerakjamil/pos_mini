@@ -344,7 +344,9 @@
       "reports": "Reports",
       "categories": "Categories",
       "cardDebts": "Card Debts",
-      "cardTypes": "Card Types"
+      "cardTypes": "Card Types",
+      "safeAccounts": "Safe Accounts",
+      "safeTransactions": "Transactions"
   },
   "userMenu": {
       "settings": "Settings",
@@ -701,5 +703,37 @@
     "paymentMethod" : "Payment Method",
     "contacts" : {
         "noPhoneAvailable" : "Not Available"
-    }
+    },
+  "safeAccounts": {
+    "title": "Safe Accounts",
+    "create": "Create Account",
+    "edit": "Edit Account",
+    "accountNumber": "Account Number",
+    "ownerName": "Owner Name",
+    "balance": "Balance",
+    "status": "Status",
+    "assignedUser": "Assigned User",
+    "notes": "Notes",
+    "active": "Active",
+    "inactive": "Inactive"
+  },
+  "safeTransactions": {
+    "title": "Safe Transactions",
+    "create": "New Transaction",
+    "senderAccount": "Sender Account",
+    "receiverAccount": "Receiver Account",
+    "amount": "Amount",
+    "sourceSafe": "Source Safe",
+    "mainSafe": "Main Safe",
+    "secondarySafe": "Secondary Safe",
+    "description": "Description",
+    "descriptionPlaceholder": "Enter optional description for this transaction",
+    "submit": "Complete Transaction",
+    "fromSafe": "From Safe to Account",
+    "betweenAccounts": "Between Accounts",
+    "selectSender": "Select Sender Account",
+    "selectReceiver": "Select Receiver Account",
+    "insufficientFunds": "Insufficient funds in sender account",
+    "sufficientFunds": "Sufficient funds available"
   }
+}
