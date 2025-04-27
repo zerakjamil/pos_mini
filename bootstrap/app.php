@@ -25,6 +25,7 @@ return Application::configure(basePath: dirname(__DIR__))
 
         $middleware->alias([
             'role' => \App\Http\Middleware\CheckRole::class,
+            'throttle.safe-accounts' => \App\Http\Middleware\ThrottleSafeAccountRequests::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {

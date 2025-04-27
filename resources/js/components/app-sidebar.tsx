@@ -11,7 +11,9 @@ import {
     Package,
     PieChart,
     ShoppingCart,
-    Users
+    Users,
+    Wallet,
+    ArrowLeftRight
 } from 'lucide-react';
 import AppLogo from './app-logo';
 import { useTranslation } from 'react-i18next';
@@ -69,6 +71,16 @@ export function AppSidebar() {
             title: t('sidebar.categories'),
             href: '/categories',
             icon: Folder,
+        },
+        {
+            title: t('sidebar.safeAccounts'),
+            href: '/safe-accounts',
+            icon: Wallet,
+        },
+        {
+            title: t('sidebar.safeTransactions'),
+            href: '/safe-transactions',
+            icon: ArrowLeftRight,
         },
     ];
 
