@@ -105,8 +105,6 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     Route::get('/safe-transactions', [SafeTransactionController::class, 'index'])
         ->name('safe-transactions');
-    Route::post('/api/safe-transactions', [SafeTransactionController::class, 'store']);
-    Route::get('/api/safe-transactions/{id}', [SafeTransactionController::class, 'show']);
 });
 
 

@@ -80,7 +80,6 @@ public function show(Product $product): Response
     public function cashier(): Response
     {
         $products = Product::with('category')
-            ->where('stock', '>', 0)
             ->get()
             ->map(function ($product) {
                 return [
@@ -91,6 +90,8 @@ public function show(Product $product): Response
                     'category' => $product->category ? $product->category->name : 'Uncategorized',
                     'stock' => $product->stock,
                     'barcode' => $product->barcode ?? '',
+                    'available' => $product->stock > 0,
+                    'low_stock' => $product->isLowStock(),
                 ];
             });
 

@@ -42,7 +42,7 @@ const ProductLookupModal: React.FC<ProductLookupModalProps> = ({ visible, produc
                 }
                 options={Array.isArray(products) ? products.map((product) => ({
                     value: product.id,
-                    label: `${product.name} - ${t('common.currency')} ${formatPrice(product.price)} (${t('cashier.productLookup.inStock', { stock: product.stock })})`
+                    label: `${product.name} - ${t('common.currency')} ${formatPrice(product.price)} (${product.stock > 0 ? t('cashier.productLookup.inStock', { stock: product.stock }) : 'Out of Stock'})`
                 })) : []}
             />
         </Modal>

@@ -1,0 +1,7 @@
+import{u as a,j as e,$ as o}from"./app-D4DCDOZQ.js";import{S as n}from"./index-CTVambiV.js";import{B as s}from"./button-hbvwzErM.js";import{A as m}from"./arrow-left-Cb1tOz-w.js";import{T as c}from"./index-BTVY_glA.js";import{c as p}from"./createLucideIcon-CbOnka2L.js";/* empty css            */import"./useSize-pRZNKIr-.js";import"./AntdIcon-DdBdtrI_.js";import"./index-BDhkmi6J.js";import"./colors-CRoBDNKI.js";import"./useVariants-BM6369mv.js";import"./styleChecker-CmR1XX-_.js";import"./getAllowClear-BRA64n-f.js";import"./TextArea-Bdn4-cEU.js";/**
+ * @license lucide-react v0.475.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */const l=[["path",{d:"M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2",key:"143wyd"}],["path",{d:"M6 9V3a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v6",key:"1itne7"}],["rect",{x:"6",y:"14",width:"12",height:"8",rx:"1",key:"1ue0tg"}]],h=p("Printer",l),{Title:d}=c,H=({transactionNumber:t,onPrint:i})=>{const{t:r}=a("sale/show");return e.jsxs("div",{className:"flex justify-between items-center py-4",children:[e.jsxs(n,{children:[e.jsx(o,{href:route("sales.index"),children:e.jsx(s,{icon:e.jsx(m,{className:"h-4 w-4 mr-2"}),children:r("sales.actions.backToSales")})}),e.jsxs(d,{level:4,style:{margin:0},children:[r("sales.sale")," #",t]})]}),e.jsx(s,{type:"primary",icon:e.jsx(h,{className:"h-4 w-4 mr-2"}),onClick:i,children:r("sales.actions.printReceipt")})]})};export{H as default};
+//# sourceMappingURL=SaleHeader-BPT1OwW4.js.map

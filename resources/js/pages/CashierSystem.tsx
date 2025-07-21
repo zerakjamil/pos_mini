@@ -163,7 +163,11 @@ const CashierSystem: React.FC = () => {
     const handleBarcodeScan = (barcode: string) => {
         const product = products.find((p) => p.barcode === barcode);
         if (product) {
-            handleProductScanned(product);
+            if (product.stock > 0) {
+                handleProductScanned(product);
+            } else {
+                message.warning(`${product.name} is out of stock (${product.stock} remaining)`);
+            }
         } else {
             message.error(`Product with barcode ${barcode} not found`);
         }
@@ -186,7 +190,11 @@ const CashierSystem: React.FC = () => {
         if (selectedProduct) {
             const product = products.find((p) => p.id === selectedProduct);
             if (product) {
-                handleProductScanned(product);
+                if (product.stock > 0) {
+                    handleProductScanned(product);
+                } else {
+                    message.warning(`${product.name} is out of stock (${product.stock} remaining)`);
+                }
             }
             setProductLookupVisible(false);
             setSelectedProduct(null);

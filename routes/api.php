@@ -9,3 +9,6 @@ Route::get('/user', function (Request $request) {
 })->middleware('auth:sanctum');
 
 Route::get('/sales/{transactionNumber}', [SalesController::class, 'getByTransactionNumber']);
+
+ Route::post('/api/safe-transactions', [SafeTransactionController::class, 'store']);
+    Route::get('/api/safe-transactions/{id}', [SafeTransactionController::class, 'show']);
